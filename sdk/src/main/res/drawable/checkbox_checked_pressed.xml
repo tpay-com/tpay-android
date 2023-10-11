@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="24dp"
+        android:height="24dp">
+        <shape>
+            <solid android:color="@color/colorPrimary600" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    <item
+        android:width="16dp"
+        android:height="16dp"
+        android:drawable="@drawable/ic_checkbox_tick"
+        android:gravity="center" />
+</layer-list>

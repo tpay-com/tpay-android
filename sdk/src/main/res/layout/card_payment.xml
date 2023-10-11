@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.tpay.sdk.designSystem.buttons.ButtonSecondary
+        android:id="@+id/cardSelectionButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:buttonText="@string/card_selection"
+        android:layout_marginStart="16dp"
+        app:iconPosition="start"
+        app:tpayButtonIcon="@drawable/ic_chevron_left"/>
+
+    <TextView
+        android:id="@+id/addCardText"
+        style="@style/Headline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/add_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingEnd="5dp"
+        android:text="@string/powered_by"
+        android:textColor="@color/colorNeutral500"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@id/iconElavon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/iconElavon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/image_content_description"
+        android:src="@drawable/ic_elavon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.tpay.sdk.designSystem.textfields.TextFieldCardNumber
+        android:id="@+id/creditCardNumberTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintTop_toBottomOf="@id/addCardText"
+        app:textFieldHint="@string/credit_card_number_hint"
+        app:textFieldIcons="all" />
+
+    <LinearLayout
+        android:id="@+id/bottomTextFields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/creditCardNumberTextField">
+
+        <com.tpay.sdk.designSystem.textfields.TextFieldCardDate
+            android:id="@+id/creditCardDateTextField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            app:textFieldHint="@string/credit_card_valid_date_hint" />
+
+        <com.tpay.sdk.designSystem.textfields.TextFieldCVV
+            android:id="@+id/creditCardCVVTextField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            app:textFieldHint="@string/credit_card_cvv_hint" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/saveCardLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:layout_marginHorizontal="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/bottomTextFields">
+
+        <TextView
+            android:id="@+id/saveCardText"
+            style="@style/BodyTextSmall"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:text="@string/save_credit_card_for_later" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/saveCardCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:layout_marginStart="16dp"
+            app:buttonCompat="@drawable/checkbox_states" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/rodoInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:textColor="@color/colorNeutral500"
+        android:textColorLink="@color/colorPrimary500"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/saveCardLayout"
+        tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/idCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="36dp"
+        android:contentDescription="@string/image_content_description"
+        android:src="@drawable/ic_id_check"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rodoInfo" />
+
+    <ImageView
+        android:id="@+id/visaCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:contentDescription="@string/image_content_description"
+        android:src="@drawable/ic_visa_check"
+        app:layout_constraintStart_toEndOf="@id/idCheck"
+        app:layout_constraintTop_toBottomOf="@id/rodoInfo" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:contentDescription="@string/image_content_description"
+        android:src="@drawable/ic_pci_check"
+        app:layout_constraintStart_toEndOf="@id/visaCheck"
+        app:layout_constraintTop_toBottomOf="@id/rodoInfo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

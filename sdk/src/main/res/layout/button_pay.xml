@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_pay_with_tpay_states"
+    android:clickable="true"
+    android:contentDescription="@string/image_content_description"
+    android:focusable="true"
+    android:paddingVertical="14dp"
+    android:src="@drawable/ic_tpay_payments" />

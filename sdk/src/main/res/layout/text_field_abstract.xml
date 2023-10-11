@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldLayout"
+        style="@style/InputTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        app:errorIconDrawable="@null">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textField"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:paddingEnd="80dp"
+            android:singleLine="true"
+            android:textColor="@color/colorPrimary900" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="13dp">
+
+        <ImageView
+            android:id="@+id/cardIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/image_content_description"
+            android:paddingEnd="17dp" />
+
+        <com.tpay.sdk.designSystem.buttons.ButtonRoundIcon
+            android:id="@+id/iconScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:tpayButtonIcon="@drawable/ic_scan"
+            app:roundIconButtonType="colorful" />
+
+        <com.tpay.sdk.designSystem.buttons.ButtonRoundIcon
+            android:id="@+id/iconNfc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="invisible"
+            app:tpayButtonIcon="@drawable/ic_nfc"
+            app:roundIconButtonType="colorful" />
+
+    </LinearLayout>
+
+</FrameLayout>

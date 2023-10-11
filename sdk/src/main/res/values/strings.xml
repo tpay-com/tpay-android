@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_need_to_enter_blik_code">Nie musisz podawać kodu BLIK - robisz zakupy w zapisanym wcześniej sklepie</string>
+    <string name="save_blik_alias">Zapamiętaj sklep i włącz płatność one-click</string>
+    <string name="name_the_store">Nazwij sklep</string>
+    <string name="invalid_number_of_characters">Nieprawidłowa liczba znaków</string>
+    <string name="credit_card_expiration_date_format">MM/RR</string>
+    <string name="blik_code_not_found_or_expired">Podany kod jest nieprawidłowy lub stracił ważność</string>
+    <string name="field_required">To pole jest wymagane</string>
+    <string name="blik_code_not_valid">Niepoprawny kod BLIK</string>
+    <string name="email_address_not_valid">Niepoprawny adres e-mail</string>
+    <string name="card_number_not_valid">Niepoprawny numer karty</string>
+    <string name="credit_card_date_not_valid">Niepoprawna data ważności</string>
+    <string name="card_cvv_number_not_valid">Niepoprawny kod CVV2/CVC</string>
+    <string name="your_data">Twoje dane</string>
+    <string name="rodo_info">Administratorem danych osobowych jest Krajowy Integrator Płatności spółka akcyjna z siedzibą w Poznaniu.</string>
+    <string name="merchant_rodo_info">Administratorem danych osobowych jest %1$s.</string>
+    <string name="merchant_rodo_info_with_city">Administratorem danych osobowych jest %1$s z siedzibą w %2$s.</string>
+    <string name="rodo_link">Zapoznaj się z pełną treścią.</string>
+    <string name="payer_data_primary_button_text">Wybierz metodę płatności</string>
+    <string name="payer_data_name_surname_hint">Imię i Nazwisko</string>
+    <string name="payer_data_email_hint">E-mail</string>
+    <string name="image_content_description">Obraz</string>
+    <string name="payment_method_name_apple_pay" translatable="false">Apple Pay</string>
+    <string name="payment_method_name_google_pay" translatable="false">Google Pay</string>
+    <string name="payment_method_name_pay_pal" translatable="false">PayPal</string>
+    <string name="fragment_payment_method_header">Wybierz formę płatności</string>
+    <string name="add_card">Dodaj kartę</string>
+    <string name="powered_by" translatable="false">Powered by</string>
+    <string name="credit_card_number_hint">Numer karty</string>
+    <string name="credit_card_valid_date_hint">Data ważności</string>
+    <string name="credit_card_cvv_hint" translatable="false">CVV2/CVC</string>
+    <string name="save_credit_card_for_later">Zapisz kartę, aby nie uzupełniać formularza przy następnych zakupach.</string>
+    <string name="blik_code_hint">Wpisz kod BLIK</string>
+    <string name="pay_using">Zapłać za pomocą</string>
+    <string name="go_back">Wróć</string>
+    <string name="place_credit_card_close_to_phone">Przyłóż kartę do telefonu</string>
+    <string name="data_will_be_read_automatically">Odczyt potrzebnych danych nastąpi automatycznie</string>
+    <string name="try_again">Spróbuj ponownie</string>
+    <string name="regulation_accept">Płacąc akceptujesz</string>
+    <string name="regulation">regulamin.</string>
+    <string name="blik_pay_using_code">Zapłać przy użyciu kodu</string>
+    <string name="processing_payment">Przetwarzanie płatności</string>
+    <string name="waiting_for_bank_response">Jeszcze chwila. Czekamy na\n odpowiedź Twojego banku</string>
+    <string name="payment_successful">Płatność zakończona\n sukcesem</string>
+    <string name="my_orders">Moje zamówienia</string>
+    <string name="payment_failure">Płatność nieudana</string>
+    <string name="cancel">Anuluj</string>
+    <string name="retry_payment">Ponów płatność</string>
+    <string name="select_your_bank">Wybierz swój bank</string>
+    <string name="confirm_payment_in_bank_app">Potwierdź płatność w aplikacji\n swojego banku</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="you_can_now_use_fast_payment">Możesz teraz dokonywać płatności za pomocą karty</string>
+    <string name="card_has_been_added">Karta została dodana!</string>
+    <string name="card_has_not_been_added">Niestety, nie udało się dodać karty</string>
+    <string name="try_again_or_select_different_method">Proszę spróbować ponownie lub wybrać inną metodę płatności</string>
+    <string name="card">Karta</string>
+    <string name="blik" translatable="false">BLIK</string>
+    <string name="transfer">Przelew</string>
+    <string name="electronic_wallets">Portfele elektroniczne</string>
+    <string name="paying">Płacę %1$.2f zł</string>
+    <string name="settings">Ustawienia</string>
+    <string name="enable_nfc">Włącz NFC</string>
+    <string name="enable_nfc_in_settings">Przejdź do ustawień telefonu aby włączyć tryb NFC</string>
+    <string name="can_not_read_pay_card_data">Nie można odczytać danych. Staraj się trzymać kartę nieruchomo przy telefonie</string>
+    <string name="something_went_wrong">Coś poszło nie tak! Spróbuj ponownie.</string>
+    <string name="no_internet_access">Brak połączenia z internetem</string>
+    <string name="save_card">Zapisz kartę</string>
+    <string name="mastercard" translatable="false">Mastercard</string>
+    <string name="visa" translatable="false">Visa</string>
+    <string name="pay_card">Karta płatnicza</string>
+    <string name="select_pay_card">Wybierz kartę</string>
+    <string name="card_selection">Wybór karty</string>
+    <string name="pay_card_tail_dots" translatable="false">****</string>
+    <string name="first_last_name_invalid">Niepoprawne imię i nazwisko</string>
+</resources>

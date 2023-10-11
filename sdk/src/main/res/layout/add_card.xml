@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.tpay.sdk.designSystem.textfields.TextFieldStandard
+        android:id="@+id/addCardNameSurnameTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:paddingBottom="8dp"
+        app:textFieldHint="@string/payer_data_name_surname_hint" />
+
+    <com.tpay.sdk.designSystem.textfields.TextFieldEmail
+        android:id="@+id/addCardEmailTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:paddingBottom="8dp"
+        app:textFieldHint="@string/payer_data_email_hint" />
+
+    <com.tpay.sdk.designSystem.textfields.TextFieldCardNumber
+        android:id="@+id/creditCardNumberTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/addCardText"
+        app:textFieldHint="@string/credit_card_number_hint"
+        app:textFieldIcons="all" />
+
+    <LinearLayout
+        android:id="@+id/bottomTextFields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/creditCardNumberTextField">
+
+        <com.tpay.sdk.designSystem.textfields.TextFieldCardDate
+            android:id="@+id/creditCardDateTextField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            app:textFieldHint="@string/credit_card_valid_date_hint" />
+
+        <com.tpay.sdk.designSystem.textfields.TextFieldCVV
+            android:id="@+id/creditCardCVVTextField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            app:textFieldHint="@string/credit_card_cvv_hint" />
+
+    </LinearLayout>
+
+</LinearLayout>

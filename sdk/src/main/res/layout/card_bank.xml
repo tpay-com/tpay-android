@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="3dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bank_card_enabled"
+    android:clickable="true"
+    android:focusable="true"
+    android:minWidth="167dp"
+    android:minHeight="80dp">
+
+    <ImageView
+        android:id="@+id/bankLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/image_content_description" />
+
+    <TextView
+        android:id="@+id/bankName"
+        style="@style/BodyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textColor="@color/colorPrimary900" />
+
+</FrameLayout>

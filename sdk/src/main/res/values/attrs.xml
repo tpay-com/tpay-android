@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="buttonText" format="string" />
+    <attr name="textFieldText" format="string" />
+    <attr name="textFieldHint" format="string" />
+    <attr name="tpayButtonIcon" format="integer" />
+
+    <declare-styleable name="ButtonPrimary">
+        <attr name="buttonText" />
+        <attr name="loading" format="boolean" />
+        <attr name="enabled" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ButtonSecondary">
+        <attr name="buttonText" />
+        <attr name="iconPosition" format="enum">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+        </attr>
+        <attr name="tpayButtonIcon" />
+    </declare-styleable>
+
+    <declare-styleable name="CardUser">
+        <attr name="userName" format="string" />
+        <attr name="userEmail" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="ButtonLink">
+        <attr name="buttonText" />
+    </declare-styleable>
+
+    <declare-styleable name="ButtonRoundIcon">
+        <attr name="tpayButtonIcon" />
+        <attr name="roundIconButtonType" format="enum">
+            <enum name="colorful" value="0" />
+            <enum name="gray" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="TextFieldAbstract">
+        <attr name="textFieldIcons" format="enum">
+            <enum name="none" value="0" />
+            <enum name="all" value="1" />
+        </attr>
+        <attr name="textFieldText" />
+        <attr name="textFieldHint" />
+    </declare-styleable>
+
+    <declare-styleable name="ButtonPaymentMethod">
+        <attr name="buttonText" />
+        <attr name="tpayButtonIcon" />
+        <attr name="preset" format="enum">
+            <enum name="applePay" value="0" />
+            <enum name="googlePay" value="1" />
+            <enum name="payPal" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CardPaymentBox">
+        <attr name="tpayButtonIcon" />
+        <attr name="buttonText" />
+        <attr name="paymentBoxType" format="enum">
+            <enum name="card" value="0" />
+            <enum name="blik" value="1" />
+            <enum name="transfer" value="2" />
+            <enum name="wallet" value="3" />
+        </attr>
+        <attr name="paymentBoxState" format="enum">
+            <enum name="enabled" value="0" />
+            <enum name="checked" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CardBank">
+        <attr name="bankLogo" format="integer" />
+        <attr name="bankName" format="string" />
+    </declare-styleable>
+
+</resources>

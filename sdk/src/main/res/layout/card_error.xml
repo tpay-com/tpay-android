@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_error_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/errorText"
+        style="@style/BodyTextSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:textColor="@color/colorNeutralWhite" />
+
+    <ProgressBar
+        android:id="@+id/errorProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:max="1000"
+        android:paddingHorizontal="16dp"
+        android:progress="1000"
+        android:progressDrawable="@drawable/progress_bar_error" />
+
+</LinearLayout>

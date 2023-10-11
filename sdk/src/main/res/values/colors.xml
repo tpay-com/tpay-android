@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="colorPrimary100">#FFF1F5FF</color>
+    <color name="colorPrimary200">#FFD9E1F5</color>
+    <color name="colorPrimary500">#FF2B5ADC</color>
+    <color name="colorPrimary600">#FF2248B0</color>
+    <color name="colorPrimary900">#FF09122C</color>
+
+    <color name="colorNeutralWhite">#FFFFFFFF</color>
+    <color name="colorNeutral100">#FFF7F7FA</color>
+    <color name="colorNeutral200">#FFE1E1E7</color>
+    <color name="colorNeutral300">#FFC2C3CF</color>
+    <color name="colorNeutral500">#FF85879E</color>
+
+    <color name="colorPayButtonGradientStartEnabled">#2952C4</color>
+    <color name="colorPayButtonGradientEndEnabled">#082755</color>
+    <color name="colorPayButtonGradientStartPressed">#14348E</color>
+    <color name="colorPayButtonGradientEndPressed">#031A3C</color>
+
+    <color name="colorErrorProgressBarBackground">#BE1534</color>
+    <color name="colorErrorProgressBarProgress">#FF6783</color>
+
+    <color name="colorSemanticError">#FFE0153A</color>
+    <color name="colorSemanticSuccess" tools:keep="@color/colorSemanticSuccess">#FF1DCC54</color>
+
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorBlack20">#33000000</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true" tools:keep="@color/mtrl_textinput_default_box_stroke_color" tools:ignore="PrivateResource">
+        @color/colorNeutral200
+    </color>
+</resources>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ButtonPrimary" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorNeutralWhite</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ButtonSecondary">
+        <item name="android:textColor">@color/colorPrimary500</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Headline1">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/colorPrimary900</item>
+    </style>
+
+    <style name="Headline2">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/colorPrimary900</item>
+    </style>
+
+    <style name="LabelSmall">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/colorNeutral500</item>
+    </style>
+
+    <style name="MicroText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/colorNeutral500</item>
+    </style>
+
+    <style name="SuperMicroText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">8sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/colorNeutral500</item>
+    </style>
+
+    <style name="BodyText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/colorNeutral500</item>
+    </style>
+
+    <style name="BodyTextSmall">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/colorNeutral500</item>
+    </style>
+
+    <style name="ButtonLink">
+        <item name="android:textColor">@drawable/button_link_states</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="InputTextField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/colorPrimary500</item>
+        <item name="hintTextColor">@color/colorPrimary500</item>
+        <item name="boxCornerRadiusTopEnd">13dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusBottomEnd">13dp</item>
+        <item name="android:background">@drawable/text_field_states</item>
+        <item name="boxCornerRadiusBottomStart">13dp</item>
+        <item name="boxCornerRadiusTopStart">13dp</item>
+        <item name="boxStrokeErrorColor">@color/colorSemanticError</item>
+        <item name="android:textColorHint">@color/colorNeutral500</item>
+    </style>
+</resources>
