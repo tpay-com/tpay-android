@@ -41,8 +41,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "Tpay CI"
-          git config user.email ci-noreply@tpay.com
+          git config user.name "Tpay Auto Commit"
+          git config user.email devs@tpay.com
 
       - name: Create release branch
         run: git checkout -b release/${{ github.event.inputs.version }}
@@ -61,5 +61,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           head: release/${{ github.event.inputs.version }}
-          base: main
-          title: ${{ github.event.inputs.version }} into main
+          base: master
+          title: ${{ github.event.inputs.version }} into master

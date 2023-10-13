@@ -156,15 +156,15 @@ afterEvaluate {
                     }
 
                     scm {
-                        url '<github-repo-url>'
-                        connection 'scm:git:git://github.com/<tpay>.git'
-                        developerConnection 'scm:git:git://github.com/<tpay>.git'
+                        url 'https://github.com/tpay-com/tpay-android'
+                        connection 'scm:git:git://github.com/tpay-com/tpay-android.git'
+                        developerConnection 'scm:git:git://github.com/tpay-com/tpay-android.git'
                     }
 
                     developers {
                         developer {
-                            id 'karolwojciechowski'
-                            name 'Karol Wojciechowski'
+                            id 'com.tpay.devs'
+                            name 'Tpay Auto Commit'
                         }
                     }
                 }
