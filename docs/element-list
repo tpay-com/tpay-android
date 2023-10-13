@@ -1,0 +1,87 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:com.tpay.sdk.api.addCard/AddCard.Sheet///PointingToDeclaration/com/tpay/sdk/api/addCard/AddCard.Sheet.html
+$dokka.location:com.tpay.sdk.api.cardTokenPayment/CardTokenPayment.Sheet///PointingToDeclaration/com/tpay/sdk/api/cardTokenPayment/CardTokenPayment.Sheet.html
+$dokka.location:com.tpay.sdk.api.models.merchant/Merchant.Authorization///PointingToDeclaration/com/tpay/sdk/api/models/merchant/Merchant.Authorization.html
+$dokka.location:com.tpay.sdk.api.models.moduleError/ModuleError.ConfigurationError.Companion///PointingToDeclaration/com/tpay/sdk/api/models/moduleError/ModuleError.ConfigurationError.Companion.html
+$dokka.location:com.tpay.sdk.api.models.moduleError/ModuleError.ConfigurationError.MerchantCredentialsNotProvided///PointingToDeclaration/com/tpay/sdk/api/models/moduleError/ModuleError.ConfigurationError.MerchantCredentialsNotProvided.html
+$dokka.location:com.tpay.sdk.api.models.moduleError/ModuleError.ConfigurationError.MerchantDetailsProviderNotProvided///PointingToDeclaration/com/tpay/sdk/api/models/moduleError/ModuleError.ConfigurationError.MerchantDetailsProviderNotProvided.html
+$dokka.location:com.tpay.sdk.api.models.moduleError/ModuleError.ConfigurationError.MerchantIdNotProvided///PointingToDeclaration/com/tpay/sdk/api/models/moduleError/ModuleError.ConfigurationError.MerchantIdNotProvided.html
+$dokka.location:com.tpay.sdk.api.models.moduleError/ModuleError.ConfigurationError.SSLCertificateProviderNotProvided///PointingToDeclaration/com/tpay/sdk/api/models/moduleError/ModuleError.ConfigurationError.SSLCertificateProviderNotProvided.html
+$dokka.location:com.tpay.sdk.api.models.moduleError/ModuleError.ConfigurationError///PointingToDeclaration/com/tpay/sdk/api/models/moduleError/ModuleError.ConfigurationError.html
+$dokka.location:com.tpay.sdk.api.models.payer/Payer.Address///PointingToDeclaration/com/tpay/sdk/api/models/payer/Payer.Address.html
+$dokka.location:com.tpay.sdk.api.models.transaction/Frequency.Companion///PointingToDeclaration/com/tpay/sdk/api/models/transaction/Frequency.Companion.html
+$dokka.location:com.tpay.sdk.api.models.transaction/Quantity.Indefinite///PointingToDeclaration/com/tpay/sdk/api/models/transaction/Quantity.Indefinite.html
+$dokka.location:com.tpay.sdk.api.models.transaction/Quantity.Specified///PointingToDeclaration/com/tpay/sdk/api/models/transaction/Quantity.Specified.html
+$dokka.location:com.tpay.sdk.api.models/BlikAlias.NotRegistered///PointingToDeclaration/com/tpay/sdk/api/models/BlikAlias.NotRegistered.html
+$dokka.location:com.tpay.sdk.api.models/BlikAlias.Registered///PointingToDeclaration/com/tpay/sdk/api/models/BlikAlias.Registered.html
+$dokka.location:com.tpay.sdk.api.models/ConfigurationCheckResult.Invalid///PointingToDeclaration/com/tpay/sdk/api/models/ConfigurationCheckResult.Invalid.html
+$dokka.location:com.tpay.sdk.api.models/ConfigurationCheckResult.Valid///PointingToDeclaration/com/tpay/sdk/api/models/ConfigurationCheckResult.Valid.html
+$dokka.location:com.tpay.sdk.api.models/PaymentMethod.Blik///PointingToDeclaration/com/tpay/sdk/api/models/PaymentMethod.Blik.html
+$dokka.location:com.tpay.sdk.api.models/PaymentMethod.Card///PointingToDeclaration/com/tpay/sdk/api/models/PaymentMethod.Card.html
+$dokka.location:com.tpay.sdk.api.models/PaymentMethod.Companion///PointingToDeclaration/com/tpay/sdk/api/models/PaymentMethod.Companion.html
+$dokka.location:com.tpay.sdk.api.models/PaymentMethod.DigitalWallets///PointingToDeclaration/com/tpay/sdk/api/models/PaymentMethod.DigitalWallets.html
+$dokka.location:com.tpay.sdk.api.models/PaymentMethod.Pbl///PointingToDeclaration/com/tpay/sdk/api/models/PaymentMethod.Pbl.html
+$dokka.location:com.tpay.sdk.api.models/SheetOpenResult.ConfigurationInvalid///PointingToDeclaration/com/tpay/sdk/api/models/SheetOpenResult.ConfigurationInvalid.html
+$dokka.location:com.tpay.sdk.api.models/SheetOpenResult.Success///PointingToDeclaration/com/tpay/sdk/api/models/SheetOpenResult.Success.html
+$dokka.location:com.tpay.sdk.api.models/SheetOpenResult.UnexpectedError///PointingToDeclaration/com/tpay/sdk/api/models/SheetOpenResult.UnexpectedError.html
+$dokka.location:com.tpay.sdk.api.payment/Payment.Sheet///PointingToDeclaration/com/tpay/sdk/api/payment/Payment.Sheet.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/BLIKAmbiguousAliasPayment.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/blik/BLIKAmbiguousAliasPayment.Companion.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/BLIKPayment.Builder///PointingToDeclaration/com/tpay/sdk/api/screenless/blik/BLIKPayment.Builder.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/CreateBLIKTransactionResult.AmbiguousBlikAlias///PointingToDeclaration/com/tpay/sdk/api/screenless/blik/CreateBLIKTransactionResult.AmbiguousBlikAlias.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/CreateBLIKTransactionResult.ConfiguredPaymentFailed///PointingToDeclaration/com/tpay/sdk/api/screenless/blik/CreateBLIKTransactionResult.ConfiguredPaymentFailed.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/CreateBLIKTransactionResult.Created///PointingToDeclaration/com/tpay/sdk/api/screenless/blik/CreateBLIKTransactionResult.Created.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/CreateBLIKTransactionResult.CreatedAndPaid///PointingToDeclaration/com/tpay/sdk/api/screenless/blik/CreateBLIKTransactionResult.CreatedAndPaid.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/CreateBLIKTransactionResult.Error///PointingToDeclaration/com/tpay/sdk/api/screenless/blik/CreateBLIKTransactionResult.Error.html
+$dokka.location:com.tpay.sdk.api.screenless.card/CreateCreditCardTransactionResult.Created///PointingToDeclaration/com/tpay/sdk/api/screenless/card/CreateCreditCardTransactionResult.Created.html
+$dokka.location:com.tpay.sdk.api.screenless.card/CreateCreditCardTransactionResult.CreatedAndPaid///PointingToDeclaration/com/tpay/sdk/api/screenless/card/CreateCreditCardTransactionResult.CreatedAndPaid.html
+$dokka.location:com.tpay.sdk.api.screenless.card/CreateCreditCardTransactionResult.Error///PointingToDeclaration/com/tpay/sdk/api/screenless/card/CreateCreditCardTransactionResult.Error.html
+$dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment.Builder.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/card/CreditCardPayment.Builder.Companion.html
+$dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment.Builder///PointingToDeclaration/com/tpay/sdk/api/screenless/card/CreditCardPayment.Builder.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/CreateGooglePayTransactionResult.Created///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/CreateGooglePayTransactionResult.Created.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/CreateGooglePayTransactionResult.CreatedAndPaid///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/CreateGooglePayTransactionResult.CreatedAndPaid.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/CreateGooglePayTransactionResult.Error///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/CreateGooglePayTransactionResult.Error.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment.Builder///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/GooglePayPayment.Builder.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayRequest.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/GooglePayRequest.Companion.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayUtil.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/GooglePayUtil.Companion.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/OpenGooglePayResult.Cancelled///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/OpenGooglePayResult.Cancelled.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/OpenGooglePayResult.Success///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/OpenGooglePayResult.Success.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/OpenGooglePayResult.UnknownError///PointingToDeclaration/com/tpay/sdk/api/screenless/googlePay/OpenGooglePayResult.UnknownError.html
+$dokka.location:com.tpay.sdk.api.screenless.paymentMethods/GetPaymentMethods.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/paymentMethods/GetPaymentMethods.Companion.html
+$dokka.location:com.tpay.sdk.api.screenless.paymentMethods/GetPaymentMethodsResult.Error///PointingToDeclaration/com/tpay/sdk/api/screenless/paymentMethods/GetPaymentMethodsResult.Error.html
+$dokka.location:com.tpay.sdk.api.screenless.paymentMethods/GetPaymentMethodsResult.Success///PointingToDeclaration/com/tpay/sdk/api/screenless/paymentMethods/GetPaymentMethodsResult.Success.html
+$dokka.location:com.tpay.sdk.api.screenless.transfer/CreateTransferTransactionResult.Created///PointingToDeclaration/com/tpay/sdk/api/screenless/transfer/CreateTransferTransactionResult.Created.html
+$dokka.location:com.tpay.sdk.api.screenless.transfer/CreateTransferTransactionResult.Error///PointingToDeclaration/com/tpay/sdk/api/screenless/transfer/CreateTransferTransactionResult.Error.html
+$dokka.location:com.tpay.sdk.api.screenless.transfer/TransferPayment.Builder///PointingToDeclaration/com/tpay/sdk/api/screenless/transfer/TransferPayment.Builder.html
+$dokka.location:com.tpay.sdk.api.screenless/Payment.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/Payment.Companion.html
+$dokka.location:com.tpay.sdk.api.screenless/PaymentBuilder.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/PaymentBuilder.Companion.html
+$dokka.location:com.tpay.sdk.api.screenless/TransactionState.Companion///PointingToDeclaration/com/tpay/sdk/api/screenless/TransactionState.Companion.html
+$dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion///PointingToDeclaration/com/tpay/sdk/api/tpayModule/TpayModule.Companion.html
+$dokka.location:com.tpay.sdk.api/PayCardEncryptor.Companion///PointingToDeclaration/com/tpay/sdk/api/PayCardEncryptor.Companion.html
+$dokka.location:com.tpay.sdk.internal.model/TransactionMethod.Companion///PointingToDeclaration/com/tpay/sdk/internal/model/TransactionMethod.Companion.html
+$dokka.location:com.tpay.sdk.server/AccessToken.Companion///PointingToDeclaration/com/tpay/sdk/server/AccessToken.Companion.html
+com.tpay.sdk
+com.tpay.sdk.api
+com.tpay.sdk.api.addCard
+com.tpay.sdk.api.cardTokenPayment
+com.tpay.sdk.api.models
+com.tpay.sdk.api.models.merchant
+com.tpay.sdk.api.models.moduleError
+com.tpay.sdk.api.models.payer
+com.tpay.sdk.api.models.transaction
+com.tpay.sdk.api.paycard
+com.tpay.sdk.api.payment
+com.tpay.sdk.api.providers
+com.tpay.sdk.api.screenless
+com.tpay.sdk.api.screenless.blik
+com.tpay.sdk.api.screenless.card
+com.tpay.sdk.api.screenless.googlePay
+com.tpay.sdk.api.screenless.paymentMethods
+com.tpay.sdk.api.screenless.transfer
+com.tpay.sdk.api.tpayModule
+com.tpay.sdk.extensions
+com.tpay.sdk.internal
+com.tpay.sdk.internal.model
+com.tpay.sdk.server
+com.tpay.sdk.server.dto.parts
+
