@@ -13,17 +13,18 @@ import com.tpay.sdk.cache.CachedNetworkImage
 import com.tpay.sdk.di.injectFields
 import com.tpay.sdk.extensions.Completable
 import com.tpay.sdk.extensions.toBitmapDrawable
-import com.tpay.sdk.internal.model.TransactionMethods
-import com.tpay.sdk.internal.paymentMethod.TransferMethod
+import com.tpay.sdk.internal.model.AvailableMethods
 import com.tpay.sdk.internal.webView.WebUrl
 import com.tpay.sdk.server.ImageEmptyException
 import com.tpay.sdk.server.ServerService
 import com.tpay.sdk.server.dto.request.CardTokenizationRequestDTO
 import com.tpay.sdk.server.dto.response.GetTransactionResponseDTO
 import com.tpay.sdk.server.dto.request.CreateTransactionRequestDTO
+import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 import com.tpay.sdk.server.dto.request.PayTransactionRequestDTO
 import com.tpay.sdk.server.dto.response.CardTokenizationResponseDTO
 import com.tpay.sdk.server.dto.response.CreateTransactionResponseDTO
+import com.tpay.sdk.server.dto.response.GetChannelsResponseDTO
 import com.tpay.sdk.server.dto.response.GetTransactionMethodsResponseDTO
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,8 +32,7 @@ import javax.inject.Singleton
 @Singleton
 internal class Repository(private val serverService: ServerService) {
     internal var selectedPaymentMethod: PaymentMethod? = null
-    internal var availableTransactionMethods: TransactionMethods = TransactionMethods()
-    internal var transferMethods: List<TransferMethod> = emptyList()
+    internal var availableMethods = AvailableMethods()
     internal var cardTokenTransaction: CardTokenTransaction? = null
     internal lateinit var transaction: Transaction
     internal lateinit var tokenization: Tokenization
@@ -40,8 +40,8 @@ internal class Repository(private val serverService: ServerService) {
     internal var tokenizationId: String? = null
     internal var webUrl: WebUrl? = null
     internal var internalRedirects = Redirects(
-        successUrl = "https://www.google.com/",
-        errorUrl = "https://www.youtube.com/"
+        successUrl = "https://secure.tpay.com/mobile-sdk/success",
+        errorUrl = "https://secure.tpay.com/mobile-sdk/error"
     )
 
     @Inject
@@ -91,12 +91,20 @@ internal class Repository(private val serverService: ServerService) {
         }
     }
 
+    internal fun getPaymentChannels(): Completable<GetChannelsResponseDTO> {
+        return serverService.getPaymentChannels()
+    }
+
     internal fun getAvailablePaymentMethods(): Completable<GetTransactionMethodsResponseDTO> {
         return serverService.getPaymentMethods()
     }
 
     internal fun createTransaction(createTransactionRequestDTO: CreateTransactionRequestDTO): Completable<CreateTransactionResponseDTO> {
         return serverService.createTransaction(createTransactionRequestDTO)
+    }
+
+    internal fun createTransaction(createTransactionWithChannelsDTO: CreateTransactionWithChannelsDTO): Completable<CreateTransactionResponseDTO> {
+        return serverService.createTransaction(createTransactionWithChannelsDTO)
     }
 
     internal fun continueTransaction(transactionId: String, payTransactionRequestDTO: PayTransactionRequestDTO): Completable<CreateTransactionResponseDTO> {

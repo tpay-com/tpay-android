@@ -65,6 +65,7 @@
             <enum name="blik" value="1" />
             <enum name="transfer" value="2" />
             <enum name="wallet" value="3" />
+            <enum name="ratyPekao" value="4" />
         </attr>
         <attr name="paymentBoxState" format="enum">
             <enum name="enabled" value="0" />
@@ -72,9 +73,9 @@
         </attr>
     </declare-styleable>
 
-    <declare-styleable name="CardBank">
-        <attr name="bankLogo" format="integer" />
-        <attr name="bankName" format="string" />
+    <declare-styleable name="MethodWithImageCard">
+        <attr name="methodLogo" format="integer" />
+        <attr name="methodName" format="string" />
     </declare-styleable>
 
 </resources>

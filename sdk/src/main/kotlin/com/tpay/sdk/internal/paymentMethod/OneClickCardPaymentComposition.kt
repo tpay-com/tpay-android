@@ -14,6 +14,7 @@ internal class OneClickCardPaymentComposition(
     private val viewModel: PaymentMethodViewModel,
     private val sheetFragment: SheetFragment,
     private val onAddCardClick: () -> Unit,
+    private val payButtonText: String,
     context: Context
 ) : Composition(context) {
     override fun onCreate() {
@@ -81,6 +82,7 @@ internal class OneClickCardPaymentComposition(
                 paymentBoxCard.isSelected = value
                 isBottomLayoutVisible = value
                 isPayWithCodeButtonVisible = false
+                setPayButtonText(payButtonText)
             }
         }
 }

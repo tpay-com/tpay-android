@@ -73,6 +73,7 @@ internal class CardPaymentBox @JvmOverloads constructor(
                         PaymentBoxType.CARD.ordinal -> PaymentBoxType.CARD
                         PaymentBoxType.BLIK.ordinal -> PaymentBoxType.BLIK
                         PaymentBoxType.TRANSFER.ordinal -> PaymentBoxType.TRANSFER
+                        PaymentBoxType.RATY_PEKAO.ordinal -> PaymentBoxType.RATY_PEKAO
                         else -> PaymentBoxType.WALLET
                     }
 
@@ -128,7 +129,8 @@ internal class CardPaymentBox @JvmOverloads constructor(
         CARD(R.drawable.ic_mastercard_visa, R.drawable.ic_mastercard_visa),
         BLIK(R.drawable.ic_blik_default, R.drawable.ic_blik_active),
         TRANSFER(R.drawable.ic_transfer_default, R.drawable.ic_transfer_active),
-        WALLET(R.drawable.ic_wallet_default, R.drawable.ic_wallet_active)
+        WALLET(R.drawable.ic_wallet_default, R.drawable.ic_wallet_active),
+        RATY_PEKAO(R.drawable.ic_raty_pekao_active, R.drawable.ic_raty_pekao_active)
     }
 
     enum class PaymentBoxState(val background: Int, val textColor: Int) {

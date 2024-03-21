@@ -6,6 +6,7 @@ import com.tpay.sdk.R
 import com.tpay.sdk.api.models.BlikAlias
 import com.tpay.sdk.api.models.DigitalWallet
 import com.tpay.sdk.api.models.Environment
+import com.tpay.sdk.api.models.InstallmentPayment
 import com.tpay.sdk.api.models.PaymentMethod
 import com.tpay.sdk.api.models.TokenizedCard
 import com.tpay.sdk.api.screenless.PaymentDetails
@@ -17,6 +18,8 @@ import com.tpay.sdk.api.screenless.card.CreateCreditCardTransactionResult
 import com.tpay.sdk.api.screenless.card.CreditCard
 import com.tpay.sdk.api.screenless.card.CreditCardPayment
 import com.tpay.sdk.api.screenless.googlePay.*
+import com.tpay.sdk.api.screenless.pekaoInstallment.CreatePekaoInstallmentTransactionResult
+import com.tpay.sdk.api.screenless.pekaoInstallment.PekaoInstallmentPayment
 import com.tpay.sdk.api.screenless.transfer.CreateTransferTransactionResult
 import com.tpay.sdk.api.screenless.transfer.TransferPayment
 import com.tpay.sdk.designSystem.textfields.CreditCardDate
@@ -25,6 +28,7 @@ import com.tpay.sdk.internal.FormError
 import com.tpay.sdk.internal.Language.Companion.asApi
 import com.tpay.sdk.internal.SheetType
 import com.tpay.sdk.internal.base.BaseViewModel
+import com.tpay.sdk.internal.model.MethodWithImage
 import com.tpay.sdk.internal.processingPayment.ProcessingPaymentFragment
 import com.tpay.sdk.internal.webView.WebUrl
 
@@ -36,6 +40,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     internal val blikNumberError = Observable<FormError>(FormError.None)
     internal val walletError = Observable(false)
     internal val transferError = Observable(false)
+    internal val ratyPekaoError = Observable(false)
     internal val walletMethod = Observable(WalletMethod.NONE)
     internal val isNfcEnabled = Observable(false)
     internal val shouldReadPayCardData = Observable(false)
@@ -50,22 +55,24 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     internal var cardCVV = ""
     internal var saveCardChecked = false
     internal var blikOtc = ""
-    internal var selectedTransferId: String? = null
+    internal var selectedTransferId: Int? = null
+    internal var selectedRatyPekaoVariantId: Int? = null
 
     val transactionAmount: Double
         get() = repository.transaction.amount
 
     val cardAvailable: Boolean
-        get() = repository.availableTransactionMethods.cardPaymentAvailable
+        get() = repository.availableMethods.creditCard != null
 
     val blikAvailable: Boolean
-        get() = repository.availableTransactionMethods.blikPaymentAvailable
+        get() = repository.availableMethods.blik != null
 
     val availableWalletMethods
-        get() = repository.availableTransactionMethods.wallets
+        get() = repository.availableMethods.wallets
 
     val isGooglePayInPaymentMethods: Boolean
-        get() = repository.availableTransactionMethods.wallets.contains(WalletMethod.GOOGLE_PAY)
+        get() = availableWalletMethods
+            .firstOrNull { method -> method.wallet == DigitalWallet.GOOGLE_PAY } != null
 
     val merchantName: String
         get() = configuration.merchantDetailsProvider?.merchantDisplayName(languageSwitcher.currentLanguage.asApi()) ?: ""
@@ -104,13 +111,16 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     var selectedTokenizedCard: TokenizedCard? = null
     var currentAmbiguousAlias: AmbiguousAlias? = null
 
-    val availableTransferMethods: List<TransferMethod>
-        get() = repository.transferMethods
+    val availableTransferMethods: List<MethodWithImage>
+        get() = repository.availableMethods.transfers
+
+    val availableRatyPekaoMethods: List<MethodWithImage>
+        get() = repository.availableMethods.pekaoInstallments
 
     private val googlePayRequest = GooglePayRequest(
         price = repository.transaction.amount,
         merchantName = merchantName,
-        merchantId = configuration.merchant?.merchantId ?: ""
+        merchantId = configuration.googlePayConfiguration?.merchantId ?: ""
     )
 
     lateinit var googlePayUtil: GooglePayUtil
@@ -333,7 +343,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                 transferError.value = selectedTransferId == null
                 if (transferError.value == false) {
                     TransferPayment.Builder().apply {
-                        setGroupId(selectedTransferId?.toInt() ?: -1)
+                        setChannelId(selectedTransferId ?: -1)
                         repository.transaction.run {
                             setCallbacks(repository.internalRedirects, notifications)
                             setPayer(payerContext.payer)
@@ -347,6 +357,29 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                         }
                     }.build().execute(onResult = this::handleTransferResult)
                 } else {
+                    screenClickable.value = true
+                    buttonLoading.value = false
+                }
+            }
+            PaymentMethodScreenState.RATY_PEKAO -> {
+                selectedRatyPekaoVariantId?.run variant@{
+                    ratyPekaoError.value = false
+                    PekaoInstallmentPayment.Builder().apply {
+                        setChannelId(this@variant)
+                        repository.transaction.run {
+                            setCallbacks(repository.internalRedirects, notifications)
+                            setPayer(payerContext.payer)
+                            setPaymentDetails(
+                                PaymentDetails(
+                                    amount = amount,
+                                    description = description,
+                                    language = languageSwitcher.currentLanguage.asApi()
+                                )
+                            )
+                        }
+                    }.build().execute(onResult = this@PaymentMethodViewModel::handleRatyPekaoResult)
+                } ?: kotlin.run {
+                    ratyPekaoError.value = true
                     screenClickable.value = true
                     buttonLoading.value = false
                 }
@@ -382,6 +415,23 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                 else -> handleGooglePayDataError()
             }
         }
+    }
+
+    private fun handleRatyPekaoResult(result: CreatePekaoInstallmentTransactionResult) {
+        repository.selectedPaymentMethod = PaymentMethod.InstallmentPayments(listOf(InstallmentPayment.RATY_PEKAO))
+
+        when (result) {
+            is CreatePekaoInstallmentTransactionResult.Created -> {
+                handleTransactionId(result.transactionId)
+                handlePaymentUrl(result.paymentUrl)
+            }
+            is CreatePekaoInstallmentTransactionResult.Error -> {
+                result.transactionId?.let(this::handleTransactionId)
+                moveToFailureScreen(addToBackStack = true)
+            }
+        }
+        screenClickable.value = true
+        buttonLoading.value = false
     }
 
     private fun handleBLIKResult(
@@ -506,8 +556,12 @@ internal class PaymentMethodViewModel : BaseViewModel() {
         saveCardChecked = !saveCardChecked
     }
 
-    internal fun onTransferItemClick(id: String) {
+    internal fun onTransferItemClick(id: Int) {
         selectedTransferId = id
+    }
+
+    internal fun onRatyPekaoItemClick(id: Int) {
+        selectedRatyPekaoVariantId = id
     }
 
     companion object {

@@ -18,7 +18,8 @@ internal class CardPaymentComposition(
     private val viewModel: PaymentMethodViewModel,
     private val onCardSelectionButtonClick: () -> Unit,
     private val onHideKeyboard: () -> Unit,
-    private val context: Context
+    private val context: Context,
+    private val payButtonText: String
 ) : Composition(context) {
     override fun onCreate() {
         viewModel.screenState = PaymentMethodScreenState.CARD
@@ -64,6 +65,7 @@ internal class CardPaymentComposition(
                 isBottomLayoutVisible = value
                 paymentBoxCard.isSelected = value
                 cardPaymentMethod.root.isVisible = value
+                setPayButtonText(payButtonText)
                 if (!value) isNFCLayoutVisible = false
             }
         }

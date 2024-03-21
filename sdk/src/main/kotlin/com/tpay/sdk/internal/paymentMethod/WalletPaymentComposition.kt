@@ -9,6 +9,7 @@ import com.tpay.sdk.extensions.onClick
 internal class WalletPaymentComposition(
     private val binding: FragmentPaymentMethodBinding,
     private val viewModel: PaymentMethodViewModel,
+    private val payButtonText: String,
     context: Context
 ) : Composition(context) {
     override fun onCreate() {
@@ -44,6 +45,7 @@ internal class WalletPaymentComposition(
                 isPayWithCodeButtonVisible = false
                 walletPaymentMethod.root.isVisible = value
                 paymentBoxWallet.isSelected = value
+                setPayButtonText(payButtonText)
             }
             if(value) deselectWalletMethods()
         }

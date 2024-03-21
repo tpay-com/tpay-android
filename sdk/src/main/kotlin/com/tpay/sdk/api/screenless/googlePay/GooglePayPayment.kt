@@ -3,13 +3,13 @@ package com.tpay.sdk.api.screenless.googlePay
 import android.util.Base64
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.*
-import com.tpay.sdk.server.dto.request.CreateTransactionRequestDTO
+import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 
 /**
  * Class responsible for creating Google Pay payment
  */
 class GooglePayPayment private constructor(
-    private val request: CreateTransactionRequestDTO
+    private val request: CreateTransactionWithChannelsDTO
 ) : Payment<CreateGooglePayTransactionResult>() {
     override fun execute(
         longPollingConfig: LongPollingConfig?,

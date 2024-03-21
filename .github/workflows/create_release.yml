@@ -34,10 +34,13 @@ jobs:
         uses: gradle/gradle-build-action@v2.9.0
 
       - name: Gradle generate documentation
-        run: ./gradlew sdk:generateDocumentation
+        run: ./gradlew sdk:dokkaHtml
+
+      - name: Remove previous documentation
+        run: rm -rf docs
 
       - name: Copy generated documentation
-        run: cp -r ./sdk/build/dokka/javadoc/ ./docs
+        run: cp -r ./sdk/build/dokka/html/ ./docs
 
       - name: Configure Git
         run: |

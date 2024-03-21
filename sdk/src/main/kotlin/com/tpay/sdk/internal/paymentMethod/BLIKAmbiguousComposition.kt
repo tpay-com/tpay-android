@@ -10,6 +10,7 @@ import com.tpay.sdk.extensions.isVisible
 internal class BLIKAmbiguousComposition(
     private val binding: FragmentPaymentMethodBinding,
     private val viewModel: PaymentMethodViewModel,
+    private val payButtonText: String,
     context: Context
 ) : Composition(context) {
     override fun onCreate() {
@@ -69,6 +70,7 @@ internal class BLIKAmbiguousComposition(
                 paymentBoxBLIK.isSelected = value
                 blikBankPayment.root.isVisible = value
                 isPayWithCodeButtonVisible = true
+                setPayButtonText(payButtonText)
             }
         }
 }

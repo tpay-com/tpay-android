@@ -5,6 +5,7 @@ import com.tpay.sdk.extensions.Completable
 import com.tpay.sdk.internal.Repository
 import com.tpay.sdk.internal.config.Configuration
 import com.tpay.sdk.server.dto.request.CreateTransactionRequestDTO
+import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 import com.tpay.sdk.server.dto.request.PayTransactionRequestDTO
 import com.tpay.sdk.server.dto.response.CreateTransactionResponseDTO
 import javax.inject.Inject
@@ -39,6 +40,10 @@ abstract class Payment <T> {
     )
 
     internal fun makeTransaction(request: CreateTransactionRequestDTO): Completable<CreateTransactionResponseDTO> {
+        return repository.createTransaction(request)
+    }
+
+    internal fun makeTransaction(request: CreateTransactionWithChannelsDTO): Completable<CreateTransactionResponseDTO> {
         return repository.createTransaction(request)
     }
 

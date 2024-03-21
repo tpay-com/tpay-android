@@ -6,9 +6,9 @@ plugins {
     id 'signing'
 }
 
-def _versionMajor = 0
-def _versionMinor = 5
-def _versionPatch = 1
+def _versionMajor = 1
+def _versionMinor = 1
+def _versionPatch = 0
 def _versionName = "${_versionMajor}.${_versionMinor}.${_versionPatch}"
 def _archiveName = "com.tpay.sdk-$_versionName"
 
@@ -110,6 +110,10 @@ afterEvaluate {
                     username System.getenv('STAGING_MAVEN_LOGIN')
                     password System.getenv('STAGING_MAVEN_PASSWORD')
                 }
+            }
+            maven {
+                name 'Local'
+                url "$buildDir/tpayMaven/"
             }
         }
 

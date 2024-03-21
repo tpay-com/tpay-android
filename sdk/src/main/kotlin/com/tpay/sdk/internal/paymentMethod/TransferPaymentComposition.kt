@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
+import com.tpay.sdk.designSystem.cards.MethodWithImageCard
 import com.tpay.sdk.extensions.isVisible
 import com.tpay.sdk.internal.SheetFragment
 
@@ -12,6 +13,7 @@ internal class TransferPaymentComposition(
     private val binding: FragmentPaymentMethodBinding,
     private val viewModel: PaymentMethodViewModel,
     private val sheetFragment: SheetFragment,
+    private val payButtonText: String,
     context: Context
 ) : Composition(context) {
     override fun onCreate() {
@@ -45,11 +47,12 @@ internal class TransferPaymentComposition(
                 isPayWithCodeButtonVisible = false
                 paymentBoxTransfer.isSelected = value
                 transferPaymentMethod.root.isVisible = value
+                setPayButtonText(payButtonText)
             }
         }
 
     private fun setupRecyclerView() {
-        val bankAdapter = TransferListAdapter()
+        val bankAdapter = MethodWithImageAdapter(MethodWithImageCard.Type.TRANSFER)
         binding.transferPaymentMethod.bankListRecyclerView.run {
             adapter = bankAdapter
             layoutManager =
@@ -57,7 +60,7 @@ internal class TransferPaymentComposition(
             isNestedScrollingEnabled = false
         }
 
-        bankAdapter.onTransferItemClickListener = TransferListAdapter.OnTransferItemClickListener(viewModel::onTransferItemClick)
+        bankAdapter.onMethodWithImageItemClickListener = MethodWithImageAdapter.OnMethodWithImageItemClickListener(viewModel::onTransferItemClick)
         bankAdapter.items = viewModel.availableTransferMethods
     }
 

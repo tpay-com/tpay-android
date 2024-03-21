@@ -9,14 +9,16 @@ import javax.crypto.Cipher
 /**
  * Class responsible for encrypting credit card information
  */
-class PayCardEncryptor(private val publicKeyString: String) {
+class PayCardEncryptor(private val publicKeyHash: String) {
     fun encrypt(
         cardNumber: String,
         expirationDate: String,
         cvv: String,
         domain: String
     ): String {
-        val stringKey = publicKeyString.fromPEMPublicKey()
+        val stringKey = Base64.decode(publicKeyHash, Base64.DEFAULT).run {
+            String(this).fromPEMPublicKey()
+        }
 
         val encoded = Base64.decode(stringKey, Base64.DEFAULT)
 

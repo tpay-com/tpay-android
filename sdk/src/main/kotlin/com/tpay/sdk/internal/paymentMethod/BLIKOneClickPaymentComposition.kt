@@ -8,6 +8,7 @@ import com.tpay.sdk.extensions.isVisible
 internal class BLIKOneClickPaymentComposition(
     private val binding: FragmentPaymentMethodBinding,
     private val viewModel: PaymentMethodViewModel,
+    private val payButtonText: String,
     context: Context
 ) : Composition(context) {
     override fun onCreate() {
@@ -27,6 +28,7 @@ internal class BLIKOneClickPaymentComposition(
                 blikPaymentMethod.root.isVisible = value
                 isBottomLayoutVisible = value
                 isPayWithCodeButtonVisible = true
+                setPayButtonText(payButtonText)
             }
             field = value
         }

@@ -3,6 +3,7 @@
 
 ## About
 This SDK allows your app to make payments with Tpay.
+Documentation is available [here](https://tpay-com.github.io/tpay-android/).
 
 ## Install
 Tpay SDK is available on Maven Central.
@@ -17,6 +18,22 @@ dependencies {
     implementation "com.tpay:sdk:<version>"   
 }
 ```
+Tpay SDK is also available as a local maven repository, downloadable from Github releases.
+```groovy
+// Unzip the downloaded file and then
+// Add local maven repository to root level build.gradle or settings.gradle file
+repositories {
+    maven {
+        url "/path/to/tpayMaven"
+    }
+}
+
+// Add Tpay SDK dependency to app level build.gradle
+// Local repository contains only one SDK version
+dependencies {
+    implementation "com.tpay:sdk:<downloaded_version>"
+}
+```
 
 # Usage
 Tpay SDK contains UI module that users can interact with and exposes a possibility to make screenless payments.
@@ -29,7 +46,6 @@ Configure information about merchant.
 ```kotlin
 TpayModule.configure(  
     Merchant(
-        merchantId = "YOUR_MERCHANT_ID",
         authorization = Merchant.Authorization(  
             clientId = "YOUR_CLIENT_ID",  
             clientSecret = "YOUR_CLIENT_SECRET"  
@@ -56,15 +72,18 @@ TpayModule.configure(
 ### Payment methods
 Configure payment methods that customer will be able to use.
 ```kotlin
-TpayModule.configure(  
-    paymentMethods = listOf(  
-        PaymentMethod.Card,  
-        PaymentMethod.Blik,  
-        PaymentMethod.Pbl,  
-        PaymentMethod.DigitalWallets(  
-            wallets = listOf(DigitalWallet.GOOGLE_PAY)  
-        )  
-    )  
+TpayModule.configure(
+    paymentMethods = listOf(
+        PaymentMethod.Card,
+        PaymentMethod.Blik,
+        PaymentMethod.Pbl,
+        PaymentMethod.DigitalWallets(
+            wallets = listOf(DigitalWallet.GOOGLE_PAY)
+        ),
+        PaymentMethod.InstallmentPayments(
+            methods = listOf(InstallmentPayment.RATY_PEKAO)
+        )
+    )
 )
 ```
 
@@ -102,6 +121,25 @@ TpayModule.configure(object : SSLCertificatesProvider {
     override var apiConfiguration: CertificatePinningConfiguration =  
         CertificatePinningConfiguration(publicKeyHash = "PUBLIC_KEY")  
 })
+```
+
+### Google Pay configuration
+Configure Google Pay by providing your merchant id.
+```kotlin
+TpayModule.configure(GooglePayConfiguration(merchantId = "YOUR_MERCHANT_ID"))
+```
+
+### Compatibility
+Configure the compatibility mode for SDK. 
+Currently available modes are Native and Flutter. Native is set by default.
+Tpay has a official Flutter plugin, check this [repository](https://github.com/tpay-com/tpay-flutter) for more details.
+Want to create your own plugin? Use Compatibility.Flutter when configuring.
+```kotlin
+// For native development
+TpayModule.configure(Compatibility.Native)
+
+// For Flutter plugin
+TpayModule.configure(Compatibility.Flutter)
 ```
 
 ## Back press handling
@@ -233,26 +271,39 @@ if (result is SheetOpenResult.Success) {
 }
 ```
 # Screenless payments
-## Get payment methods
-GetPaymentMethods class allows you to get payment methods that you can use within your app. It takes a common part of payment methods available on Tpay backend and payment methods that you configured using TpayModule.
+
+## Get payment channels
+GetPaymentChannels class allows you to get payment channels available on your merchant account.
+You can also use GroupedPaymentChannels class to group channels received from GetPaymentChannels.
+There is also a AvailablePaymentMethods class, you can get available payment methods that satisfy payment constraints from it.
 ```kotlin
-GetPaymentMethods().execute { result ->  
-    if (result is GetPaymentMethodsResult.Success) {  
-        if (result.isCreditCardPaymentAvailable) {  
-            // show credit card  
-        }  
-        if (result.isBLIKPaymentAvailable) {  
-            // show BLIK  
-        }  
-        if (result.availableTransferMethods.isNotEmpty()) {
-            // show transfers
-            // each transfer object contains         
-            // groupId, name and image url
+GetPaymentChannels().execute { result ->
+    when (result) {
+        is GetPaymentChannelsResult.Success -> {
+            // read channels via result.channels
+            
+            // Group payment channels by type
+            val grouped = GroupedPaymentChannels.from(result.channels)
+            
+            // Get only available methods that satisfy payment constraints.
+            // It returns a common part of "grouped" and provided "methods".
+            // Amount needs to be a final price that will be used while creating transaction.
+            val availableMethods = AvailablePaymentMethods.from(
+                grouped = grouped,
+                methods = listOf(
+                    PaymentMethod.Blik,
+                    PaymentMethod.Pbl, 
+                    PaymentMethod.DigitalWallets(listOf(DigitalWallet.GOOGLE_PAY))
+                ),
+                amount = 39.99
+            )
+            
+            // display availableMethods in your UI
         }
-        if (result.availableDigitalWallets.isNotEmpty()) {  
-            // show digital wallets  
-        }  
-    }  
+        is GetPaymentChannelsResult.Error -> {
+            // read error via result.devErrorMessage
+        }
+    }
 }
 ```
 ## Parameters
@@ -345,15 +396,29 @@ if (result is CreateBLIKTransactionResult.AmbiguousBlikAlias) {
 }
 ```
 ## Screenless transfer payment
-TransferPayment allows you to create payment with bank selected by user identified by groupId.
+TransferPayment allows you to create payment with bank selected by user identified by channelId.
 ```kotlin
 TransferPayment.Builder()  
-    .setGroupId(102)  
+    .setChannelId(102)
     .setPayer(payer)  
     .setPaymentDetails(paymentDetails)  
     .setCallbacks(redirects, notifications)  
     .build()  
     .execute { result -> 
+        // handle payment create result
+    }
+```
+
+## Screenless Raty Pekao payment
+PekaoInstallmentPayment allows you to create installment payment with Pekao.
+```kotlin
+PekaoInstallmentPayment.Builder()
+    .setChannelId(81)
+    .setPayer(payer)
+    .setPaymentDetails(paymentDetails)
+    .setCallbacks(redirects, notifications)
+    .build()
+    .execute { result ->
         // handle payment create result
     }
 ```

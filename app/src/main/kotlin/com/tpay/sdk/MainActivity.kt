@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             .configure(Environment.SANDBOX)
             .configure(PaymentMethod.allMethods)
             .configure(Language.PL)
+            .configure(GooglePayConfiguration("<merchant id>"))
             .configure(object : MerchantDetailsProvider {
                 override fun merchantDisplayName(language: Language): String {
                     return when(language){
@@ -81,7 +82,6 @@ class MainActivity : AppCompatActivity() {
             })
             .configure(
                 Merchant(
-                    merchantId = "<merchant id>",
                     authorization = Merchant.Authorization(
                         clientId = "<client id>",
                         clientSecret = "<client secret>"

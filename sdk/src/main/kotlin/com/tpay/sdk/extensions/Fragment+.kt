@@ -1,5 +1,6 @@
 package com.tpay.sdk.extensions
 
+import android.graphics.Rect
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
@@ -10,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.tpay.sdk.R
+import com.tpay.sdk.internal.ScreenMetrics
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -59,6 +61,16 @@ internal fun Fragment.getColor(@ColorRes resId: Int): Int = ContextCompat.getCol
 
 // Keyboard
 internal fun Fragment.hideKeyboard() = requireActivity().hideKeyboard()
+
+internal fun Fragment.getScreenMetrics(): ScreenMetrics {
+    return Rect().run {
+        requireActivity().window.decorView.getWindowVisibleDisplayFrame(this)
+        ScreenMetrics(
+            statusBarHeight = top,
+            screenHeightWithoutBottomBar = bottom
+        )
+    }
+}
 
 internal fun FragmentTransaction.animate(withAnim: Boolean): FragmentTransaction {
     if (withAnim) {

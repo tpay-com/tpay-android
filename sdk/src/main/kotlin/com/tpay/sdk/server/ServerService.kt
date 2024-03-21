@@ -6,6 +6,7 @@ import com.tpay.sdk.extensions.Completable
 import com.tpay.sdk.extensions.Threads
 import com.tpay.sdk.server.dto.request.CardTokenizationRequestDTO
 import com.tpay.sdk.server.dto.request.CreateTransactionRequestDTO
+import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 import com.tpay.sdk.server.dto.request.PayTransactionRequestDTO
 import com.tpay.sdk.server.dto.response.*
 import javax.inject.Singleton
@@ -57,7 +58,28 @@ internal class ServerService {
                 })
         }, completable::onError)
     }
-
+    
+    fun getPaymentChannels(): Completable<GetChannelsResponseDTO> = Completable.create { completable ->
+        authorize({ accessToken ->
+            networking.get(
+                endpoint = "transactions/channels",
+                auth = Auth.BearerAuth(accessToken.token)
+            )
+                .observeOn(Threads.IO)
+                .observe({ response ->
+                    try {
+                        completable.onSuccess(GetChannelsResponseDTO(response))
+                    } catch (exception: Exception) {
+                        exception.printStackTrace()
+                        completable.onError(JsonParseException(exception.message))
+                    }
+                }, { e ->
+                    handleClientOrServerError(e)
+                    completable.onError(e)
+                })
+        }, completable::onError)
+    }
+    
     fun getPaymentMethods(): Completable<GetTransactionMethodsResponseDTO> = Completable.create { completable ->
         authorize({ accessToken ->
                 networking.get(
@@ -85,6 +107,29 @@ internal class ServerService {
     fun getImage(imageUrl: String): Completable<ByteArray> {
         return Completable.create { completable ->
             networking.getImage(imageUrl, completable)
+        }
+    }
+    
+    fun createTransaction(createTransactionWithChannelsDTO: CreateTransactionWithChannelsDTO): Completable<CreateTransactionResponseDTO> {
+        return Completable.create { completable ->
+            authorize({ accessToken ->
+                networking.post(
+                    endpoint = "transactions",
+                    auth = Auth.BearerAuth(accessToken.token),
+                    body = createTransactionWithChannelsDTO.toString()
+                )
+                    .observeOn(Threads.IO)
+                    .observe({ response ->
+                        try {
+                            completable.onSuccess(CreateTransactionResponseDTO(response))
+                        } catch (exception: Exception) {
+                            completable.onError(JsonParseException(exception.message))
+                        }
+                    }, { e ->
+                        handleClientOrServerError(e)
+                        completable.onError(e)
+                    })
+            }, completable::onError)
         }
     }
 

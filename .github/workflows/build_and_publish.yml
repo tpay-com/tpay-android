@@ -63,8 +63,19 @@ jobs:
       - name: Publish to Maven Central
         run: ./gradlew sdk:publishReleasePublicationToMavenCentralRepository
 
+      - name: Publish to local maven
+        run: ./gradlew sdk:publishReleasePublicationToLocalRepository
+
+      - name: Zip local maven
+        run: |
+          zip -qq -r tpayMaven.zip tpayMaven
+          cd ../..
+          mv ./sdk/build/tpayMaven.zip .
+        working-directory: ./sdk/build
+
       - name: Create Github release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.RELEASE_VERSION }}
           body: "Release is available on Maven Central repository. Add > implementation \"com.tpay:sdk:${{ env.RELEASE_VERSION }}\" < to your app level build.gradle file."
+          artifacts: "tpayMaven.zip"

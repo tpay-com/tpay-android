@@ -1,6 +1,8 @@
 package com.tpay.sdk.api.tpayModule
 
+import com.tpay.sdk.api.models.Compatibility
 import com.tpay.sdk.api.models.Environment
+import com.tpay.sdk.api.models.GooglePayConfiguration
 import com.tpay.sdk.api.models.Language
 import com.tpay.sdk.api.models.PaymentMethod
 import com.tpay.sdk.api.models.merchant.Merchant
@@ -52,6 +54,23 @@ sealed class TpayModule {
          */
         fun configure(merchantDetailsProvider: MerchantDetailsProvider): Companion {
             configuration.merchantDetailsProvider = merchantDetailsProvider
+            return this
+        }
+
+        /**
+         * Function responsible for configuring the compatibility mode.
+         * [Compatibility.Native] is set by default.
+         */
+        fun configure(compatibility: Compatibility): Companion {
+            configuration.compatibility = compatibility
+            return this
+        }
+
+        /**
+         * Function responsible for configuring Google Pay
+         */
+        fun configure(googlePayConfiguration: GooglePayConfiguration): Companion {
+            configuration.googlePayConfiguration = googlePayConfiguration
             return this
         }
 

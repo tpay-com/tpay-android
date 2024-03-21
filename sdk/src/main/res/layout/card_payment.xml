@@ -26,28 +26,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingEnd="5dp"
-        android:text="@string/powered_by"
-        android:textColor="@color/colorNeutral500"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toStartOf="@id/iconElavon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SmallSp" />
-
-    <ImageView
-        android:id="@+id/iconElavon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:contentDescription="@string/image_content_description"
-        android:src="@drawable/ic_elavon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.tpay.sdk.designSystem.textfields.TextFieldCardNumber
         android:id="@+id/creditCardNumberTextField"
         android:layout_width="match_parent"

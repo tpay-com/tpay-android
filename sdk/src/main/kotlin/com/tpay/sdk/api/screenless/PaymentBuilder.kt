@@ -3,12 +3,12 @@ package com.tpay.sdk.api.screenless
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.di.injectFields
 import com.tpay.sdk.internal.config.Configuration
-import com.tpay.sdk.server.dto.request.CreateTransactionRequestDTO
+import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 import javax.inject.Inject
 
 
 abstract class PaymentBuilder<T : Payment<*>> {
-    internal val transactionRequest = CreateTransactionRequestDTO()
+    internal val transactionRequest = CreateTransactionWithChannelsDTO()
 
     @Inject
     private lateinit var configuration: Configuration

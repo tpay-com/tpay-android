@@ -62,6 +62,11 @@ internal open class BaseViewModel @Inject constructor(
         buttonLoading.value = false
     }
 
+    fun showSomethingWentWrong() {
+        errorMessageId.value = R.string.something_went_wrong
+        buttonLoading.value = false
+    }
+
     protected fun moveToWebViewScreen(){
         navigation.changeFragment(WebViewFragment(), addToBackStack = true)
     }

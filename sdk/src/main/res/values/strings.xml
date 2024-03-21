@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="continue_text">Przejdź dalej</string>
+    <string name="select_installment_variant">Wybierz wariant rat</string>
+    <string name="raty_pekao" translatable="false">Raty Pekao</string>
     <string name="no_need_to_enter_blik_code">Nie musisz podawać kodu BLIK - robisz zakupy w zapisanym wcześniej sklepie</string>
     <string name="save_blik_alias">Zapamiętaj sklep i włącz płatność one-click</string>
     <string name="name_the_store">Nazwij sklep</string>

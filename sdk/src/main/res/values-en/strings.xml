@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="select_installment_variant">Choose installment option</string>
     <string name="no_need_to_enter_blik_code">You do not have to enter the BLIK code - you shop in a previously remembered store</string>
     <string name="save_blik_alias">Remember the store and enable one-click payment</string>
     <string name="name_the_store">Name the store</string>
@@ -63,4 +64,5 @@
     <string name="merchant_rodo_info">The personal data administrator is %1$s.</string>
     <string name="merchant_rodo_info_with_city">The personal data administrator is %1$s with its registered office in %2$s.</string>
     <string name="blik_code_not_found_or_expired">The entered code is invalid or has expired</string>
+    <string name="continue_text">Continue</string>
 </resources>

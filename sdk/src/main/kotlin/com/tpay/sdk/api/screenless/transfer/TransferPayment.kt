@@ -3,13 +3,13 @@ package com.tpay.sdk.api.screenless.transfer
 
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.*
-import com.tpay.sdk.server.dto.request.CreateTransactionRequestDTO
+import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 
 /**
  * Class responsible for creating transfer payment.
  */
 class TransferPayment private constructor(
-    private val request: CreateTransactionRequestDTO
+    private val request: CreateTransactionWithChannelsDTO
 ) : Payment<CreateTransferTransactionResult>() {
     override fun execute(
         longPollingConfig: LongPollingConfig?,
@@ -62,10 +62,10 @@ class TransferPayment private constructor(
         }
 
         /**
-         * Function setting group id of bank to request
+         * Function setting the channelId to request
          */
-        fun setGroupId(groupId: Int): Builder = apply {
-            transactionRequest.applyTransfer(groupId)
+        fun setChannelId(channelId: Int): Builder = apply {
+            transactionRequest.applyTransfer(channelId)
         }
 
         override fun build(): TransferPayment {

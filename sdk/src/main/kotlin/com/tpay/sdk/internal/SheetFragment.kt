@@ -6,11 +6,11 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tpay.sdk.R
+import com.tpay.sdk.api.models.Compatibility
 import com.tpay.sdk.databinding.FragmentSheetBinding
 import com.tpay.sdk.designSystem.buttons.ButtonLanguage
 import com.tpay.sdk.di.injectFields
@@ -52,6 +52,8 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
     @Inject
     internal lateinit var addCardCoordinator: AddCardCoordinator
 
+    private val screenMetrics by lazy { getScreenMetrics() }
+
     private var savedSoftInputMode: Int? = null
 
     init {
@@ -72,8 +74,12 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
 
         navigation.changeFragment(startingFragment, addToBackStack = false)
 
-        initBottomSheet(savedInstanceState)
-        showSheet()
+        try {
+            initBottomSheet(savedInstanceState)
+            showSheet()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        }
     }
 
     val sheetType: SheetType
@@ -114,33 +120,52 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         }
     }
 
-    private fun initBottomSheet(savedInstanceState: Bundle?) {
-        val screenHeight = requireActivity().screenHeight
-        bottomSheetBehavior =
-            BottomSheetBehavior.from(binding.bottomSheet)
-        bottomSheetBehavior?.peekHeight = (screenHeight * SCREEN_RATIO).toInt()
-        bottomSheetBehavior?.isHideable = true
-
-        binding.bottomSheetContainer.layoutParams =
-            (binding.bottomSheetContainer.layoutParams as ConstraintLayout.LayoutParams).also {
-                it.height = (screenHeight * SCREEN_RATIO).toInt() - 60.px
+    private fun initBottomSheet(savedInstanceState: Bundle?) = configuration.compatibility.let { compatibility ->
+        fun initNative() {
+            val screenHeight = requireActivity().screenHeight
+            bottomSheetBehavior?.peekHeight = (screenHeight * STANDARD_SHEET_SCREEN_RATIO).toInt()
+            binding.bottomSheetContainer.run {
+                layoutParams = layoutParams.apply {
+                    height = (screenHeight * STANDARD_SHEET_SCREEN_RATIO).toInt() - 60.px
+                }
             }
+        }
+
+        fun initFlutter() = screenMetrics.run {
+            val statusBarToScreenRatio = statusBarHeight/screenHeightWithoutBottomBar.toFloat()
+            bottomSheetBehavior?.maxHeight = (screenHeightWithoutBottomBar * (1 - statusBarToScreenRatio)).toInt()
+            bottomSheetBehavior?.peekHeight = (screenHeightWithoutBottomBar * STANDARD_SHEET_SCREEN_RATIO).toInt()
+            binding.bottomSheetContainer.run {
+                layoutParams = layoutParams.apply {
+                    height = (screenHeightWithoutBottomBar * STANDARD_SHEET_SCREEN_RATIO).toInt() - 60.px
+                }
+            }
+        }
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet).apply {
+            isHideable = true
+        }
+
+        when (compatibility) {
+            is Compatibility.Native -> initNative()
+            is Compatibility.Flutter -> initFlutter()
+        }
 
         navigation.fragmentListeners({
-            handleSheetStateChange(bottomSheetBehavior?.state, binding.bottomSheet)
+            handleSheetStateChange(bottomSheetBehavior?.state)
         }, {
-            handleSheetStateChange(bottomSheetBehavior?.state, binding.bottomSheet)
+            handleSheetStateChange(bottomSheetBehavior?.state)
         })
 
         bottomSheetBehavior?.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                handleSheetStateChange(newState, bottomSheet)
+                handleSheetStateChange(newState)
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 if (slideOffset >= 0){
-                    handleDraggingAndSettling(bottomSheet)
+                    handleDraggingAndSettling()
                     onSlide.value = slideOffset
                 }
             }
@@ -184,31 +209,43 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         showLanguageBtn()
     }
 
-    private fun handleSheetStateChange(state: Int?, bottomSheet: View){
-        val currentFragment = navigation.getCurrentFragment()
-        val shouldBottomBarBeDisplayed =
-            currentFragment !is WebViewFragment &&
-            currentFragment !is SuccessStatusFragment &&
-            currentFragment !is FailureStatusFragment
-        if(state == BottomSheetBehavior.STATE_COLLAPSED || state == BottomSheetBehavior.STATE_EXPANDED){
-            binding.bottomSheetContainer.layoutParams =
-                (binding.bottomSheetContainer.layoutParams as ConstraintLayout.LayoutParams).also {
-                    it.height = binding.bottomSheet.height - bottomSheet.top - if(shouldBottomBarBeDisplayed) 60.px else 0.px
+    private fun getContainerHeightFor(fragment: Fragment?): Int = binding.run {
+        val additionalHeight = if (configuration.compatibility is Compatibility.Flutter) screenMetrics.statusBarHeight else 0
+        bottomSheet.height + additionalHeight - bottomSheet.top - if (shouldBottomBarBeDisplayed(fragment)) 60.px else 0.px
+    }
+
+    private fun handleSheetStateChange(state: Int?){
+        try {
+            val currentFragment = navigation.getCurrentFragment()
+            if (state == BottomSheetBehavior.STATE_COLLAPSED || state == BottomSheetBehavior.STATE_EXPANDED) {
+                binding.bottomSheetContainer.run {
+                    layoutParams = layoutParams.apply {
+                        height = getContainerHeightFor(currentFragment)
+                    }
                 }
+            }
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
     }
 
-    fun handleDraggingAndSettling(bottomSheet: View){
-        val currentFragment = navigation.getCurrentFragment()
-        val shouldBottomBarBeDisplayed =
-            currentFragment !is WebViewFragment &&
-            currentFragment !is SuccessStatusFragment &&
-            currentFragment !is FailureStatusFragment
-        if(bottomSheetBehavior?.state == BottomSheetBehavior.STATE_DRAGGING || bottomSheetBehavior?.state == BottomSheetBehavior.STATE_SETTLING){
-            binding.bottomSheetContainer.layoutParams =
-                (binding.bottomSheetContainer.layoutParams as ConstraintLayout.LayoutParams).also {
-                    it.height = binding.bottomSheet.height - bottomSheet.top - if(shouldBottomBarBeDisplayed) 60.px else 0.px
+    private fun shouldBottomBarBeDisplayed(fragment: Fragment?): Boolean {
+        return fragment !is WebViewFragment && fragment !is SuccessStatusFragment && fragment !is FailureStatusFragment
+    }
+
+
+    fun handleDraggingAndSettling(){
+        try {
+            val currentFragment = navigation.getCurrentFragment()
+            if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_DRAGGING || bottomSheetBehavior?.state == BottomSheetBehavior.STATE_SETTLING) {
+                binding.bottomSheetContainer.run {
+                    layoutParams = layoutParams.apply {
+                        height = getContainerHeightFor(currentFragment)
+                    }
                 }
+            }
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
     }
 
@@ -466,7 +503,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         private const val USER_CARD_SHOW_DELAY = 300L
         private const val LANGUAGE_BUTTON_ANIMATION_DURATION = 250L
         private const val DIM_BACKGROUND_ANIMATION_DURATION = 100L
-        private const val SCREEN_RATIO = 0.65f
+        private const val STANDARD_SHEET_SCREEN_RATIO = 0.65f
         private val SHEET_TYPE_ARGUMENT_NAME = SheetType::class.java.simpleName
 
         fun with(sheetType: SheetType): SheetFragment {
@@ -476,6 +513,11 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         }
     }
 }
+
+internal data class ScreenMetrics(
+    val statusBarHeight: Int,
+    val screenHeightWithoutBottomBar: Int
+)
 
 internal enum class SheetType {
     PAYMENT, TOKENIZATION, TOKEN_PAYMENT

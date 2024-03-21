@@ -109,8 +109,6 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         viewModel.onAmbiguousBlikAliases = { showBLIKAmbiguousPaymentComposition() }
         viewModel.onAmbiguousBlikAliasesError = { showBLIKOneClickPaymentComposition() }
 
-        binding.payButton.text = getString(R.string.paying, viewModel.transactionAmount)
-
         payCardScanner.startScan(requireActivity()) { payCardScanResult ->
             if (viewModel.shouldReadPayCardData.value!!) {
                 if (payCardScanResult == null) {
@@ -134,6 +132,12 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
             }
         }
     }
+
+    private val payButtonPriceText: String
+        get() = getString(R.string.paying, viewModel.transactionAmount)
+
+    private val payButtonContinueText: String
+        get() = getString(R.string.continue_text)
 
     private fun openGooglePayScanActivity() {
         val request = PaymentCardRecognitionIntentRequest.getDefaultInstance()
@@ -186,6 +190,9 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                         paymentMethodBoxes.add(PaymentMethodScreenState.BLIK to paymentBoxBLIK)
                     }
                 }
+                if (availableRatyPekaoMethods.isNotEmpty()) {
+                    paymentMethodBoxes.add(PaymentMethodScreenState.RATY_PEKAO to paymentBoxRatyPekao)
+                }
                 if (availableTransferMethods.isNotEmpty()) {
                     paymentMethodBoxes.add(PaymentMethodScreenState.TRANSFER to paymentBoxTransfer)
                 }
@@ -215,8 +222,18 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                         PaymentMethodScreenState.BLIK_AMBIGUOUS -> {
                             showBLIKAmbiguousPaymentComposition()
                         }
+                        PaymentMethodScreenState.RATY_PEKAO -> {
+                            showRatyPekaoComposition()
+                        }
                         PaymentMethodScreenState.TRANSFER -> {
-                            changeComposition(TransferPaymentComposition(binding, viewModel, sheetFragment, requireContext()))
+                            changeComposition(
+                                TransferPaymentComposition(
+                                    binding,
+                                    viewModel,
+                                    sheetFragment,
+                                    payButtonPriceText,
+                                    requireContext())
+                            )
                         }
                         PaymentMethodScreenState.WALLET -> {
                             showWalletPaymentComposition()
@@ -257,7 +274,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                     sheetFragment.isClickBlockerVisible = !clickable
                 }
                 buttonLoading.observe { isLoading ->
-                    sheetFragment.handleDraggingAndSettling(sheetFragment.binding.bottomSheet)
+                    sheetFragment.handleDraggingAndSettling()
                     payButton.isLoading = isLoading
                     if(!isLoading && viewModel.screenState == PaymentMethodScreenState.CARD && viewModel.payCardFieldsValid){
                         root.isVisible = false
@@ -283,11 +300,29 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
     }
 
     private fun showCardPaymentComposition(onHideKeyboard: () -> Unit = { hideKeyboard() }){
-        changeComposition(CardPaymentComposition(binding, viewModel, this::showOneClickCardPaymentComposition, onHideKeyboard, requireContext()))
+        changeComposition(
+            CardPaymentComposition(
+                binding,
+                viewModel,
+                this::showOneClickCardPaymentComposition,
+                onHideKeyboard,
+                requireContext(),
+                payButtonPriceText
+            )
+        )
     }
 
     private fun showOneClickCardPaymentComposition(){
-        changeComposition(OneClickCardPaymentComposition(binding, viewModel, sheetFragment, this::showCardPaymentComposition, requireContext()))
+        changeComposition(
+            OneClickCardPaymentComposition(
+                binding,
+                viewModel,
+                sheetFragment,
+                this::showCardPaymentComposition,
+                payButtonPriceText,
+                requireContext()
+            )
+        )
     }
 
     private fun showBLIKCodePaymentComposition(
@@ -295,19 +330,43 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         onBackButtonClick: () -> Unit = { },
         onHideKeyboard: () -> Unit = { hideKeyboard() }
     ){
-        changeComposition(BLIKCodePaymentComposition(binding, viewModel, requireContext(), showBackButton, onBackButtonClick, onHideKeyboard))
+        changeComposition(
+            BLIKCodePaymentComposition(
+                binding,
+                viewModel,
+                payButtonPriceText,
+                requireContext(),
+                showBackButton,
+                onBackButtonClick,
+                onHideKeyboard
+            )
+        )
     }
 
     private fun showBLIKOneClickPaymentComposition(){
-        changeComposition(BLIKOneClickPaymentComposition(binding, viewModel, requireContext()))
+        changeComposition(
+            BLIKOneClickPaymentComposition(binding, viewModel, payButtonPriceText, requireContext())
+        )
     }
 
     private fun showBLIKAmbiguousPaymentComposition(){
-        changeCompositionIfDifferent(BLIKAmbiguousComposition(binding, viewModel, requireContext()))
+        changeCompositionIfDifferent(BLIKAmbiguousComposition(binding, viewModel, payButtonPriceText, requireContext()))
     }
 
     private fun showWalletPaymentComposition() {
-        changeComposition(WalletPaymentComposition(binding, viewModel, requireContext()))
+        changeComposition(WalletPaymentComposition(binding, viewModel, payButtonPriceText, requireContext()))
+    }
+
+    private fun showRatyPekaoComposition() {
+        changeComposition(
+            RatyPekaoComposition(
+                binding,
+                viewModel,
+                sheetFragment,
+                payButtonContinueText,
+                requireContext()
+            )
+        )
     }
 
     private fun setPaymentMethodPickerBehaviour() {
@@ -336,7 +395,26 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 showWalletPaymentComposition()
             }
             paymentBoxTransfer.onClick {
-                changeComposition(TransferPaymentComposition(binding, viewModel, sheetFragment, requireContext()))
+                changeComposition(
+                    TransferPaymentComposition(
+                        binding,
+                        viewModel,
+                        sheetFragment,
+                        payButtonPriceText,
+                        requireContext()
+                    )
+                )
+            }
+            paymentBoxRatyPekao.onClick {
+                changeComposition(
+                    RatyPekaoComposition(
+                        binding,
+                        viewModel,
+                        sheetFragment,
+                        payButtonContinueText,
+                        requireContext()
+                    )
+                )
             }
         }
     }
@@ -430,6 +508,10 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         private val PAYMENT_BOX_MARGIN_START = 20.px
         private val PAYMENT_BOX_MARGIN_END = 20.px
     }
+}
+
+internal fun FragmentPaymentMethodBinding.setPayButtonText(text: String) {
+    payButton.text = text
 }
 
 internal fun FragmentPaymentMethodBinding.clearFocusOnTextFields() {

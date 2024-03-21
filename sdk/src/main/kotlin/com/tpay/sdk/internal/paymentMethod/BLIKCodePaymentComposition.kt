@@ -10,6 +10,7 @@ import com.tpay.sdk.extensions.isVisible
 internal class BLIKCodePaymentComposition(
     private val binding: FragmentPaymentMethodBinding,
     private val viewModel: PaymentMethodViewModel,
+    private val payButtonText: String,
     context: Context,
     private val showBackButton: Boolean = false,
     private val onBackButtonClick: () -> Unit = { },
@@ -95,6 +96,7 @@ internal class BLIKCodePaymentComposition(
                 paymentBoxBLIK.isSelected = value
                 blikCodePayment.root.isVisible = value
                 isPayWithCodeButtonVisible = false
+                setPayButtonText(payButtonText)
             }
         }
 

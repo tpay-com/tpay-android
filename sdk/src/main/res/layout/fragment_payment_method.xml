@@ -56,6 +56,15 @@
                         app:paymentBoxType="blik" />
 
                     <com.tpay.sdk.designSystem.cards.CardPaymentBox
+                        android:id="@+id/paymentBoxRatyPekao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
+                        app:buttonText="@string/raty_pekao"
+                        app:paymentBoxType="ratyPekao" />
+
+                    <com.tpay.sdk.designSystem.cards.CardPaymentBox
                         android:id="@+id/paymentBoxTransfer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -128,6 +137,13 @@
             <include
                 android:id="@+id/enableNfc"
                 layout="@layout/enable_nfc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/pekaoInstallmentsMethod"
+                layout="@layout/raty_pekao_payment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />

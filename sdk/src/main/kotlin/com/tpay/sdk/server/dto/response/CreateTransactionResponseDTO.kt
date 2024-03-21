@@ -3,6 +3,7 @@
 package com.tpay.sdk.server.dto.response
 
 import androidx.annotation.Keep
+import com.tpay.sdk.extensions.actuallyOptString
 import com.tpay.sdk.server.dto.ResultDTO
 import com.tpay.sdk.server.dto.parts.CreationRealizationDateDTO
 import com.tpay.sdk.server.dto.parts.PayerResponseDTO
@@ -40,5 +41,5 @@ internal class CreateTransactionResponseDTO(json: String) : ResultDTO(json) {
             null
         }
     }
-    var transactionPaymentUrl: String? = optString("transactionPaymentUrl")
+    var transactionPaymentUrl: String? = actuallyOptString("transactionPaymentUrl")
 }

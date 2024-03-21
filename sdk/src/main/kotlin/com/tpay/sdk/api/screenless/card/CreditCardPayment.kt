@@ -4,7 +4,7 @@ package com.tpay.sdk.api.screenless.card
 import com.tpay.sdk.api.PayCardEncryptor
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.*
-import com.tpay.sdk.server.dto.request.CreateTransactionRequestDTO
+import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -12,7 +12,7 @@ import java.util.*
  * Class responsible for creating credit card payment.
  */
 class CreditCardPayment private constructor(
-    private val request: CreateTransactionRequestDTO
+    private val request: CreateTransactionWithChannelsDTO
 ) : Payment<CreateCreditCardTransactionResult>() {
     override fun execute(
         longPollingConfig: LongPollingConfig?,

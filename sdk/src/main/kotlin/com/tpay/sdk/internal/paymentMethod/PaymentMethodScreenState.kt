@@ -8,5 +8,6 @@ internal enum class PaymentMethodScreenState {
     BLIK_ONE_CLICK_CODE,
     BLIK_AMBIGUOUS,
     WALLET,
-    TRANSFER
+    TRANSFER,
+    RATY_PEKAO
 }
