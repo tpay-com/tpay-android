@@ -8,12 +8,12 @@ import com.tpay.sdk.api.models.PaymentMethod
 import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.models.transaction.Transaction
 import com.tpay.sdk.api.screenless.Redirects
+import com.tpay.sdk.api.screenless.channelMethods.AvailablePaymentMethods
 import com.tpay.sdk.cache.Cache
 import com.tpay.sdk.cache.CachedNetworkImage
 import com.tpay.sdk.di.injectFields
 import com.tpay.sdk.extensions.Completable
 import com.tpay.sdk.extensions.toBitmapDrawable
-import com.tpay.sdk.internal.model.AvailableMethods
 import com.tpay.sdk.internal.webView.WebUrl
 import com.tpay.sdk.server.ImageEmptyException
 import com.tpay.sdk.server.ServerService
@@ -31,8 +31,13 @@ import javax.inject.Singleton
 
 @Singleton
 internal class Repository(private val serverService: ServerService) {
+    // Save and restore to/from state handle
     internal var selectedPaymentMethod: PaymentMethod? = null
-    internal var availableMethods = AvailableMethods()
+    internal var availablePaymentMethods: AvailablePaymentMethods? = null
+        set(value) {
+            field = value
+            value?.run(::preloadImages)
+        }
     internal var cardTokenTransaction: CardTokenTransaction? = null
     internal lateinit var transaction: Transaction
     internal lateinit var tokenization: Tokenization
@@ -44,6 +49,9 @@ internal class Repository(private val serverService: ServerService) {
         errorUrl = "https://secure.tpay.com/mobile-sdk/error"
     )
 
+    // Saving to state handle not needed
+    internal val preloadedImages: HashMap<String, BitmapDrawable> = hashMapOf()
+
     @Inject
     lateinit var cache: Cache
 
@@ -51,10 +59,22 @@ internal class Repository(private val serverService: ServerService) {
         injectFields()
     }
 
+    private fun preloadImages(
+        availablePaymentMethods: AvailablePaymentMethods
+    ) = availablePaymentMethods.run {
+        for (method in (availableTransfers + availablePekaoInstallmentMethods)) {
+            if (preloadedImages[method.imageUrl] != null) continue
+            getImageDrawable(method.imageUrl).observe(
+                onSuccess = { image -> preloadedImages[method.imageUrl] = image },
+                onError = {}
+            )
+        }
+    }
+
     internal fun setAuth(
         authorization: Merchant.Authorization,
         environment: Environment
-    ){
+    ) {
         serverService.setAuth(authorization, environment)
     }
 
@@ -68,13 +88,13 @@ internal class Repository(private val serverService: ServerService) {
                 completable.onSuccess(cachedImage.bytes.toBitmapDrawable())
             }, {
                 serverService.getImage(imageUrl).observe({ bytes ->
-                    if(bytes.isEmpty()){
+                    if (bytes.isEmpty()) {
                         completable.onError(ImageEmptyException)
                     } else {
                         val imageToCache = CachedNetworkImage.from(imageUrl, bytes)
                         val bitmapDrawable = bytes.toBitmapDrawable()
 
-                        if(imageToCache != null){
+                        if (imageToCache != null) {
                             cache.saveBankLogo(imageToCache).observe({
                                 completable.onSuccess(bitmapDrawable)
                             }, {
@@ -107,7 +127,10 @@ internal class Repository(private val serverService: ServerService) {
         return serverService.createTransaction(createTransactionWithChannelsDTO)
     }
 
-    internal fun continueTransaction(transactionId: String, payTransactionRequestDTO: PayTransactionRequestDTO): Completable<CreateTransactionResponseDTO> {
+    internal fun continueTransaction(
+        transactionId: String,
+        payTransactionRequestDTO: PayTransactionRequestDTO
+    ): Completable<CreateTransactionResponseDTO> {
         return serverService.payForTransaction(transactionId, payTransactionRequestDTO)
     }
 

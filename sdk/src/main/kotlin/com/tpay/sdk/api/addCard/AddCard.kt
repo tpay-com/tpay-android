@@ -51,7 +51,6 @@ sealed class AddCard {
                 SheetOpenResult.ConfigurationInvalid(configurationResult.error.devMessage)
             } else {
                 try {
-                    Language.fromConfiguration(configuration.supportedLanguages)
                     if (!sheetFragment.isAdded) {
                         sheetFragment = SheetFragment.with(SheetType.TOKENIZATION)
                         supportFragmentManager
@@ -90,5 +89,29 @@ sealed class AddCard {
         }
 
         override fun onBackPressed() {}
+
+        companion object {
+            /**
+             * Function responsible for restoring the AddCardDelegate callback
+             * after a process death occurred.
+             *
+             * If the AddCard.Sheet was open during process death, system will automatically
+             * open it again after user comes back to the app. In this case you need to call this method
+             * to restore the callback and receive tokenization information.
+             */
+            fun restore(supportFragmentManager: FragmentManager, addCardDelegate: AddCardDelegate) {
+                supportFragmentManager
+                    .getFragmentOrNull<SheetFragment>()
+                    ?.addTokenizationDelegate(addCardDelegate)
+            }
+
+            /**
+             * Function responsible for checking if the AddCard.Sheet is currently open
+             */
+            fun isOpen(supportFragmentManager: FragmentManager): Boolean {
+                return supportFragmentManager
+                    .getFragmentOrNull<SheetFragment>()?.sheetType == SheetType.TOKENIZATION
+            }
+        }
     }
 }

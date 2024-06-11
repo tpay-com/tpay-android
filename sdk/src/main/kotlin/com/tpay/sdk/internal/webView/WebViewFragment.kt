@@ -9,6 +9,7 @@ import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.fragment.app.viewModels
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentWebViewBinding
 import com.tpay.sdk.extensions.runDelayedOnMainThread
@@ -18,7 +19,7 @@ import com.tpay.sdk.internal.base.BaseFragment
 
 internal class WebViewFragment : BaseFragment(R.layout.fragment_web_view) {
     override val binding: FragmentWebViewBinding by viewBinding(FragmentWebViewBinding::bind)
-    override val viewModel = WebViewViewModel()
+    override val viewModel: WebViewViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,6 +36,7 @@ internal class WebViewFragment : BaseFragment(R.layout.fragment_web_view) {
         observeViewModelFields()
         enableCookies()
         setupWebView()
+        viewModel.init()
     }
 
     private fun observeViewModelFields(){
@@ -49,6 +51,7 @@ internal class WebViewFragment : BaseFragment(R.layout.fragment_web_view) {
     private fun setupWebView(){
         binding.root.run {
             settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(
                     view: WebView?,

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
-import com.tpay.sdk.designSystem.cards.MethodWithImageCard
+import com.tpay.sdk.designSystem.cards.ChannelMethodCard
 import com.tpay.sdk.extensions.isVisible
 import com.tpay.sdk.internal.SheetFragment
 
@@ -52,7 +52,7 @@ internal class TransferPaymentComposition(
         }
 
     private fun setupRecyclerView() {
-        val bankAdapter = MethodWithImageAdapter(MethodWithImageCard.Type.TRANSFER)
+        val bankAdapter = ChannelMethodAdapter(ChannelMethodCard.Type.TRANSFER)
         binding.transferPaymentMethod.bankListRecyclerView.run {
             adapter = bankAdapter
             layoutManager =
@@ -60,7 +60,7 @@ internal class TransferPaymentComposition(
             isNestedScrollingEnabled = false
         }
 
-        bankAdapter.onMethodWithImageItemClickListener = MethodWithImageAdapter.OnMethodWithImageItemClickListener(viewModel::onTransferItemClick)
+        bankAdapter.onMethodWithImageItemClickListener = ChannelMethodAdapter.OnMethodWithImageItemClickListener(viewModel::onTransferItemClick)
         bankAdapter.items = viewModel.availableTransferMethods
     }
 

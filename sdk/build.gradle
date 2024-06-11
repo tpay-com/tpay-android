@@ -4,11 +4,12 @@ plugins {
     id 'maven-publish'
     id 'org.jetbrains.dokka'
     id 'signing'
+    id 'kotlin-parcelize'
 }
 
 def _versionMajor = 1
-def _versionMinor = 1
-def _versionPatch = 0
+def _versionMinor = 2
+def _versionPatch = 1
 def _versionName = "${_versionMajor}.${_versionMinor}.${_versionPatch}"
 def _archiveName = "com.tpay.sdk-$_versionName"
 
@@ -48,6 +49,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
     implementation "androidx.recyclerview:recyclerview:$recyclerView"
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtx"
 
     // Google Pay
     implementation "com.google.android.gms:play-services-wallet:$googlePay"
@@ -111,6 +113,7 @@ afterEvaluate {
                     password System.getenv('STAGING_MAVEN_PASSWORD')
                 }
             }
+
             maven {
                 name 'Local'
                 url "$buildDir/tpayMaven/"

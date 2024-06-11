@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import com.google.android.gms.wallet.*
 import com.tpay.sdk.R
 import com.tpay.sdk.api.models.Environment
@@ -31,7 +32,7 @@ import javax.inject.Inject
 
 internal class AddCardFragment : BaseFragment(R.layout.fragment_add_card) {
     override val binding: FragmentAddCardBinding by viewBinding(FragmentAddCardBinding::bind)
-    override val viewModel = AddCardViewModel()
+    override val viewModel: AddCardViewModel by viewModels()
 
     @Inject
     lateinit var payCardScanner: PayCardScanner
@@ -134,6 +135,7 @@ internal class AddCardFragment : BaseFragment(R.layout.fragment_add_card) {
         observeLanguageChanges()
         observeViewModelFields()
         setupTextFieldValidation()
+        viewModel.init()
     }
 
     private fun handleOCRScanResult(activityResult: ActivityResult) {

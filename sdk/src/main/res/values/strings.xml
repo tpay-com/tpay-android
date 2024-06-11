@@ -59,6 +59,7 @@
     <string name="try_again_or_select_different_method">Proszę spróbować ponownie lub wybrać inną metodę płatności</string>
     <string name="card">Karta</string>
     <string name="blik" translatable="false">BLIK</string>
+    <string name="payPo" translatable="false">PayPo</string>
     <string name="transfer">Przelew</string>
     <string name="electronic_wallets">Portfele elektroniczne</string>
     <string name="paying">Płacę %1$.2f zł</string>
@@ -76,4 +77,11 @@
     <string name="card_selection">Wybór karty</string>
     <string name="pay_card_tail_dots" translatable="false">****</string>
     <string name="first_last_name_invalid">Niepoprawne imię i nazwisko</string>
+    <string name="buy_now_pay_later">Kup teraz zapłać później</string>
+    <string name="paying_with_paypo">Płacę z PayPo</string>
+    <string name="enter_address">Wpisz adres zamieszkania</string>
+    <string name="postal_code">Kod pocztowy</string>
+    <string name="city">Miasto</string>
+    <string name="poland">Polska</string>
+    <string name="value_is_invalid">Wartość jest niepoprawna</string>
 </resources>

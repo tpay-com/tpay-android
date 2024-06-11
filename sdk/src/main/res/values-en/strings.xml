@@ -49,7 +49,7 @@
     <string name="card">Credit Card</string>
     <string name="transfer">Transfer</string>
     <string name="electronic_wallets">Mobile wallets</string>
-    <string name="paying">Pay %1$.2f zł</string>
+    <string name="paying">Pay PLN %1$.2f</string>
     <string name="settings">Settings</string>
     <string name="enable_nfc">Turn on NFC</string>
     <string name="enable_nfc_in_settings">Go to phone settings to turn on the NFC mode</string>
@@ -65,4 +65,11 @@
     <string name="merchant_rodo_info_with_city">The personal data administrator is %1$s with its registered office in %2$s.</string>
     <string name="blik_code_not_found_or_expired">The entered code is invalid or has expired</string>
     <string name="continue_text">Continue</string>
+    <string name="buy_now_pay_later">Buy Now Pay Later</string>
+    <string name="paying_with_paypo">Pay with PayPo</string>
+    <string name="enter_address">Enter home address</string>
+    <string name="postal_code">Postal code</string>
+    <string name="city">City</string>
+    <string name="poland">Poland</string>
+    <string name="value_is_invalid">Value is incorrect</string>
 </resources>

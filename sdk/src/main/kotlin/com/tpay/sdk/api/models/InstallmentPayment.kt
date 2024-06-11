@@ -1,5 +1,6 @@
 package com.tpay.sdk.api.models
 
 enum class InstallmentPayment {
-    RATY_PEKAO
+    RATY_PEKAO,
+    PAY_PO
 }

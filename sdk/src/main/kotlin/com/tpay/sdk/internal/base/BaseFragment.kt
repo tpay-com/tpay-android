@@ -45,6 +45,7 @@ internal abstract class BaseFragment(layout: Int) : Fragment(layout) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sheetFragment.handleRestore(savedInstanceState)
         modifiedCtx = getModifiedContextForLocale(languageSwitcher.localeObservable.value ?: Locale.getDefault())
     }
 
@@ -130,7 +131,7 @@ internal abstract class BaseFragment(layout: Int) : Fragment(layout) {
 
     private fun observeViewModelFields(){
         sheetFragment.run {
-            viewModel.run {
+            this@BaseFragment.viewModel.run {
                 screenClickable.observe { clickable ->
                     isClickBlockerVisible = !clickable
                 }

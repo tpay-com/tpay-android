@@ -36,10 +36,6 @@ internal class CardPaymentComposition(
         observeTextFieldErrors()
         setOnClickListeners()
         observeNfcChanges()
-
-        binding.methodPicker.run {
-            post { scrollTo(0, 0) }
-        }
     }
 
     override fun onDestroy() {

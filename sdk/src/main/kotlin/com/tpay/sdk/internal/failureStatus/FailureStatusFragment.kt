@@ -2,6 +2,7 @@ package com.tpay.sdk.internal.failureStatus
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentFailureStatusBinding
 import com.tpay.sdk.extensions.*
@@ -11,7 +12,7 @@ import com.tpay.sdk.internal.base.BaseFragment
 
 internal class FailureStatusFragment : BaseFragment(R.layout.fragment_failure_status) {
     override val binding: FragmentFailureStatusBinding by viewBinding(FragmentFailureStatusBinding::bind)
-    override val viewModel = FailureStatusViewModel()
+    override val viewModel: FailureStatusViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +58,7 @@ internal class FailureStatusFragment : BaseFragment(R.layout.fragment_failure_st
                     retryButton.text = getString(R.string.try_again)
                     description.text = getString(R.string.try_again_or_select_different_method)
                 }
+                SheetType.WEB_VIEW -> { /* view not displayed */ }
             }
         }
     }

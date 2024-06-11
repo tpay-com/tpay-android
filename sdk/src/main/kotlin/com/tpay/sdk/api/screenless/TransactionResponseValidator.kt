@@ -4,6 +4,7 @@ import com.tpay.sdk.api.screenless.blik.AmbiguousAlias
 import com.tpay.sdk.api.screenless.blik.CreateBLIKTransactionResult
 import com.tpay.sdk.api.screenless.card.CreateCreditCardTransactionResult
 import com.tpay.sdk.api.screenless.googlePay.CreateGooglePayTransactionResult
+import com.tpay.sdk.api.screenless.payPo.CreatePayPoTransactionResult
 import com.tpay.sdk.api.screenless.pekaoInstallment.CreatePekaoInstallmentTransactionResult
 import com.tpay.sdk.api.screenless.transfer.CreateTransferTransactionResult
 import com.tpay.sdk.server.dto.readMessages
@@ -130,6 +131,19 @@ internal class TransactionResponseValidator {
                 )
 
             return CreatePekaoInstallmentTransactionResult.Created(transactionId, paymentUrl)
+        }
+
+        fun validatePayPo(response: CreateTransactionResponseDTO): CreatePayPoTransactionResult {
+            val transactionId = response.transactionId
+                ?: return CreatePayPoTransactionResult.Error(TRANSACTION_ID_NULL)
+
+            val paymentUrl = response.transactionPaymentUrl
+                ?: return CreatePayPoTransactionResult.Error(
+                    devErrorMessage = PAYMENT_URL_NULL,
+                    transactionId = transactionId
+                )
+
+            return CreatePayPoTransactionResult.Created(transactionId, paymentUrl)
         }
     }
 }

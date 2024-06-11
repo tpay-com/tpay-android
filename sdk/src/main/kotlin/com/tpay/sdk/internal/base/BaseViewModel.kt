@@ -14,6 +14,7 @@ import com.tpay.sdk.internal.config.Configuration
 import com.tpay.sdk.internal.failureStatus.FailureStatusFragment
 import com.tpay.sdk.internal.successStatus.SuccessStatusFragment
 import com.tpay.sdk.internal.webView.WebViewFragment
+import com.tpay.sdk.internal.webViewModule.WebViewCoordinator
 import com.tpay.sdk.server.NoInternetException
 import java.lang.Exception
 import javax.inject.Inject
@@ -37,6 +38,9 @@ internal open class BaseViewModel @Inject constructor(
 
     @Inject
     protected lateinit var addCardCoordinator: AddCardCoordinator
+
+    @Inject
+    protected lateinit var webViewCoordinator: WebViewCoordinator
 
     @Inject
     protected lateinit var languageSwitcher: LanguageSwitcher

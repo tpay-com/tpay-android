@@ -16,3 +16,7 @@ internal fun List<PaymentMethod>.containsInstallment(installmentPayment: Install
         ?.methods
         ?.contains(installmentPayment) ?: false
 }
+
+internal inline fun <reified T> List<PaymentMethod>.containsMethodOfType(): Boolean {
+    return filterIsInstance<T>().isNotEmpty()
+}

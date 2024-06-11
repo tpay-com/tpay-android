@@ -1,11 +1,12 @@
 package com.tpay.sdk.api.screenless.channelMethods
 
+import android.os.Parcelable
 import com.tpay.sdk.api.models.DigitalWallet
 import com.tpay.sdk.api.models.InstallmentPayment
 import com.tpay.sdk.api.models.PaymentMethod
-import com.tpay.sdk.extensions.amountConstraint
 import com.tpay.sdk.extensions.containsInstallment
 import com.tpay.sdk.extensions.containsWallet
+import kotlinx.parcelize.Parcelize
 
 /**
  * Class responsible for storing payment methods that are available
@@ -16,14 +17,17 @@ import com.tpay.sdk.extensions.containsWallet
  * @param [availableTransfers] list containing available transfer methods
  * @param [availableWallets] list containing available digital wallet methods
  * @param [availablePekaoInstallmentMethods] list containing available Pekao installment methods
+ * @param [payPoMethod] not null if PayPo is available
  */
+@Parcelize
 data class AvailablePaymentMethods(
     val creditCardMethod: ChannelMethod?,
     val blikMethod: ChannelMethod?,
     val availableTransfers: List<ChannelMethod>,
     val availableWallets: List<WalletMethod>,
-    val availablePekaoInstallmentMethods: List<ChannelMethod>
-) {
+    val availablePekaoInstallmentMethods: List<ChannelMethod>,
+    val payPoMethod: ChannelMethod?
+): Parcelable {
     companion object {
         /**
          * Method responsible for creating [AvailablePaymentMethods].
@@ -40,7 +44,9 @@ data class AvailablePaymentMethods(
             amount: Double
         ): AvailablePaymentMethods {
             val isGooglePayInMethods = methods.containsWallet(DigitalWallet.GOOGLE_PAY)
-            val isPekaoInstallmentInMethods = methods.containsInstallment(InstallmentPayment.RATY_PEKAO)
+            val isPekaoInstallmentInMethods =
+                methods.containsInstallment(InstallmentPayment.RATY_PEKAO)
+            val isPayPoInMethods = methods.containsInstallment(InstallmentPayment.PAY_PO)
 
             val creditCardMethod = if (methods.contains(PaymentMethod.Card)) {
                 grouped.getCreditCardIfAvailable(amount)?.asChannelMethod
@@ -48,6 +54,11 @@ data class AvailablePaymentMethods(
 
             val blikMethod = if (methods.contains(PaymentMethod.Blik)) {
                 grouped.getBLIKIfAvailable(amount)?.asChannelMethod
+            } else null
+
+            val payPoMethod = if (isPayPoInMethods) {
+                grouped.getAvailableInstallmentMethods(InstallmentPayment.PAY_PO, amount)
+                    .firstOrNull()?.asChannelMethod
             } else null
 
             val availableTransfers = if (methods.contains(PaymentMethod.Pbl)) {
@@ -72,7 +83,8 @@ data class AvailablePaymentMethods(
                 blikMethod = blikMethod,
                 availableTransfers = availableTransfers,
                 availableWallets = availableWallets,
-                availablePekaoInstallmentMethods = availablePekaoInstallments
+                availablePekaoInstallmentMethods = availablePekaoInstallments,
+                payPoMethod = payPoMethod
             )
         }
     }
@@ -81,16 +93,18 @@ data class AvailablePaymentMethods(
 /**
  * Class responsible for storing basic information about wallet method
  */
+@Parcelize
 data class WalletMethod(
     val wallet: DigitalWallet,
     val method: ChannelMethod
-)
+) : Parcelable
 
 /**
  * Class responsible for storing basic information about channel
  */
+@Parcelize
 data class ChannelMethod(
     val channelId: Int,
     val name: String,
     val imageUrl: String
-)
+) : Parcelable

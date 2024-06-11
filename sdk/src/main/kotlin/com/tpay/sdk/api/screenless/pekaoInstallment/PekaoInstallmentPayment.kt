@@ -10,6 +10,9 @@ import com.tpay.sdk.api.screenless.Redirects
 import com.tpay.sdk.api.screenless.TransactionResponseValidator
 import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
 
+/**
+ * Class responsible for creating Raty Pekao payment
+ */
 class PekaoInstallmentPayment private constructor(
     private val request: CreateTransactionWithChannelsDTO
 ) : Payment<CreatePekaoInstallmentTransactionResult>() {

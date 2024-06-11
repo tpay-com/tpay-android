@@ -14,11 +14,14 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
 import com.google.android.gms.wallet.*
 import com.tpay.sdk.R
 import com.tpay.sdk.api.models.Environment
 import com.tpay.sdk.api.screenless.googlePay.GooglePayEnvironment
 import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
+import com.tpay.sdk.designSystem.textfields.TextFieldAbstract
+import com.tpay.sdk.designSystem.textfields.Validators
 import com.tpay.sdk.extensions.*
 import com.tpay.sdk.internal.LegalNotesToSpan
 import com.tpay.sdk.internal.base.BaseFragment
@@ -30,7 +33,7 @@ import kotlin.NoSuchElementException
 
 internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_method) {
     override val binding: FragmentPaymentMethodBinding by viewBinding(FragmentPaymentMethodBinding::bind)
-    override val viewModel = PaymentMethodViewModel()
+    override val viewModel: PaymentMethodViewModel by viewModels()
 
     @Inject
     lateinit var payCardScanner: PayCardScanner
@@ -105,6 +108,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         setPaymentMethodPickerBehaviour()
         showAvailablePaymentMethods()
         observeViewModelFields()
+        setupTextFieldValidation()
 
         viewModel.onAmbiguousBlikAliases = { showBLIKAmbiguousPaymentComposition() }
         viewModel.onAmbiguousBlikAliasesError = { showBLIKOneClickPaymentComposition() }
@@ -138,6 +142,9 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
 
     private val payButtonContinueText: String
         get() = getString(R.string.continue_text)
+
+    private val payButtonPayPoText: String
+        get() = getString(R.string.paying_with_paypo)
 
     private fun openGooglePayScanActivity() {
         val request = PaymentCardRecognitionIntentRequest.getDefaultInstance()
@@ -180,6 +187,9 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         val paymentMethodBoxes = mutableListOf<Pair<PaymentMethodScreenState, ViewGroup>>()
         binding.run {
             viewModel.run {
+                if (availableWalletMethods.isNotEmpty()) {
+                    paymentMethodBoxes.add(PaymentMethodScreenState.WALLET to paymentBoxWallet)
+                }
                 if (cardAvailable) {
                     paymentMethodBoxes.add(PaymentMethodScreenState.CARD to paymentBoxCard)
                 }
@@ -190,14 +200,14 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                         paymentMethodBoxes.add(PaymentMethodScreenState.BLIK to paymentBoxBLIK)
                     }
                 }
-                if (availableRatyPekaoMethods.isNotEmpty()) {
-                    paymentMethodBoxes.add(PaymentMethodScreenState.RATY_PEKAO to paymentBoxRatyPekao)
-                }
                 if (availableTransferMethods.isNotEmpty()) {
                     paymentMethodBoxes.add(PaymentMethodScreenState.TRANSFER to paymentBoxTransfer)
                 }
-                if (availableWalletMethods.isNotEmpty()) {
-                    paymentMethodBoxes.add(PaymentMethodScreenState.WALLET to paymentBoxWallet)
+                if (availableRatyPekaoMethods.isNotEmpty()) {
+                    paymentMethodBoxes.add(PaymentMethodScreenState.RATY_PEKAO to paymentBoxRatyPekao)
+                }
+                if (payPoAvailable) {
+                    paymentMethodBoxes.add(PaymentMethodScreenState.PAY_PO to paymentBoxPayPo)
                 }
 
                 paymentMethodBoxes.forEach { it.second.isVisible = true }
@@ -221,6 +231,9 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                         }
                         PaymentMethodScreenState.BLIK_AMBIGUOUS -> {
                             showBLIKAmbiguousPaymentComposition()
+                        }
+                        PaymentMethodScreenState.PAY_PO -> {
+                            showPayPoPaymentComposition()
                         }
                         PaymentMethodScreenState.RATY_PEKAO -> {
                             showRatyPekaoComposition()
@@ -353,6 +366,10 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         changeCompositionIfDifferent(BLIKAmbiguousComposition(binding, viewModel, payButtonPriceText, requireContext()))
     }
 
+    private fun showPayPoPaymentComposition() {
+        changeComposition(PayPoComposition(binding, viewModel, payButtonPayPoText, ::hideKeyboard, requireContext()))
+    }
+
     private fun showWalletPaymentComposition() {
         changeComposition(WalletPaymentComposition(binding, viewModel, payButtonPriceText, requireContext()))
     }
@@ -367,6 +384,26 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 requireContext()
             )
         )
+    }
+
+    private fun setupTextFieldValidation() {
+        binding.payPoPayment.run {
+            nameSurnameTextField.setInputValidator(object : TextFieldAbstract.InputValidator {
+                override fun validate(value: String): String? {
+                    return Validators.validatePayerName(value)?.let(::getString)
+                }
+            })
+            addressTextField.setInputValidator(object : TextFieldAbstract.InputValidator {
+                override fun validate(value: String): String? {
+                    return Validators.validatePayerAddress(value)?.let(::getString)
+                }
+            })
+            cityTextField.setInputValidator(object : TextFieldAbstract.InputValidator {
+                override fun validate(value: String): String? {
+                    return Validators.validatePayerCity(value)?.let(::getString)
+                }
+            })
+        }
     }
 
     private fun setPaymentMethodPickerBehaviour() {
@@ -416,6 +453,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                     )
                 )
             }
+            paymentBoxPayPo.onClick(::showPayPoPaymentComposition)
         }
     }
 

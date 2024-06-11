@@ -250,6 +250,58 @@ internal abstract class TextFieldAbstract @JvmOverloads constructor(
                                         }
                                     }
                                 }
+                                is PostalCodeFormatter -> {
+                                    if (original.length > previousText.length){
+                                        if (formatted.getOrNull(2) == formatter.separator && cursor == 2) {
+                                            previousText = formatted
+                                            formattedText = formatted
+                                            setSelection(3)
+                                        } else {
+                                            previousText = formatted
+                                            formattedText = formatted
+                                            setSelection(
+                                                if (cursor == original.length) {
+                                                    formatted.length
+                                                } else {
+                                                    if (formatted.getOrNull(cursor - 1) == formatter.separator) {
+                                                        cursor + 1
+                                                    } else {
+                                                        cursor
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    } else {
+                                        if (formatted.getOrNull(cursor) == formatter.separator) {
+                                            val before = formatted.substring(0, cursor - 1)
+                                            val after = formatted.substring(cursor)
+
+                                            val full = formatter.format(formatter.removeFormatting("$before$after"))
+                                            previousText = full
+                                            formattedText = full
+                                            setSelection(cursor - 1)
+                                        } else {
+                                            if (original.lastOrNull() != formatter.separator && !previousText.endsWith(formatter.separator)) {
+                                                val before = formatted.substring(0, cursor)
+                                                val after = formatted.substring(cursor)
+
+                                                val full = formatter.format(formatter.removeFormatting("$before$after"))
+                                                previousText = full
+                                                formattedText = full
+                                                setSelection(cursor)
+                                            } else {
+                                                if (previousText.endsWith(formatter.separator) && !original.contains(formatter.separator)) {
+                                                    val before = formatted.substring(0, cursor - 1)
+                                                    previousText = before
+                                                    formattedText = before
+                                                    setSelection(cursor - 1)
+                                                } else {
+                                                    previousText = original
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             this@TextFieldAbstract.text.value = Text(formatted = formattedText, notFormatted = notFormattedText)
                         } catch (e: Exception) {
@@ -366,7 +418,30 @@ internal abstract class TextFieldAbstract @JvmOverloads constructor(
                 value.length == 2 && lastInput.length == 2 && !value.contains(separator) -> withoutSlash.applyFormattingRightAway(2, separator)
                 else -> withoutSlash.applyFormatting(2, separator)
             }.also { lastInput = value }
+        }
 
+        override fun removeFormatting(value: String): String = value
+    }
+
+    protected class PostalCodeFormatter : InputFormatter {
+        override val separator: Char = '-'
+        private var lastInput = ""
+
+        override fun format(value: String): String {
+            val withoutSeparator = value.replace(separator.toString(), "")
+            return when {
+                withoutSeparator.length == 1 -> withoutSeparator
+                value.length == 2 && lastInput.length < value.length -> withoutSeparator.applyFormattingRightAway(2, separator)
+                value.length == 2 && lastInput.length == 2 && !value.contains(separator) -> withoutSeparator.applyFormattingRightAway(2, separator)
+                value.length == 3 && lastInput.length < value.length && value.endsWith(separator) -> value
+                else -> {
+                    if (withoutSeparator.length < 3) {
+                        withoutSeparator
+                    } else {
+                        withoutSeparator.substring(0, 2).applyFormattingRightAway(2, separator) + withoutSeparator.substring(2)
+                    }
+                }
+            }.also { lastInput = value }
         }
 
         override fun removeFormatting(value: String): String = value
@@ -380,45 +455,6 @@ internal abstract class TextFieldAbstract @JvmOverloads constructor(
 
     interface OnTextChangedListener {
         fun onChange(value: String)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    public override fun onSaveInstanceState(): Parcelable? {
-        val superState = super.onSaveInstanceState()
-        val ss = SavedState(superState)
-        ss.childrenStates = SparseArray()
-        for (i in 0 until childCount) {
-            getChildAt(i).saveHierarchyState(ss.childrenStates as SparseArray<Parcelable>)
-        }
-        return ss
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    public override fun onRestoreInstanceState(state: Parcelable) {
-        val ss = state as SavedState
-        super.onRestoreInstanceState(ss.superState)
-        for (i in 0 until childCount) {
-            getChildAt(i).restoreHierarchyState(ss.childrenStates as SparseArray<Parcelable>)
-        }
-    }
-
-    override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
-        dispatchFreezeSelfOnly(container)
-    }
-
-    override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>) {
-        dispatchThawSelfOnly(container)
-    }
-
-    private class SavedState(superState: Parcelable?) : BaseSavedState(superState) {
-        var childrenStates: SparseArray<Any>? = null
-
-        override fun writeToParcel(out: Parcel, flags: Int) {
-            super.writeToParcel(out, flags)
-            childrenStates?.let {
-                out.writeSparseArray(it)
-            }
-        }
     }
 
     companion object {

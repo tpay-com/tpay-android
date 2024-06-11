@@ -66,6 +66,7 @@
             <enum name="transfer" value="2" />
             <enum name="wallet" value="3" />
             <enum name="ratyPekao" value="4" />
+            <enum name="payPo" value="5" />
         </attr>
         <attr name="paymentBoxState" format="enum">
             <enum name="enabled" value="0" />
@@ -73,7 +74,7 @@
         </attr>
     </declare-styleable>
 
-    <declare-styleable name="MethodWithImageCard">
+    <declare-styleable name="ChannelMethodCard">
         <attr name="methodLogo" format="integer" />
         <attr name="methodName" format="string" />
     </declare-styleable>

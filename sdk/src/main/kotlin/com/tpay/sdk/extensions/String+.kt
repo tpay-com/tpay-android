@@ -26,6 +26,10 @@ internal fun String.isValidBLIKCode(): Boolean {
     return this.matches(Regex("^[0-9]{6}$"))
 }
 
+internal fun String.isValidPostalCode(): Boolean {
+    return matches(Regex("^[0-9]{2}-[0-9]{3}$"))
+}
+
 internal fun String.isValidCreditCardNumber(): Boolean {
     return matches(Regex(Validators.MASTERCARD_REGEX)) || matches(Regex(Validators.VISA_REGEX))
 }
@@ -36,8 +40,22 @@ internal fun String.isValidCVVCode(): Boolean {
 
 internal fun String.isValidFirstAndLastName(): Boolean {
     if (isBlank()) return false
-    if (containsEmoji()) return false;
+    if (containsEmoji()) return false
     return !Regex("[~!@#$%^&*()_+]").containsMatchIn(this)
+}
+
+internal const val ADDRESS_AND_CITY_REGEX = "[~!@#$%^*()_+]"
+
+internal fun String.isValidAddress(): Boolean {
+    if (isBlank()) return false
+    if (containsEmoji()) return false
+    return !Regex(ADDRESS_AND_CITY_REGEX).containsMatchIn(this)
+}
+
+internal fun String.isValidCity(): Boolean {
+    if (isBlank()) return false
+    if (containsEmoji()) return false
+    return !Regex(ADDRESS_AND_CITY_REGEX).containsMatchIn(this)
 }
 
 internal fun String.containsEmoji(): Boolean {
@@ -46,6 +64,12 @@ internal fun String.containsEmoji(): Boolean {
 
 internal val String.isFirstAndLastNameLengthValid: Boolean
     get() = length in (3..255)
+
+internal val String.isAddressLengthValid: Boolean
+    get() = length in (3..255)
+
+internal val String.isCityLengthValid: Boolean
+    get() = length in (1..255)
 
 internal fun String.addAtEndIfNotThere(text: String): String {
     return if (!this.endsWith(text)) {

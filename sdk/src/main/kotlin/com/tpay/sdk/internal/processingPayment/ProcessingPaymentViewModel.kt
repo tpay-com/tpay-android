@@ -12,7 +12,11 @@ internal class ProcessingPaymentViewModel : BaseViewModel() {
         get() = repository.selectedPaymentMethod is PaymentMethod.Blik
 
     private var scheduler: CompletableScheduler<GetTransactionResponseDTO>? = null
-    init {
+
+    fun init() {
+        configuration.merchant?.authorization?.run {
+            repository.setAuth(this, configuration.environment)
+        }
         repository.transactionId?.let { id ->
             scheduler = CompletableScheduler { repository.getTransaction(id) }.apply {
                 schedule(
@@ -26,16 +30,18 @@ internal class ProcessingPaymentViewModel : BaseViewModel() {
     }
 
     private fun handleResponse(scheduler: CompletableScheduler<*>, response: GetTransactionResponseDTO) {
-        when {
-            PaymentStatus.SUCCESS_STATUSES.contains(response.status) -> {
-                scheduler.stop()
-                moveToSuccessScreen()
+        try {
+            when {
+                PaymentStatus.SUCCESS_STATUSES.contains(response.status) -> {
+                    scheduler.stop()
+                    moveToSuccessScreen()
+                }
+                PaymentStatus.ERROR_STATUS == response.status || (isBlikPayment && response.isBlikError) -> {
+                    scheduler.stop()
+                    moveToFailureScreen()
+                }
             }
-            PaymentStatus.ERROR_STATUS == response.status || (isBlikPayment && response.isBlikError) -> {
-                scheduler.stop()
-                moveToFailureScreen()
-            }
-        }
+        } catch (_: Exception) {}
     }
 
     fun onDestroy(){

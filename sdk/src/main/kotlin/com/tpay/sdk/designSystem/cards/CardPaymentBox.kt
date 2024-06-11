@@ -66,15 +66,11 @@ internal class CardPaymentBox @JvmOverloads constructor(
                     name = getString(R.styleable.CardPaymentBox_buttonText) ?: ""
                     iconDrawable = getDrawable(R.styleable.CardPaymentBox_tpayButtonIcon)
 
-                    type = when (getInteger(
+                    getInteger(
                         R.styleable.CardPaymentBox_paymentBoxType,
                         PaymentBoxType.CARD.ordinal
-                    )) {
-                        PaymentBoxType.CARD.ordinal -> PaymentBoxType.CARD
-                        PaymentBoxType.BLIK.ordinal -> PaymentBoxType.BLIK
-                        PaymentBoxType.TRANSFER.ordinal -> PaymentBoxType.TRANSFER
-                        PaymentBoxType.RATY_PEKAO.ordinal -> PaymentBoxType.RATY_PEKAO
-                        else -> PaymentBoxType.WALLET
+                    ).run {
+                        type = PaymentBoxType.values()[this]
                     }
 
                     state = when (getInteger(
@@ -130,7 +126,8 @@ internal class CardPaymentBox @JvmOverloads constructor(
         BLIK(R.drawable.ic_blik_default, R.drawable.ic_blik_active),
         TRANSFER(R.drawable.ic_transfer_default, R.drawable.ic_transfer_active),
         WALLET(R.drawable.ic_wallet_default, R.drawable.ic_wallet_active),
-        RATY_PEKAO(R.drawable.ic_raty_pekao_active, R.drawable.ic_raty_pekao_active)
+        RATY_PEKAO(R.drawable.ic_raty_pekao_active, R.drawable.ic_raty_pekao_active),
+        PAY_PO(R.drawable.ic_paypo_default, R.drawable.ic_paypo_active)
     }
 
     enum class PaymentBoxState(val background: Int, val textColor: Int) {

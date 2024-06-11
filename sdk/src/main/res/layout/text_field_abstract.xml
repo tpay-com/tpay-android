@@ -7,6 +7,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textFieldLayout"
         style="@style/InputTextField"
+        android:saveEnabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start|bottom"
@@ -14,6 +15,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textField"
+            android:saveEnabled="false"
+            android:freezesText="true"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:paddingEnd="80dp"

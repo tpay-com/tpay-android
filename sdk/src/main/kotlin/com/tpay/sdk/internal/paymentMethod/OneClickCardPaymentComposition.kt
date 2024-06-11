@@ -25,10 +25,6 @@ internal class OneClickCardPaymentComposition(
         observeViewModelFields()
         isLayoutVisible = true
         isErrorVisible = false
-
-        binding.methodPicker.run {
-            post { scrollTo(0, 0) }
-        }
     }
 
     override fun onDestroy() {

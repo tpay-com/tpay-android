@@ -58,11 +58,11 @@ internal class ServerService {
                 })
         }, completable::onError)
     }
-    
+
     fun getPaymentChannels(): Completable<GetChannelsResponseDTO> = Completable.create { completable ->
         authorize({ accessToken ->
             networking.get(
-                endpoint = "transactions/channels",
+                endpoint = "transactions/channels?imageSize=medium",
                 auth = Auth.BearerAuth(accessToken.token)
             )
                 .observeOn(Threads.IO)
@@ -79,7 +79,7 @@ internal class ServerService {
                 })
         }, completable::onError)
     }
-    
+
     fun getPaymentMethods(): Completable<GetTransactionMethodsResponseDTO> = Completable.create { completable ->
         authorize({ accessToken ->
                 networking.get(
@@ -109,7 +109,7 @@ internal class ServerService {
             networking.getImage(imageUrl, completable)
         }
     }
-    
+
     fun createTransaction(createTransactionWithChannelsDTO: CreateTransactionWithChannelsDTO): Completable<CreateTransactionResponseDTO> {
         return Completable.create { completable ->
             authorize({ accessToken ->

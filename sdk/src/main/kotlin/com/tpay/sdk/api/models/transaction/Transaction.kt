@@ -1,12 +1,13 @@
 package com.tpay.sdk.api.models.transaction
 
+import android.os.Parcelable
 import com.tpay.sdk.api.models.PayerContext
 import com.tpay.sdk.api.screenless.Notifications
 
 /**
  * Interface defining transactions
  */
-interface Transaction {
+interface Transaction : Parcelable {
     /**
      * payment amount/price, multiple of 0.01
      */

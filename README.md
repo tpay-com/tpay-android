@@ -1,5 +1,5 @@
 # Tpay Android SDK
-[![Min Android SDK](https://img.shields.io/badge/Min%20sdk-23-informational.svg)](https://shields.io/)[![Target Android SDK](https://img.shields.io/badge/Target/Compile%20sdk-33-informational.svg)](https://shields.io/)
+[![Min Android SDK](https://img.shields.io/badge/Min%20sdk-23-informational.svg)](https://shields.io/)[![Target Android SDK](https://img.shields.io/badge/Target/Compile%20sdk-34-informational.svg)](https://shields.io/)
 
 ## About
 This SDK allows your app to make payments with Tpay.
@@ -130,16 +130,21 @@ TpayModule.configure(GooglePayConfiguration(merchantId = "YOUR_MERCHANT_ID"))
 ```
 
 ### Compatibility
-Configure the compatibility mode for SDK. 
-Currently available modes are Native and Flutter. Native is set by default.
+Configure the compatibility mode for SDK.
+Currently available modes are NATIVE, FLUTTER and REACT_NATIVE. NATIVE is set by default.
 Tpay has a official Flutter plugin, check this [repository](https://github.com/tpay-com/tpay-flutter) for more details.
-Want to create your own plugin? Use Compatibility.Flutter when configuring.
+Want to create your own plugin? Use Compatibility.FLUTTER when configuring.
+Tpay also has a official React Native module, check this [repository](https://github.com/tpay-com/tpay-react-native).
+If you want to create your own native module, use Compatibility.REACT_NATIVE.
 ```kotlin
 // For native development
-TpayModule.configure(Compatibility.Native)
+TpayModule.configure(Compatibility.NATIVE)
 
 // For Flutter plugin
-TpayModule.configure(Compatibility.Flutter)
+TpayModule.configure(Compatibility.FLUTTER)
+
+// For React Native module
+TpayModule.configure(Compatibility.REACT_NATIVE)
 ```
 
 ## Back press handling
@@ -162,16 +167,16 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 Payment flow opens a UI module and allows customer to pick one of defined payment methods.
 ```kotlin
 // Create payment
-val paymentSheet = Payment.Sheet(  
-    object : Transaction {  
-        override val amount: Double = 29.99  
-        override val description: String = "transaction description"  
-        override val payerContext: PayerContext = PayerContext(  
-            payer = Payer(  
-                name = "Jan Kowalski",  
-                email = "jan.kowalski@example.com",  
-                phone = null,  
-                address = null  
+val paymentSheet = Payment.Sheet(
+    transaction = SingleTransaction(
+        amount = 29.99,
+        description = "transaction description",
+        payerContext = PayerContext(
+            payer = Payer(
+                name = "Jan Kowalski",
+                email = "jan.kowalski@example.com",
+                phone = null,
+                address = null
             ),
             automaticPaymentMethods = AutomaticPaymentMethods(
                 blikAlias = BlikAlias.Registered(value = "alias value", label = "alias label"),
@@ -180,12 +185,12 @@ val paymentSheet = Payment.Sheet(
                     TokenizedCard(token = "card token 2", cardTail = "1234", brand = CreditCardBrand.MASTERCARD)
                 )
             )
-        )  
-        override val notifications: Notifications = Notifications(  
-            notificationEmail = "payments@yourstore.com",  
-            notificationUrl = "https://yourstore.com"  
-        )  
-    },
+        ),
+        notifications = Notifications(
+            notificationEmail = "payments@yourstore.com",
+            notificationUrl = "https://yourstore.com"
+        )
+    ),
     activity = activity,
     supportFragmentManager = activity.supportFragmentManager
 )
@@ -270,8 +275,38 @@ if (result is SheetOpenResult.Success) {
     // Module opened successfully
 }
 ```
-# Screenless payments
+## Web view
+Tpay SDK provides a WebView module, it doesn't require any configuration set via 'TpayModule.configure(...)'.
+WebView needs 3 parameters:
+1) paymentUrl returned by Tpay backend, it will be displayed in the web view
+2) successUrl will be used to determine if payment was completed
+3) errorUrl will be used to determine if payment couldn't be completed
+```kotlin
+// Create WebView sheet
+val webViewSheet = WebView.Sheet(
+    webViewConfiguration = WebViewConfiguration(
+        paymentUrl = "<payment url>",
+        successUrl = "<success url>",
+        errorUrl = "<error url>"
+    ),
+    activity = activity,
+    supportFragmentManager = activity.supportFragmentManager
+)
 
+// Add WebViewCallback to WebView
+webViewSheet.setCallback(object : WebViewCallback {
+    override fun onPaymentSuccess() {}
+    override fun onPaymentFailure() {}
+})
+
+// Open WebView
+val result = webViewSheet.present()
+if (result is SheetOpenResult.Success) {
+    // WebView opened successfully
+}
+```
+
+# Screenless payments
 ## Get payment channels
 GetPaymentChannels class allows you to get payment channels available on your merchant account.
 You can also use GroupedPaymentChannels class to group channels received from GetPaymentChannels.
@@ -398,7 +433,7 @@ if (result is CreateBLIKTransactionResult.AmbiguousBlikAlias) {
 ## Screenless transfer payment
 TransferPayment allows you to create payment with bank selected by user identified by channelId.
 ```kotlin
-TransferPayment.Builder()  
+TransferPayment.Builder()
     .setChannelId(102)
     .setPayer(payer)  
     .setPaymentDetails(paymentDetails)  
@@ -516,6 +551,39 @@ BLIKPayment.Builder()
     .execute(config) { result ->  
         // handle payment create result
     }
+```
+## Handling process death
+If the Tpay module was open during process death, system will automatically open it again after user comes back to the app.
+In this case you can check if the Tpay sheets are open:
+```kotlin
+Payment.Sheet.isOpen(/* fragment manager */)
+CardTokenPayment.Sheet.isOpen(/* fragment manager */)
+AddCard.Sheet.isOpen(/* fragment manager */)
+WebView.Sheet.isOpen(/* fragment manager */)
+```
+If a sheet is open, you can use a 'restore' method to restore a callback and receive transaction/tokenization information.
+```kotlin
+Payment.Sheet.restore(/* fragment manager */, /* respective callback */)
+CardTokenPayment.Sheet.restore(/* fragment manager */, /* respective callback */)
+AddCard.Sheet.restore(/* fragment manager */, /* respective callback */)
+WebView.Sheet.restore(/* fragment manager */, /* respective callback */)
+```
+Tpay module also needs a way to receive activity result data after process death.
+This step is important if you use Google Pay as a payment method.
+```kotlin
+// In your activity
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    // Check if Payment.Sheet is currently open and visible for the user
+    val isPaymentSheetOpen = Payment.Sheet.isOpen(supportFragmentManager)
+    // Check if the incoming result was initiated by Tpay module for Google Pay
+    val isGooglePayResult = requestCode == GooglePayUtil.GOOGLE_PAY_UI_REQUEST_CODE
+
+    if (isPaymentSheetOpen && isGooglePayResult) {
+        Payment.Sheet.onActivityResult(supportFragmentManager, requestCode, resultCode, data)
+    }
+}
 ```
 
 ## License

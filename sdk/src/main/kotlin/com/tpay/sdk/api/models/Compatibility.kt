@@ -1,16 +1,21 @@
 package com.tpay.sdk.api.models
 
 /**
- * Class providing compatibility options
+ * Enum providing compatibility options
  */
-sealed class Compatibility {
+enum class Compatibility {
     /**
      * Sets compatibility options for native Android development
      */
-    object Native : Compatibility()
+    NATIVE,
 
     /**
      * Sets compatibility options for Flutter plugin development
      */
-    object Flutter : Compatibility()
+    FLUTTER,
+
+    /**
+     * Sets compatibility options for React Native module development
+     */
+    REACT_NATIVE
 }

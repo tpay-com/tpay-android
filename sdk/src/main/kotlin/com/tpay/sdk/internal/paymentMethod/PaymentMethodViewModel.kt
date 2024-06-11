@@ -9,6 +9,7 @@ import com.tpay.sdk.api.models.Environment
 import com.tpay.sdk.api.models.InstallmentPayment
 import com.tpay.sdk.api.models.PaymentMethod
 import com.tpay.sdk.api.models.TokenizedCard
+import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.PaymentDetails
 import com.tpay.sdk.api.screenless.blik.AmbiguousAlias
 import com.tpay.sdk.api.screenless.blik.BLIKAmbiguousAliasPayment
@@ -17,18 +18,21 @@ import com.tpay.sdk.api.screenless.blik.CreateBLIKTransactionResult
 import com.tpay.sdk.api.screenless.card.CreateCreditCardTransactionResult
 import com.tpay.sdk.api.screenless.card.CreditCard
 import com.tpay.sdk.api.screenless.card.CreditCardPayment
+import com.tpay.sdk.api.screenless.channelMethods.ChannelMethod
 import com.tpay.sdk.api.screenless.googlePay.*
+import com.tpay.sdk.api.screenless.payPo.CreatePayPoTransactionResult
+import com.tpay.sdk.api.screenless.payPo.PayPoPayment
 import com.tpay.sdk.api.screenless.pekaoInstallment.CreatePekaoInstallmentTransactionResult
 import com.tpay.sdk.api.screenless.pekaoInstallment.PekaoInstallmentPayment
 import com.tpay.sdk.api.screenless.transfer.CreateTransferTransactionResult
 import com.tpay.sdk.api.screenless.transfer.TransferPayment
 import com.tpay.sdk.designSystem.textfields.CreditCardDate
+import com.tpay.sdk.designSystem.textfields.Validators
 import com.tpay.sdk.extensions.*
 import com.tpay.sdk.internal.FormError
 import com.tpay.sdk.internal.Language.Companion.asApi
 import com.tpay.sdk.internal.SheetType
 import com.tpay.sdk.internal.base.BaseViewModel
-import com.tpay.sdk.internal.model.MethodWithImage
 import com.tpay.sdk.internal.processingPayment.ProcessingPaymentFragment
 import com.tpay.sdk.internal.webView.WebUrl
 
@@ -47,6 +51,11 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     internal val isPayCardScanSuccessful = Observable(false)
     internal val oneClickCardError = Observable(false)
     internal val oneClickBLIKError = Observable(false)
+    internal val payPoPayerNameError = Observable<FormError>(FormError.None)
+    internal val payPoPayerEmailError = Observable<FormError>(FormError.None)
+    internal val payPoPayerAddressError = Observable<FormError>(FormError.None)
+    internal val payPoPayerPostalCodeError = Observable<FormError>(FormError.None)
+    internal val payPoPayerCityError = Observable<FormError>(FormError.None)
 
     internal var payCardFieldsValid = false
 
@@ -58,17 +67,81 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     internal var selectedTransferId: Int? = null
     internal var selectedRatyPekaoVariantId: Int? = null
 
+    val payer: Payer
+        get() = repository.transaction.payerContext.payer
+
+    private var payPoPayer: Payer? = null
+
+    var payPoPayerName: String
+        get() = payPoPayer?.name ?: ""
+        set(value) {
+            payPoPayer?.name = value
+        }
+
+    var payPoPayerEmail: String
+        get() = payPoPayer?.email ?: ""
+        set(value) {
+            payPoPayer?.email = value
+        }
+
+    var payPoPayerAddress: String
+        get() = payPoPayer?.address?.address ?: ""
+        set(value) {
+            payPoPayer?.setAddress(value)
+        }
+
+    var payPoPayerPostalCode: String
+        get() = payPoPayer?.address?.postalCode ?: ""
+        set(value) {
+            payPoPayer?.setPostalCode(value)
+        }
+
+    var payPoPayerCity: String
+        get() = payPoPayer?.address?.city ?: ""
+        set(value) {
+            payPoPayer?.setCity(value)
+        }
+
+    fun createPayPoPayer() {
+        payPoPayer = Payer(
+            name = payer.name,
+            email = payer.email,
+            phone = payer.phone,
+            address = payer.address?.run {
+                Payer.Address(
+                    address = address,
+                    city = city,
+                    countryCode = COUNTRY_CODE_PL,
+                    postalCode = postalCode
+                )
+            }
+        )
+    }
+
+    fun deletePayPoPayer() {
+        payPoPayer = null
+    }
+
     val transactionAmount: Double
         get() = repository.transaction.amount
 
     val cardAvailable: Boolean
-        get() = repository.availableMethods.creditCard != null
+        get() = repository.availablePaymentMethods?.creditCardMethod != null
 
     val blikAvailable: Boolean
-        get() = repository.availableMethods.blik != null
+        get() = repository.availablePaymentMethods?.blikMethod != null
+
+    val payPoAvailable: Boolean
+        get() = repository.availablePaymentMethods?.payPoMethod != null
 
     val availableWalletMethods
-        get() = repository.availableMethods.wallets
+        get() = repository.availablePaymentMethods?.availableWallets ?: emptyList()
+
+    val availableTransferMethods: List<ChannelMethod>
+        get() = repository.availablePaymentMethods?.availableTransfers ?: emptyList()
+
+    val availableRatyPekaoMethods: List<ChannelMethod>
+        get() = repository.availablePaymentMethods?.availablePekaoInstallmentMethods ?: emptyList()
 
     val isGooglePayInPaymentMethods: Boolean
         get() = availableWalletMethods
@@ -111,17 +184,13 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     var selectedTokenizedCard: TokenizedCard? = null
     var currentAmbiguousAlias: AmbiguousAlias? = null
 
-    val availableTransferMethods: List<MethodWithImage>
-        get() = repository.availableMethods.transfers
-
-    val availableRatyPekaoMethods: List<MethodWithImage>
-        get() = repository.availableMethods.pekaoInstallments
-
-    private val googlePayRequest = GooglePayRequest(
-        price = repository.transaction.amount,
-        merchantName = merchantName,
-        merchantId = configuration.googlePayConfiguration?.merchantId ?: ""
-    )
+    private val googlePayRequest by lazy {
+        GooglePayRequest(
+            price = repository.transaction.amount,
+            merchantName = merchantName,
+            merchantId = configuration.googlePayConfiguration?.merchantId ?: ""
+        )
+    }
 
     lateinit var googlePayUtil: GooglePayUtil
 
@@ -384,6 +453,53 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+            PaymentMethodScreenState.PAY_PO -> (payPoPayer ?: payer).run payer@{
+                payPoPayerNameError.value = Validators.validatePayerName(name)
+                    ?.let(FormError::Resource) ?: FormError.None
+
+                payPoPayerEmailError.value = Validators.validatePayerEmail(email)
+                    ?.let(FormError::Resource) ?: FormError.None
+
+                payPoPayerAddressError.value = address?.address
+                    .let(Validators::validatePayerAddress)
+                    ?.let(FormError::Resource) ?: FormError.None
+
+                payPoPayerPostalCodeError.value = address?.postalCode
+                    .let(Validators::validatePayerPostalCode)
+                    ?.let(FormError::Resource) ?: FormError.None
+
+                payPoPayerCityError.value = address?.city
+                    .let(Validators::validatePayerCity)
+                    ?.let(FormError::Resource) ?: FormError.None
+
+                val isFormValid = listOf(
+                    payPoPayerNameError,
+                    payPoPayerEmailError,
+                    payPoPayerAddressError,
+                    payPoPayerPostalCodeError,
+                    payPoPayerCityError
+                ).all { error -> error.value is FormError.None }
+
+                if (!isFormValid) {
+                    screenClickable.value = true
+                    buttonLoading.value = false
+                    return
+                }
+
+                PayPoPayment.Builder().apply {
+                    repository.transaction.run {
+                        setCallbacks(repository.internalRedirects, notifications)
+                        setPayer(this@payer)
+                        setPaymentDetails(
+                            PaymentDetails(
+                                amount = amount,
+                                description = description,
+                                language = languageSwitcher.currentLanguage.asApi()
+                            )
+                        )
+                    }
+                }.build().execute { result -> handlePayPoResult(result) }
+            }
         }
     }
 
@@ -415,6 +531,24 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                 else -> handleGooglePayDataError()
             }
         }
+    }
+
+    private fun handlePayPoResult(result: CreatePayPoTransactionResult) {
+        repository.selectedPaymentMethod = PaymentMethod.InstallmentPayments(listOf(InstallmentPayment.PAY_PO))
+
+        when (result) {
+            is CreatePayPoTransactionResult.Created -> {
+                handleTransactionId(result.transactionId)
+                handlePaymentUrl(result.paymentUrl)
+            }
+            is CreatePayPoTransactionResult.Error -> {
+                result.transactionId?.let(::handleTransactionId)
+                moveToFailureScreen(addToBackStack = true)
+            }
+        }
+
+        screenClickable.value = true
+        buttonLoading.value = false
     }
 
     private fun handleRatyPekaoResult(result: CreatePekaoInstallmentTransactionResult) {
@@ -566,5 +700,6 @@ internal class PaymentMethodViewModel : BaseViewModel() {
 
     companion object {
         private const val EXAMPLE_DOMAIN = "example.com"
+        private const val COUNTRY_CODE_PL = "PL"
     }
 }

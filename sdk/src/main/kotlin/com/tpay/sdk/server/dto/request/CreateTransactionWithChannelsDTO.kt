@@ -156,6 +156,14 @@ internal class CreateTransactionWithChannelsDTO : JSONObject() {
         }
     }
 
+    fun applyPayPo(): CreateTransactionWithChannelsDTO {
+        return apply {
+            pay = PayWithRedirectionRequestDTO().apply {
+                channelId = PAY_PO_CHANNEL_ID
+            }
+        }
+    }
+
     fun applyTransfer(id: Int): CreateTransactionWithChannelsDTO {
         return apply {
             pay = PayWithRedirectionRequestDTO().apply {
@@ -198,6 +206,7 @@ internal class CreateTransactionWithChannelsDTO : JSONObject() {
         private const val CREDIT_CARD_CHANNEL_ID = 53
         private const val BLIK_CHANNEL_ID = 64
         private const val GOOGLE_PAY_CHANNEL_ID = 68
+        private const val PAY_PO_CHANNEL_ID = 83
         private const val TYPE_OF_RECURSIVE = 1
         private const val SALE_METHOD = "sale"
         private const val BLIK_ALIAS_TYPE = "UID"

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
-import com.tpay.sdk.designSystem.cards.MethodWithImageCard
+import com.tpay.sdk.designSystem.cards.ChannelMethodCard
 import com.tpay.sdk.extensions.isVisible
 import com.tpay.sdk.internal.SheetFragment
 
@@ -42,7 +42,7 @@ internal class RatyPekaoComposition(
     }
 
     private fun setupRecyclerView() {
-        val pekaoAdapter = MethodWithImageAdapter(MethodWithImageCard.Type.RATY_PEKAO)
+        val pekaoAdapter = ChannelMethodAdapter(ChannelMethodCard.Type.RATY_PEKAO)
         binding.pekaoInstallmentsMethod.pekaoVariantRecyclerView.run {
             adapter = pekaoAdapter
             layoutManager = GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
@@ -50,7 +50,7 @@ internal class RatyPekaoComposition(
         }
 
         pekaoAdapter.onMethodWithImageItemClickListener =
-            MethodWithImageAdapter.OnMethodWithImageItemClickListener(viewModel::onRatyPekaoItemClick)
+            ChannelMethodAdapter.OnMethodWithImageItemClickListener(viewModel::onRatyPekaoItemClick)
         pekaoAdapter.items = viewModel.availableRatyPekaoMethods
     }
 

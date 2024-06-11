@@ -9,5 +9,6 @@ internal enum class PaymentMethodScreenState {
     BLIK_AMBIGUOUS,
     WALLET,
     TRANSFER,
-    RATY_PEKAO
+    RATY_PEKAO,
+    PAY_PO
 }

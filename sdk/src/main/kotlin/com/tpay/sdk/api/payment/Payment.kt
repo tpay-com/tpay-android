@@ -41,9 +41,6 @@ sealed class Payment {
         internal lateinit var configuration: Configuration
 
         @Inject
-        internal lateinit var directoryManager: DirectoryManager
-
-        @Inject
         internal lateinit var activityResultHandler: ActivityResultHandler
 
         init {
@@ -63,8 +60,6 @@ sealed class Payment {
                 SheetOpenResult.ConfigurationInvalid(configurationResult.error.devMessage)
             } else {
                 try {
-                    directoryManager.init(activity)
-                    Language.fromConfiguration(configuration.supportedLanguages)
                     if (!sheetFragment.isAdded) {
                         sheetFragment = SheetFragment.with(SheetType.PAYMENT)
                         supportFragmentManager
@@ -104,6 +99,62 @@ sealed class Payment {
             sheetFragment.run {
                 if (childFragmentManager.fragments.lastOrNull() is PaymentMethodFragment) {
                     navigation.onBackPressed()
+                }
+            }
+        }
+
+        companion object {
+            /**
+             * Function responsible for restoring the PaymentDelegate callback
+             * after a process death occurred.
+             *
+             * If the Payment.Sheet was open during process death, system will automatically
+             * open it again after user comes back to the app. In this case you need to call this method
+             * to restore the callback and receive transaction information.
+             */
+            fun restore(supportFragmentManager: FragmentManager, paymentDelegate: PaymentDelegate) {
+                supportFragmentManager.getFragmentOrNull<SheetFragment>()?.addPaymentDelegate(
+                    sheetType = SheetType.PAYMENT,
+                    paymentDelegate = paymentDelegate
+                )
+            }
+
+            /**
+             * Function responsible for checking if the Payment.Sheet is currently open
+             */
+            fun isOpen(supportFragmentManager: FragmentManager): Boolean {
+                return supportFragmentManager
+                    .getFragmentOrNull<SheetFragment>()?.sheetType == SheetType.PAYMENT
+            }
+
+            /**
+             * Function responsible for passing activity result data to Payment sheet
+             * after a process death occurred.
+             *
+             * It is important to call this method if you use Google Pay inside Tpay module
+             * as the credit card data is sent via onActivityResult(...) method in your activity.
+             */
+            fun onActivityResult(
+                supportFragmentManager: FragmentManager,
+                requestCode: Int,
+                resultCode: Int,
+                data: Intent?
+            ) {
+                supportFragmentManager
+                    .getFragmentOrNull<SheetFragment>()
+                    ?.activityResultFromRestore(requestCode, resultCode, data)
+            }
+
+            /**
+             * Function responsible for passing a back press event to Payment.Sheet.
+             *
+             * Use this method if you lost access to the Payment.Sheet instance.
+             */
+            fun onBackPress(supportFragmentManager: FragmentManager) {
+                supportFragmentManager.getFragmentOrNull<SheetFragment>()?.run {
+                    if (childFragmentManager.fragments.lastOrNull() is PaymentMethodFragment) {
+                        navigation.onBackPressed()
+                    }
                 }
             }
         }

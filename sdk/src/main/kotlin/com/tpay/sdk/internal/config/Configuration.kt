@@ -15,6 +15,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class Configuration {
+    // Save values to state handle
     var merchant: Merchant? = null
     var paymentMethods: List<PaymentMethod> = PaymentMethod.allMethods
     var environment: Environment = Environment.PRODUCTION
@@ -22,7 +23,7 @@ internal class Configuration {
     var merchantDetailsProvider: MerchantDetailsProvider? = null
     var preferredLanguage: Language = Language.PL
     var supportedLanguages: List<Language> = Language.values().toList()
-    var compatibility: Compatibility = Compatibility.Native
+    var compatibility: Compatibility = Compatibility.NATIVE
     var googlePayConfiguration: GooglePayConfiguration? = null
 
     fun checkPaymentConfiguration(): ConfigurationCheckResult {

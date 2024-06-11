@@ -1,5 +1,6 @@
 package com.tpay.sdk.internal
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
@@ -8,9 +9,14 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tpay.sdk.R
+import com.tpay.sdk.api.addCard.AddCardDelegate
 import com.tpay.sdk.api.models.Compatibility
+import com.tpay.sdk.api.payment.PaymentDelegate
+import com.tpay.sdk.api.webView.WebViewCallback
+import com.tpay.sdk.cache.DirectoryManager
 import com.tpay.sdk.databinding.FragmentSheetBinding
 import com.tpay.sdk.designSystem.buttons.ButtonLanguage
 import com.tpay.sdk.di.injectFields
@@ -25,6 +31,8 @@ import com.tpay.sdk.internal.paymentMethod.PaymentMethodFragment
 import com.tpay.sdk.internal.processingPayment.ProcessingPaymentFragment
 import com.tpay.sdk.internal.successStatus.SuccessStatusFragment
 import com.tpay.sdk.internal.webView.WebViewFragment
+import com.tpay.sdk.internal.webViewModule.WebViewCoordinator
+import com.tpay.sdk.internal.webViewModule.WebViewModuleFragment
 import java.util.*
 import javax.inject.Inject
 
@@ -33,6 +41,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
     internal val binding: FragmentSheetBinding by viewBinding(FragmentSheetBinding::bind)
     private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
     internal val onSlide = Observable(0f)
+    internal val viewModel: SheetViewModel by viewModels()
 
     @Inject
     internal lateinit var navigation: Navigation
@@ -52,6 +61,15 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
     @Inject
     internal lateinit var addCardCoordinator: AddCardCoordinator
 
+    @Inject
+    internal lateinit var webViewCoordinator: WebViewCoordinator
+
+    @Inject
+    internal lateinit var directoryManager: DirectoryManager
+
+    @Inject
+    internal lateinit var activityResultHandler: ActivityResultHandler
+
     private val screenMetrics by lazy { getScreenMetrics() }
 
     private var savedSoftInputMode: Int? = null
@@ -63,6 +81,8 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        handleRestore(savedInstanceState)
+
         navigation.init(childFragmentManager)
         val backstackFragments = childFragmentManager.fragments
 
@@ -70,6 +90,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
             SheetType.TOKENIZATION -> handleTokenizationFlowScreen(backstackFragments)
             SheetType.TOKEN_PAYMENT -> handleTokenPaymentFlowScreen(backstackFragments)
             SheetType.PAYMENT -> handlePaymentFlowScreen(backstackFragments)
+            SheetType.WEB_VIEW -> handleWebViewModuleFlowScreen(backstackFragments)
         }
 
         navigation.changeFragment(startingFragment, addToBackStack = false)
@@ -82,8 +103,31 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         }
     }
 
+    fun handleRestore(savedInstanceState: Bundle?) {
+        directoryManager.init(requireContext())
+        savedInstanceState?.run { restoreState() } ?: saveState()
+        Language.fromConfiguration(configuration.supportedLanguages)
+    }
+
+    private fun restoreState() = viewModel.run {
+        readConfigurationFromState()
+        readRepositoryFromState()
+    }
+
+    private fun saveState() = viewModel.run {
+        saveConfigurationToState()
+        saveRepositoryToState()
+    }
+
     val sheetType: SheetType
         get() = SheetType.values()[arguments?.getInt(SHEET_TYPE_ARGUMENT_NAME) ?: throw IllegalStateException()]
+
+    private fun handleWebViewModuleFlowScreen(backstackFragments: List<Fragment>): Fragment {
+        return backstackFragments.firstOrNull { fragment -> fragment is WebViewModuleFragment }
+            ?: WebViewModuleFragment().apply {
+                arguments = this@SheetFragment.arguments
+            }
+    }
 
     private fun handleTokenPaymentFlowScreen(backstackFragments: List<Fragment>): Fragment {
         return backstackFragments.run {
@@ -147,8 +191,8 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         }
 
         when (compatibility) {
-            is Compatibility.Native -> initNative()
-            is Compatibility.Flutter -> initFlutter()
+            Compatibility.NATIVE -> initNative()
+            Compatibility.FLUTTER, Compatibility.REACT_NATIVE -> initFlutter()
         }
 
         navigation.fragmentListeners({
@@ -186,13 +230,15 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
 
             languageBtn.languageChangeListener = object : ButtonLanguage.LanguageChangeListener {
                 override fun onChange(language: Language) {
+                    viewModel.languageSelectedByUser = language
                     languageSwitcher.setLanguage(language)
                 }
             }
 
-            if (savedInstanceState == null) {
-                languageSwitcher.setLanguage(Language.from(configuration.preferredLanguage))
-            }
+            languageSwitcher.setLanguage(
+                if (savedInstanceState == null) Language.from(configuration.preferredLanguage)
+                else viewModel.languageSelectedByUser
+            )
 
             try {
                 val selectedLocale = languageSwitcher.localeObservable.value ?: Locale.getDefault()
@@ -210,7 +256,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
     }
 
     private fun getContainerHeightFor(fragment: Fragment?): Int = binding.run {
-        val additionalHeight = if (configuration.compatibility is Compatibility.Flutter) screenMetrics.statusBarHeight else 0
+        val additionalHeight = if (configuration.compatibility in listOf(Compatibility.FLUTTER, Compatibility.REACT_NATIVE)) screenMetrics.statusBarHeight else 0
         bottomSheet.height + additionalHeight - bottomSheet.top - if (shouldBottomBarBeDisplayed(fragment)) 60.px else 0.px
     }
 
@@ -230,7 +276,10 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
     }
 
     private fun shouldBottomBarBeDisplayed(fragment: Fragment?): Boolean {
-        return fragment !is WebViewFragment && fragment !is SuccessStatusFragment && fragment !is FailureStatusFragment
+        return fragment !is WebViewFragment &&
+                fragment !is SuccessStatusFragment &&
+                fragment !is FailureStatusFragment &&
+                fragment !is WebViewModuleFragment
     }
 
 
@@ -289,6 +338,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
 
         when (sheetType) {
             SheetType.TOKENIZATION -> addCardCoordinator.moduleClosed.invoke()
+            SheetType.WEB_VIEW -> webViewCoordinator.onWebViewClosed.invoke()
             else -> paymentCoordinators.get(sheetType)?.moduleClosed?.invoke()
         }
     }
@@ -474,6 +524,44 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         }
     }
 
+    fun addPaymentDelegate(sheetType: SheetType, paymentDelegate: PaymentDelegate) {
+        paymentCoordinators.add(
+            sheetType,
+            PaymentCoordinator(
+                paymentCreated = paymentDelegate::onPaymentCreated,
+                paymentCompleted = paymentDelegate::onPaymentCompleted,
+                paymentCancelled = paymentDelegate::onPaymentCancelled,
+                moduleClosed = paymentDelegate::onModuleClosed
+            )
+        )
+    }
+
+    fun addTokenizationDelegate(addCardDelegate: AddCardDelegate) {
+        addCardCoordinator.run {
+            addCardSuccess = addCardDelegate::onAddCardSuccess
+            addCardFailure = addCardDelegate::onAddCardFailure
+            moduleClosed = addCardDelegate::onModuleClosed
+        }
+    }
+
+    fun addWebViewCallback(callback: WebViewCallback) {
+        webViewCoordinator.run {
+            onPaymentSuccess = {
+                callback.onPaymentSuccess()
+                closeSheet()
+            }
+            onPaymentFailure = {
+                callback.onPaymentFailure()
+                closeSheet()
+            }
+            onWebViewClosed = callback::onWebViewClosed
+        }
+    }
+
+    fun activityResultFromRestore(requestCode: Int, resultCode: Int, data: Intent?) {
+        activityResultHandler.onResult.value = Triple(requestCode, resultCode, data)
+    }
+
     private fun getLanguageForLocale(locale: Locale): Language {
         val languageTag = locale.toLanguageTag().substring(0, 2)
         return Language.values().first { it.languageTag == languageTag }
@@ -506,9 +594,13 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         private const val STANDARD_SHEET_SCREEN_RATIO = 0.65f
         private val SHEET_TYPE_ARGUMENT_NAME = SheetType::class.java.simpleName
 
-        fun with(sheetType: SheetType): SheetFragment {
+        fun with(sheetType: SheetType, other: Bundle? = null): SheetFragment {
             return SheetFragment().apply {
-                arguments = bundleOf(SHEET_TYPE_ARGUMENT_NAME to sheetType.ordinal)
+                arguments = bundleOf(
+                    SHEET_TYPE_ARGUMENT_NAME to sheetType.ordinal
+                ).apply {
+                    other?.run(::putAll)
+                }
             }
         }
     }
@@ -520,5 +612,5 @@ internal data class ScreenMetrics(
 )
 
 internal enum class SheetType {
-    PAYMENT, TOKENIZATION, TOKEN_PAYMENT
+    PAYMENT, TOKENIZATION, TOKEN_PAYMENT, WEB_VIEW
 }

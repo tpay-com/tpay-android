@@ -84,6 +84,7 @@ data class GroupedPaymentChannels(
         private const val GOOGLE_PAY_GROUP_ID = "166"
         private const val GOOGLE_PAY_CHANNEL_ID = "68"
         private const val APPLE_PAY_CHANNEL_ID = "75"
+        private const val PAY_PO_GROUP_ID = "172"
 
         /**
          * This method groups payment channels, so they are easier to display.
@@ -110,6 +111,9 @@ data class GroupedPaymentChannels(
                                         ratyPekaoChannels
                                     )
                                 )
+                            }
+                            channelWithGroupId(PAY_PO_GROUP_ID)?.run {
+                                add(InstallmentPaymentKind(InstallmentPayment.PAY_PO, listOf(this)))
                             }
                         }
 

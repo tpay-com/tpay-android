@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.viewModels
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentPayerDataBinding
 import com.tpay.sdk.designSystem.textfields.TextFieldAbstract
@@ -17,7 +18,7 @@ import java.util.*
 
 internal class PayerDataFragment : BaseFragment(R.layout.fragment_payer_data) {
     override val binding by viewBinding(FragmentPayerDataBinding::bind)
-    override val viewModel = PayerDataViewModel()
+    override val viewModel: PayerDataViewModel by viewModels()
 
     private var modifiedContext: Context? = null
 

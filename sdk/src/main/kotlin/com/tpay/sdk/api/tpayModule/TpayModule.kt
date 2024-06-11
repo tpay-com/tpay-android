@@ -59,7 +59,7 @@ sealed class TpayModule {
 
         /**
          * Function responsible for configuring the compatibility mode.
-         * [Compatibility.Native] is set by default.
+         * [Compatibility.NATIVE] is set by default.
          */
         fun configure(compatibility: Compatibility): Companion {
             configuration.compatibility = compatibility

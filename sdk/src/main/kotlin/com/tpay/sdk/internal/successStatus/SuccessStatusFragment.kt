@@ -2,6 +2,7 @@ package com.tpay.sdk.internal.successStatus
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentSuccessStatusBinding
 import com.tpay.sdk.extensions.isVisible
@@ -13,7 +14,7 @@ import com.tpay.sdk.internal.base.BaseFragment
 
 internal class SuccessStatusFragment : BaseFragment(R.layout.fragment_success_status) {
     override val binding: FragmentSuccessStatusBinding by viewBinding(FragmentSuccessStatusBinding::bind)
-    override val viewModel = SuccessStatusViewModel()
+    override val viewModel: SuccessStatusViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,6 +48,7 @@ internal class SuccessStatusFragment : BaseFragment(R.layout.fragment_success_st
                     primaryButton.text = getString(R.string.ok)
                     description.text = getString(R.string.you_can_now_use_fast_payment)
                 }
+                SheetType.WEB_VIEW -> { /* view not displayed */ }
             }
         }
     }

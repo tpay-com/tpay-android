@@ -9,13 +9,11 @@ import com.tpay.sdk.internal.webView.WebUrl
 
 
 internal class TokenPaymentProcessingViewModel : BaseViewModel() {
-    init {
+    fun startTransaction() {
         configuration.merchant?.authorization?.let { auth ->
             repository.setAuth(auth, configuration.environment)
         }
-    }
 
-    fun startTransaction() {
         screenClickable.value = false
 
         val cardTokenTransaction = repository.cardTokenTransaction ?: kotlin.run {

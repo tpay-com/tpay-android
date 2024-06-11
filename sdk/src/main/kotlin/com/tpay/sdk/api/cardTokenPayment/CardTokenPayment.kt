@@ -85,6 +85,31 @@ sealed class CardTokenPayment {
             paymentCoordinators.remove(SheetType.TOKEN_PAYMENT)
         }
 
-        override fun onBackPressed() { }
+        override fun onBackPressed() {}
+
+        companion object {
+            /**
+             * Function responsible for restoring the PaymentDelegate callback
+             * after a process death occurred.
+             *
+             * If the CardTokenPayment.Sheet was open during process death, system will automatically
+             * open it again after user comes back to the app. In this case you need to call this method
+             * to restore the callback and receive transaction information.
+             */
+            fun restore(supportFragmentManager: FragmentManager, paymentDelegate: PaymentDelegate) {
+                supportFragmentManager.getFragmentOrNull<SheetFragment>()?.addPaymentDelegate(
+                    sheetType = SheetType.TOKEN_PAYMENT,
+                    paymentDelegate = paymentDelegate
+                )
+            }
+
+            /**
+             * Function responsible for checking if the CardTokenPayment.Sheet is currently open
+             */
+            fun isOpen(supportFragmentManager: FragmentManager): Boolean {
+                return supportFragmentManager
+                    .getFragmentOrNull<SheetFragment>()?.sheetType == SheetType.TOKEN_PAYMENT
+            }
+        }
     }
 }

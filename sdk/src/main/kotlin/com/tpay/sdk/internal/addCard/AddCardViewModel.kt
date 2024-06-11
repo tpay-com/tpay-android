@@ -47,21 +47,21 @@ internal class AddCardViewModel : BaseViewModel() {
     var expirationDate = ""
     var cvv = ""
 
-    private var cardTokenizationRequestDTO: CardTokenizationRequestDTO
-
-    init {
+    private val cardTokenizationRequestDTO: CardTokenizationRequestDTO by lazy {
         repository.run {
-            configuration.merchant?.authorization?.run {
-                setAuth(this, configuration.environment)
-            }
-
-            cardTokenizationRequestDTO = CardTokenizationRequestDTO().apply {
+            CardTokenizationRequestDTO().apply {
                 callbackUrl = tokenization.notificationUrl
                 redirects = PayerUrlDTO().apply {
                     success = internalRedirects.successUrl
                     error = internalRedirects.errorUrl
                 }
             }
+        }
+    }
+
+    fun init() {
+        configuration.merchant?.authorization?.let { auth ->
+            repository.setAuth(auth, configuration.environment)
         }
     }
 

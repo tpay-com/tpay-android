@@ -21,7 +21,10 @@ internal class WebViewViewModel : BaseViewModel(){
     fun getSuccessUrl(): String = repository.internalRedirects.successUrl
     fun getErrorUrl(): String = repository.internalRedirects.errorUrl
 
-    init {
+    fun init() {
+        configuration.merchant?.authorization?.run {
+            repository.setAuth(this, configuration.environment)
+        }
         repository.transactionId?.let { id ->
             scheduler = CompletableScheduler { repository.getTransaction(id) }.apply {
                 schedule(

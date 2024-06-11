@@ -124,7 +124,7 @@ class GooglePayUtil(
 
     companion object {
         const val GOOGLE_PAY_SCREENLESS_REQUEST_CODE = 2002
-        internal const val GOOGLE_PAY_UI_REQUEST_CODE = 2001
+        const val GOOGLE_PAY_UI_REQUEST_CODE = 2001
         private const val PAYMENT_METHOD_DATA = "paymentMethodData"
         private const val TOKENIZATION_DATA = "tokenizationData"
         private const val TOKEN = "token"

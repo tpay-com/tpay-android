@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.tpay.sdk.api.models.*
 import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.models.payer.Payer
-import com.tpay.sdk.api.models.transaction.Transaction
+import com.tpay.sdk.api.models.transaction.SingleTransaction
 import com.tpay.sdk.api.paycard.CreditCardBrand
 import com.tpay.sdk.api.payment.Payment
 import com.tpay.sdk.api.providers.MerchantDetailsProvider
 import com.tpay.sdk.api.providers.SSLCertificatesProvider
-import com.tpay.sdk.api.screenless.Notifications
+import com.tpay.sdk.api.screenless.googlePay.GooglePayUtil
 import com.tpay.sdk.api.tpayModule.TpayModule
 
 class MainActivity : AppCompatActivity() {
@@ -29,21 +29,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         paymentSheet = Payment.Sheet(
-            transaction = object : Transaction {
-                override val amount: Double
-                    get() = 29.99
-                override val description: String
-                    get() = "transaction description"
-                override val payerContext: PayerContext
-                    get() = PayerContext(
-                        payer,
-                        automaticPaymentMethods = AutomaticPaymentMethods(
-                            blikAlias = BlikAlias.Registered(value = "<alias value>", label = "<alias label>"),
-                            tokenizedCards = listOf(TokenizedCard("<card token>", "<card tail>", CreditCardBrand.MASTERCARD))
-                        )
+            transaction = SingleTransaction(
+                amount = 29.99,
+                description = "transaction description",
+                payerContext = PayerContext(
+                    payer,
+                    automaticPaymentMethods = AutomaticPaymentMethods(
+                        blikAlias = BlikAlias.Registered(value = "<alias value>", label = "<alias label>"),
+                        tokenizedCards = listOf(TokenizedCard("<card token>", "<card tail>", CreditCardBrand.MASTERCARD))
                     )
-                override val notifications: Notifications? = null
-            },
+                ),
+                notifications = null
+            ),
             activity = this,
             supportFragmentManager = supportFragmentManager
         )
@@ -97,7 +94,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        paymentSheet.onActivityResult(requestCode, resultCode, data)
+
+        val isPaymentSheetOpen = Payment.Sheet.isOpen(supportFragmentManager)
+        val isGooglePayResult = requestCode == GooglePayUtil.GOOGLE_PAY_UI_REQUEST_CODE
+
+        if (isPaymentSheetOpen && isGooglePayResult) {
+            Payment.Sheet.onActivityResult(supportFragmentManager, requestCode, resultCode, data)
+        }
     }
 
     override fun onBackPressed() {
