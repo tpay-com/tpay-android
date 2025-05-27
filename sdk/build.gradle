@@ -119,9 +119,8 @@ afterEvaluate {
                 }
             }
             maven {
-                def gitlabProjectId = 1205
-                url = uri("https://gitlab.futuremind.dev/api/v4/projects/$gitlabProjectId/packages/maven")
-                name 'FMGitlab'
+                name 'GitlabRegistry'
+                url System.getenv('GITLAB_REGISTRY_URL')
                 credentials(HttpHeaderCredentials) {
                     name = "Job-Token"
                     value = System.getenv("CI_JOB_TOKEN")
