@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace = "com.tpay.sdk"
     compileSdk rootProject.compileSdk
 
     defaultConfig {
