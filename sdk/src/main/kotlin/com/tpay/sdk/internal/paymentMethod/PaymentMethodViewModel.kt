@@ -19,7 +19,12 @@ import com.tpay.sdk.api.screenless.card.CreateCreditCardTransactionResult
 import com.tpay.sdk.api.screenless.card.CreditCard
 import com.tpay.sdk.api.screenless.card.CreditCardPayment
 import com.tpay.sdk.api.screenless.channelMethods.ChannelMethod
-import com.tpay.sdk.api.screenless.googlePay.*
+import com.tpay.sdk.api.screenless.googlePay.CreateGooglePayTransactionResult
+import com.tpay.sdk.api.screenless.googlePay.GooglePayEnvironment
+import com.tpay.sdk.api.screenless.googlePay.GooglePayPayment
+import com.tpay.sdk.api.screenless.googlePay.GooglePayRequest
+import com.tpay.sdk.api.screenless.googlePay.GooglePayUtil
+import com.tpay.sdk.api.screenless.googlePay.OpenGooglePayResult
 import com.tpay.sdk.api.screenless.payPo.CreatePayPoTransactionResult
 import com.tpay.sdk.api.screenless.payPo.PayPoPayment
 import com.tpay.sdk.api.screenless.pekaoInstallment.CreatePekaoInstallmentTransactionResult
@@ -28,7 +33,10 @@ import com.tpay.sdk.api.screenless.transfer.CreateTransferTransactionResult
 import com.tpay.sdk.api.screenless.transfer.TransferPayment
 import com.tpay.sdk.designSystem.textfields.CreditCardDate
 import com.tpay.sdk.designSystem.textfields.Validators
-import com.tpay.sdk.extensions.*
+import com.tpay.sdk.extensions.Observable
+import com.tpay.sdk.extensions.isValidBLIKCode
+import com.tpay.sdk.extensions.isValidCVVCode
+import com.tpay.sdk.extensions.isValidCreditCardNumber
 import com.tpay.sdk.internal.FormError
 import com.tpay.sdk.internal.Language.Companion.asApi
 import com.tpay.sdk.internal.SheetType
@@ -107,12 +115,12 @@ internal class PaymentMethodViewModel : BaseViewModel() {
             name = payer.name,
             email = payer.email,
             phone = payer.phone,
-            address = payer.address?.run {
+            address = payer.run {
                 Payer.Address(
-                    address = address,
-                    city = city,
+                    address = address?.address,
+                    city = address?.city,
                     countryCode = COUNTRY_CODE_PL,
-                    postalCode = postalCode
+                    postalCode = address?.postalCode
                 )
             }
         )
