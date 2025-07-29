@@ -1,15 +1,17 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
     id 'org.jetbrains.dokka'
     id 'signing'
     id 'kotlin-parcelize'
+    id 'com.vanniktech.maven.publish'
 }
 
 def _versionMajor = 1
 def _versionMinor = 2
-def _versionPatch = 2
+def _versionPatch = 3
 def _versionName = "${_versionMajor}.${_versionMinor}.${_versionPatch}"
 def _archiveName = "com.tpay.sdk-$_versionName"
 
@@ -86,38 +88,26 @@ task sourcesJar(type: Jar) {
     from 'src/main/kotlin/com/tpay/sdk/api'
 }
 
-def isSigningRequired = !project.hasProperty("skipSigning")
+def isSigningDisabled = project.hasProperty("skipSigning") || project.hasProperty("mavenPublishSigningEnabled") && !project.mavenPublishSigningEnabled.toBoolean()
 
+gradle.taskGraph.whenReady {
+    if (isSigningDisabled) {
+        tasks.withType(Sign).configureEach {
+            enabled = false
+        }
+    }
+}
 afterEvaluate {
     signing {
-        required { isSigningRequired }
-
         useInMemoryPgpKeys(
-            System.getenv('SIGNING_KEY'),
-            System.getenv('SIGNING_KEY_PASSWORD')
+                System.getenv('SIGNING_KEY'),
+                System.getenv('SIGNING_KEY_PASSWORD')
         )
 
         sign publishing.publications
     }
     publishing {
         repositories {
-            maven {
-                name 'MavenCentral'
-                url System.getenv('MAVEN_URL')
-                credentials {
-                    username System.getenv('MAVEN_LOGIN')
-                    password System.getenv('MAVEN_PASSWORD')
-                }
-            }
-
-            maven {
-                name 'Staging'
-                url System.getenv('STAGING_MAVEN_URL')
-                credentials {
-                    username System.getenv('STAGING_MAVEN_LOGIN')
-                    password System.getenv('STAGING_MAVEN_PASSWORD')
-                }
-            }
             maven {
                 name 'GitlabRegistry'
                 url System.getenv('GITLAB_REGISTRY_URL')
@@ -136,59 +126,34 @@ afterEvaluate {
             }
         }
 
-        publications {
-            Release(MavenPublication) {
-                groupId 'com.tpay'
-                artifactId 'sdk'
-                version "${_versionName}"
-                artifact("$buildDir/outputs/aar/${_archiveName}-release.aar")
-                artifact source: "$buildDir/libs/${_archiveName}-sources.jar", classifier: 'sources', extension: 'jar'
-                artifact source: "$buildDir/libs/${_archiveName}-javadoc.jar", classifier: 'javadoc', extension: 'jar'
+        mavenPublishing {
+            // Set to true for automatic release to Central Portal
+            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
+            signAllPublications()
 
-                pom.withXml {
-                    //noinspection GroovyImplicitNullArgumentCall
-                    def root = asNode()
+            coordinates("com.tpay", "sdk", "${_versionName}")
 
-                    def dependenciesNode = root.appendNode('dependencies')
-                    configurations.implementation.allDependencies.each { dependency ->
-                        if (dependency.name != 'unspecified' && dependency.version != 'unspecified') {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', dependency.group)
-                            dependencyNode.appendNode('artifactId', dependency.name)
-                            dependencyNode.appendNode('version', dependency.version)
-                        }
+            // the following is optional
+
+            pom {
+                name = "Tpay SDK"
+                description = "Tpay - online payment operator for Android"
+                url = "https://tpay.com/"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "http://www.opensource.org/licenses/mit-license.php"
                     }
                 }
-            }
-        }
-
-        publications.configureEach {
-            pom.withXml {
-                def root = asNode()
-
-                root.children().last() + {
-                    name 'Tpay SDK'
-                    description 'Tpay - online payment operator for Android'
-                    url 'https://tpay.com/'
-
-                    licenses {
-                        license {
-                            name 'MIT License'
-                            url 'http://www.opensource.org/licenses/mit-license.php'
-                        }
-                    }
-
-                    scm {
-                        url 'https://github.com/tpay-com/tpay-android'
-                        connection 'scm:git:git://github.com/tpay-com/tpay-android.git'
-                        developerConnection 'scm:git:git://github.com/tpay-com/tpay-android.git'
-                    }
-
-                    developers {
-                        developer {
-                            id 'com.tpay.devs'
-                            name 'Tpay Auto Commit'
-                        }
+                scm {
+                    url = "https://github.com/tpay-com/tpay-android"
+                    connection = "scm:git:git://github.com/tpay-com/tpay-android.git"
+                    developerConnection = "scm:git:git://github.com/tpay-com/tpay-android.git"
+                }
+                developers {
+                    developer {
+                        id = "com.tpay.devs"
+                        name = "Tpay Auto Commit"
                     }
                 }
             }

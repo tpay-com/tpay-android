@@ -25,7 +25,13 @@ internal class TokenPaymentProcessingViewModel : BaseViewModel() {
         CreditCardPayment.Builder().apply {
             cardTokenTransaction.run {
                 setCreditCardToken(cardToken)
-                setPaymentDetails(PaymentDetails(amount, description))
+                setPaymentDetails(
+                    PaymentDetails(
+                        amount = amount,
+                        description = description,
+                        hiddenDescription = hiddenDescription
+                    )
+                )
                 setPayer(payer)
                 setCallbacks(repository.internalRedirects, notifications)
             }
@@ -38,11 +44,13 @@ internal class TokenPaymentProcessingViewModel : BaseViewModel() {
                 handleTransactionId(result.transactionId)
                 moveToSuccessScreen()
             }
+
             is CreateCreditCardTransactionResult.Created -> {
                 handleTransactionId(result.transactionId)
                 repository.webUrl = WebUrl.Payment(result.paymentUrl)
                 moveToWebViewScreen()
             }
+
             is CreateCreditCardTransactionResult.Error -> {
                 result.transactionId?.let(this::handleTransactionId)
                 moveToFailureScreen()

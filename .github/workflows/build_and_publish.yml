@@ -61,10 +61,10 @@ jobs:
         run: ./gradlew sdk:assembleRelease
 
       - name: Publish to Maven Central
-        run: ./gradlew sdk:publishReleasePublicationToMavenCentralRepository
+        run: ./gradlew sdk:publishMavenPublicationToMavenCentralRepository
 
       - name: Publish to local maven
-        run: ./gradlew sdk:publishReleasePublicationToLocalRepository
+        run: ./gradlew sdk:publishMavenPublicationToLocalRepository
 
       - name: Zip local maven
         run: |

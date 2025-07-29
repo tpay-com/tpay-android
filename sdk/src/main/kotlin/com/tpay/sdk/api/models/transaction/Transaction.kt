@@ -19,6 +19,11 @@ interface Transaction : Parcelable {
     val description: String
 
     /**
+     * hidden description visible for merchant
+     */
+    val hiddenDescription: String?
+
+    /**
      * Information about payer
      */
     val payerContext: PayerContext

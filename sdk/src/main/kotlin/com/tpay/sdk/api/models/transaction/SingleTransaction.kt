@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class SingleTransaction(
     override val amount: Double,
     override val description: String,
+    override val hiddenDescription: String? = null,
     override val payerContext: PayerContext,
     override val notifications: Notifications?
 ) : Transaction

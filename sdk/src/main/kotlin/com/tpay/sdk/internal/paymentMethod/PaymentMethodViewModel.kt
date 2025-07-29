@@ -261,6 +261,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 PaymentDetails(
                                     amount = amount,
                                     description = description,
+                                    hiddenDescription = hiddenDescription,
                                     language = languageSwitcher.currentLanguage.asApi()
                                 )
                             )
@@ -285,6 +286,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 PaymentDetails(
                                     amount = amount,
                                     description = description,
+                                    hiddenDescription = hiddenDescription,
                                     language = languageSwitcher.currentLanguage.asApi()
                                 )
                             )
@@ -324,6 +326,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 PaymentDetails(
                                     amount = amount,
                                     description = description,
+                                    hiddenDescription = hiddenDescription,
                                     language = languageSwitcher.currentLanguage.asApi()
                                 )
                             )
@@ -389,6 +392,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 PaymentDetails(
                                     amount = amount,
                                     description = description,
+                                    hiddenDescription = hiddenDescription,
                                     language = languageSwitcher.currentLanguage.asApi()
                                 )
                             )
@@ -428,6 +432,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 PaymentDetails(
                                     amount = amount,
                                     description = description,
+                                    hiddenDescription = hiddenDescription,
                                     language = languageSwitcher.currentLanguage.asApi()
                                 )
                             )
@@ -450,6 +455,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 PaymentDetails(
                                     amount = amount,
                                     description = description,
+                                    hiddenDescription = hiddenDescription,
                                     language = languageSwitcher.currentLanguage.asApi()
                                 )
                             )
@@ -502,6 +508,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                             PaymentDetails(
                                 amount = amount,
                                 description = description,
+                                hiddenDescription = hiddenDescription,
                                 language = languageSwitcher.currentLanguage.asApi()
                             )
                         )
@@ -526,6 +533,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 PaymentDetails(
                                     amount = amount,
                                     description = description,
+                                    hiddenDescription = hiddenDescription,
                                     language = languageSwitcher.currentLanguage.asApi()
                                 )
                             )
