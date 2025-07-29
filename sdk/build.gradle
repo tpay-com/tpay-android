@@ -88,7 +88,7 @@ task sourcesJar(type: Jar) {
     from 'src/main/kotlin/com/tpay/sdk/api'
 }
 
-def isSigningDisabled = project.hasProperty("skipSigning") || project.hasProperty("mavenPublishSigningEnabled") && !project.mavenPublishSigningEnabled.toBoolean()
+def isSigningDisabled = project.hasProperty("skipSigning") || (project.hasProperty("mavenPublishSigningEnabled") && !project.mavenPublishSigningEnabled.toBoolean())
 
 gradle.taskGraph.whenReady {
     if (isSigningDisabled) {

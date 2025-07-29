@@ -10,12 +10,10 @@ on:
 env:
   SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
   SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-  MAVEN_URL: ${{ secrets.MAVEN_URL }}
-  MAVEN_LOGIN: ${{ secrets.MAVEN_LOGIN }}
-  MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-  STAGING_MAVEN_URL: ${{ secrets.STAGING_MAVEN_URL }}
-  STAGING_MAVEN_LOGIN: ${{ secrets.STAGING_MAVEN_LOGIN }}
-  STAGING_MAVEN_PASSWORD: ${{ secrets.STAGING_MAVEN_PASSWORD }}
+  ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+  ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+  ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_LOGIN }}
+  ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_PASSWORD }}
 
 jobs:
   build_and_publish:
