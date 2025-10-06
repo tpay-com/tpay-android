@@ -98,8 +98,26 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
         try {
             initBottomSheet(savedInstanceState)
             showSheet()
+            setUpOnBackgroundClick()
         } catch (exception: Exception) {
             exception.printStackTrace()
+        }
+    }
+
+    /**
+     * Clicking on the background of WebView or actual TokenPaymentProcessingFragment
+     * should close **NOT** the sheet
+     */
+    private fun setUpOnBackgroundClick() {
+        binding.coordinatorLayout.onClick {
+            when (childFragmentManager.fragments.lastOrNull()) {
+                is PayerDataFragment,
+                is PaymentMethodFragment,
+                is AddCardFragment ->
+                    closeSheet()
+
+                else -> Unit
+            }
         }
     }
 

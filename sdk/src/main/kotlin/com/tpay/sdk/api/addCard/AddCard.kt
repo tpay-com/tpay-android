@@ -7,10 +7,12 @@ import com.tpay.sdk.api.models.Presentable
 import com.tpay.sdk.api.models.SheetOpenResult
 import com.tpay.sdk.di.injectFields
 import com.tpay.sdk.extensions.getFragmentOrNull
-import com.tpay.sdk.internal.*
 import com.tpay.sdk.internal.AddCardCoordinator
 import com.tpay.sdk.internal.Repository
+import com.tpay.sdk.internal.ScreenOrientationUtil
 import com.tpay.sdk.internal.SheetFragment
+import com.tpay.sdk.internal.SheetType
+import com.tpay.sdk.internal.addCard.AddCardFragment
 import com.tpay.sdk.internal.config.Configuration
 import javax.inject.Inject
 
@@ -88,7 +90,12 @@ sealed class AddCard {
             }
         }
 
-        override fun onBackPressed() {}
+        override fun onBackPressed() {
+            when (sheetFragment.childFragmentManager.fragments.lastOrNull()) {
+                is AddCardFragment -> sheetFragment.closeSheet()
+                else -> Unit
+            }
+        }
 
         companion object {
             /**

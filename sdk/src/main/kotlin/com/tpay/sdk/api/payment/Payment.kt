@@ -9,14 +9,17 @@ import com.tpay.sdk.api.models.ObservablePayment
 import com.tpay.sdk.api.models.Presentable
 import com.tpay.sdk.api.models.SheetOpenResult
 import com.tpay.sdk.api.models.transaction.Transaction
-import com.tpay.sdk.cache.DirectoryManager
 import com.tpay.sdk.di.injectFields
 import com.tpay.sdk.extensions.getFragmentOrNull
-import com.tpay.sdk.internal.*
+import com.tpay.sdk.internal.ActivityResultHandler
 import com.tpay.sdk.internal.PaymentCoordinator
+import com.tpay.sdk.internal.PaymentCoordinators
 import com.tpay.sdk.internal.Repository
+import com.tpay.sdk.internal.ScreenOrientationUtil
 import com.tpay.sdk.internal.SheetFragment
+import com.tpay.sdk.internal.SheetType
 import com.tpay.sdk.internal.config.Configuration
+import com.tpay.sdk.internal.payerData.PayerDataFragment
 import com.tpay.sdk.internal.paymentMethod.PaymentMethodFragment
 import javax.inject.Inject
 
@@ -96,10 +99,10 @@ sealed class Payment {
         }
 
         override fun onBackPressed() {
-            sheetFragment.run {
-                if (childFragmentManager.fragments.lastOrNull() is PaymentMethodFragment) {
-                    navigation.onBackPressed()
-                }
+            when (sheetFragment.childFragmentManager.fragments.lastOrNull()) {
+                is PayerDataFragment -> sheetFragment.closeSheet()
+                is PaymentMethodFragment -> sheetFragment.navigation.onBackPressed()
+                else -> Unit
             }
         }
 
