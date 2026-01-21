@@ -3,6 +3,7 @@ package com.tpay.sdk
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import com.tpay.sdk.api.models.*
 import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.models.payer.Payer
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
         setContentView(R.layout.activity_main)
 
         paymentSheet = Payment.Sheet(

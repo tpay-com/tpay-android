@@ -1,9 +1,9 @@
 # Tpay Android SDK
 
-![Static Badge](https://img.shields.io/badge/min_android_sdk-23-blue?logo=android&label=Min%20Android%20SDK)
-[![Target Android SDK](https://img.shields.io/badge/Target/Compile%20sdk-34-informational.svg)](https://shields.io/) 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.8.0-informational.svg?logo=kotlin)](https://shields.io/)
-[![Java](https://img.shields.io/badge/Java-8-informational.svg?logo=java)](https://shields.io/)
+![Static Badge](https://img.shields.io/badge/Min_android_sdk-23-blue?logo=android)
+[![Target Android SDK](https://img.shields.io/badge/Target/Compile%20sdk-35-informational.svg?logo=android)](https://shields.io/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-informational.svg?logo=kotlin)](https://shields.io/)
+[![Java](https://img.shields.io/badge/Java-11-informational.svg?logo=java)](https://shields.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## About
@@ -13,12 +13,12 @@ Package documentation is available [here](https://tpay-com.github.io/tpay-androi
 
 Minimum supported versions:
 
-| Library | Version |
-| ------- | ------- |
-| Android SDK | 23 (Android 6.0, Marshmallow) |
-| Compile/Target SDK | 34 (Android 14, Upside Down Cake) |
-| Kotlin | 1.8.0 |
-| Java | 8|
+| Library            | Version                               |
+|--------------------|---------------------------------------|
+| Android SDK        | 23 (Android 6.0, Marshmallow)         |
+| Compile/Target SDK | 35 (Android 15, Vanilla Ice Cream)    |
+| Kotlin             | 2.3.0                                 |
+| Java               | 11                                    |
 
 > [!warning]
 > For this SDK to work you will need `client_id` and `client_secret` tokens. You can find in [merchant's panel](https://panel.tpay.com/?lang=1).
@@ -148,13 +148,13 @@ TpayModule.configure(Environment.SANDBOX)
 
 For users to be able to use a specific payment method you have declared it in the configuration.
 
-| Method | Description                                                              |
-| ------ |--------------------------------------------------------------------------|
-| BLIK | [Web docs](https://docs-api.tpay.com/en/payment-methods/blik/)           |
-| Pbl **(Pay-By-Link)** | [Web docs](https://docs-api.tpay.com/en/payment-methods/pbl/)            |
-| Card | [Web docs](https://docs-api.tpay.com/en/payment-methods/cards/)          |
-| DigitalWallets | [GOOGLE_PAY](https://docs-api.tpay.com/en/payment-methods/google-pay/)   |
-| InstallmentPayments | [RATY_PEKAO](https://docs-api.tpay.com/en/payment-methods/installments/) |
+| Method                      | Description                                                              |
+|-----------------------------|--------------------------------------------------------------------------|
+| BLIK                        | [Web docs](https://docs-api.tpay.com/en/payment-methods/blik/)           |
+| Pbl **(Pay-By-Link)**       | [Web docs](https://docs-api.tpay.com/en/payment-methods/pbl/)            |
+| Card                        | [Web docs](https://docs-api.tpay.com/en/payment-methods/cards/)          |
+| DigitalWallets              | [GOOGLE_PAY](https://docs-api.tpay.com/en/payment-methods/google-pay/)   |
+| InstallmentPayments         | [RATY_PEKAO](https://docs-api.tpay.com/en/payment-methods/installments/) |
 | DeferredPayments **(BNPL)** | [PAY_PO](https://docs-api.tpay.com/en/payment-methods/bnpl/)             |
 
 > [!note]
