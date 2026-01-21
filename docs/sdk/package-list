@@ -77,6 +77,7 @@ $dokka.location:com.tpay.sdk.api.models.transaction/Frequency.QUARTERLY///Pointi
 $dokka.location:com.tpay.sdk.api.models.transaction/Frequency.WEEKLY///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models.transaction/-frequency/-w-e-e-k-l-y/index.html
 $dokka.location:com.tpay.sdk.api.models.transaction/Frequency.YEARLY///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models.transaction/-frequency/-y-e-a-r-l-y/index.html
 $dokka.location:com.tpay.sdk.api.models.transaction/Frequency///PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-frequency/index.html
+$dokka.location:com.tpay.sdk.api.models.transaction/Frequency/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-frequency/entries.html
 $dokka.location:com.tpay.sdk.api.models.transaction/Frequency/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-frequency/value-of.html
 $dokka.location:com.tpay.sdk.api.models.transaction/Frequency/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-frequency/values.html
 $dokka.location:com.tpay.sdk.api.models.transaction/Quantity.Indefinite///PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-quantity/-indefinite/index.html
@@ -126,6 +127,7 @@ $dokka.location:com.tpay.sdk.api.models/Compatibility.FLUTTER///PointingToDeclar
 $dokka.location:com.tpay.sdk.api.models/Compatibility.NATIVE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-compatibility/-n-a-t-i-v-e/index.html
 $dokka.location:com.tpay.sdk.api.models/Compatibility.REACT_NATIVE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-compatibility/-r-e-a-c-t_-n-a-t-i-v-e/index.html
 $dokka.location:com.tpay.sdk.api.models/Compatibility///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-compatibility/index.html
+$dokka.location:com.tpay.sdk.api.models/Compatibility/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-compatibility/entries.html
 $dokka.location:com.tpay.sdk.api.models/Compatibility/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-compatibility/value-of.html
 $dokka.location:com.tpay.sdk.api.models/Compatibility/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-compatibility/values.html
 $dokka.location:com.tpay.sdk.api.models/ConfigurationCheckResult.Invalid///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-configuration-check-result/-invalid/index.html
@@ -135,11 +137,13 @@ $dokka.location:com.tpay.sdk.api.models/ConfigurationCheckResult.Valid///Pointin
 $dokka.location:com.tpay.sdk.api.models/ConfigurationCheckResult///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-configuration-check-result/index.html
 $dokka.location:com.tpay.sdk.api.models/DigitalWallet.GOOGLE_PAY///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-digital-wallet/-g-o-o-g-l-e_-p-a-y/index.html
 $dokka.location:com.tpay.sdk.api.models/DigitalWallet///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-digital-wallet/index.html
+$dokka.location:com.tpay.sdk.api.models/DigitalWallet/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-digital-wallet/entries.html
 $dokka.location:com.tpay.sdk.api.models/DigitalWallet/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-digital-wallet/value-of.html
 $dokka.location:com.tpay.sdk.api.models/DigitalWallet/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-digital-wallet/values.html
 $dokka.location:com.tpay.sdk.api.models/Environment.PRODUCTION///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-environment/-p-r-o-d-u-c-t-i-o-n/index.html
 $dokka.location:com.tpay.sdk.api.models/Environment.SANDBOX///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-environment/-s-a-n-d-b-o-x/index.html
 $dokka.location:com.tpay.sdk.api.models/Environment///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-environment/index.html
+$dokka.location:com.tpay.sdk.api.models/Environment/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-environment/entries.html
 $dokka.location:com.tpay.sdk.api.models/Environment/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-environment/value-of.html
 $dokka.location:com.tpay.sdk.api.models/Environment/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-environment/values.html
 $dokka.location:com.tpay.sdk.api.models/GooglePayConfiguration///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-google-pay-configuration/index.html
@@ -148,11 +152,13 @@ $dokka.location:com.tpay.sdk.api.models/GooglePayConfiguration/merchantId/#/Poin
 $dokka.location:com.tpay.sdk.api.models/InstallmentPayment.PAY_PO///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-installment-payment/-p-a-y_-p-o/index.html
 $dokka.location:com.tpay.sdk.api.models/InstallmentPayment.RATY_PEKAO///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-installment-payment/-r-a-t-y_-p-e-k-a-o/index.html
 $dokka.location:com.tpay.sdk.api.models/InstallmentPayment///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-installment-payment/index.html
+$dokka.location:com.tpay.sdk.api.models/InstallmentPayment/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-installment-payment/entries.html
 $dokka.location:com.tpay.sdk.api.models/InstallmentPayment/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-installment-payment/value-of.html
 $dokka.location:com.tpay.sdk.api.models/InstallmentPayment/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-installment-payment/values.html
 $dokka.location:com.tpay.sdk.api.models/Language.EN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-language/-e-n/index.html
 $dokka.location:com.tpay.sdk.api.models/Language.PL///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.models/-language/-p-l/index.html
 $dokka.location:com.tpay.sdk.api.models/Language///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-language/index.html
+$dokka.location:com.tpay.sdk.api.models/Language/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-language/entries.html
 $dokka.location:com.tpay.sdk.api.models/Language/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-language/value-of.html
 $dokka.location:com.tpay.sdk.api.models/Language/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-language/values.html
 $dokka.location:com.tpay.sdk.api.models/ObservablePayment///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-observable-payment/index.html
@@ -196,6 +202,7 @@ $dokka.location:com.tpay.sdk.api.paycard/CreditCardBrand.MASTERCARD///PointingTo
 $dokka.location:com.tpay.sdk.api.paycard/CreditCardBrand.UNKNOWN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.paycard/-credit-card-brand/-u-n-k-n-o-w-n/index.html
 $dokka.location:com.tpay.sdk.api.paycard/CreditCardBrand.VISA///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.paycard/-credit-card-brand/-v-i-s-a/index.html
 $dokka.location:com.tpay.sdk.api.paycard/CreditCardBrand///PointingToDeclaration/sdk/com.tpay.sdk.api.paycard/-credit-card-brand/index.html
+$dokka.location:com.tpay.sdk.api.paycard/CreditCardBrand/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.paycard/-credit-card-brand/entries.html
 $dokka.location:com.tpay.sdk.api.paycard/CreditCardBrand/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.paycard/-credit-card-brand/value-of.html
 $dokka.location:com.tpay.sdk.api.paycard/CreditCardBrand/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.paycard/-credit-card-brand/values.html
 $dokka.location:com.tpay.sdk.api.payment////PointingToDeclaration/sdk/com.tpay.sdk.api.payment/index.html
@@ -388,6 +395,7 @@ $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayEnvironment.PRODU
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayEnvironment.TEST///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-environment/-t-e-s-t/index.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayEnvironment///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-environment/index.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayEnvironment/actual/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-environment/actual.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayEnvironment/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-environment/entries.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayEnvironment/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-environment/value-of.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayEnvironment/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-environment/values.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment.Builder///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-payment/-builder/index.html
@@ -522,6 +530,7 @@ $dokka.location:com.tpay.sdk.api.screenless/TransactionState.REFUND///PointingTo
 $dokka.location:com.tpay.sdk.api.screenless/TransactionState.UNKNOWN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}sdk/com.tpay.sdk.api.screenless/-transaction-state/-u-n-k-n-o-w-n/index.html
 $dokka.location:com.tpay.sdk.api.screenless/TransactionState///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-transaction-state/index.html
 $dokka.location:com.tpay.sdk.api.screenless/TransactionState/actual/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-transaction-state/actual.html
+$dokka.location:com.tpay.sdk.api.screenless/TransactionState/entries/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-transaction-state/entries.html
 $dokka.location:com.tpay.sdk.api.screenless/TransactionState/valueOf/#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-transaction-state/value-of.html
 $dokka.location:com.tpay.sdk.api.screenless/TransactionState/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-transaction-state/values.html
 $dokka.location:com.tpay.sdk.api.tpayModule////PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/index.html
@@ -630,4 +639,3 @@ com.tpay.sdk.extensions
 com.tpay.sdk.internal
 com.tpay.sdk.server
 com.tpay.sdk.server.dto.parts
-

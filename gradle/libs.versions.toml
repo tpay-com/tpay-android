@@ -51,6 +51,7 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-dokka = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+dokka-javadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-maven-publish" }
 version-check = { id = "com.github.ben-manes.versions", version.ref = "manes-version-check" }

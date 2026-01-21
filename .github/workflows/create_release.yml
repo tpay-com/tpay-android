@@ -34,7 +34,7 @@ jobs:
         uses: gradle/gradle-build-action@v2.9.0
 
       - name: Gradle generate documentation
-        run: ./gradlew sdk:dokkaHtml
+        run: ./gradlew sdk:dokkaGeneratePublicationHtml
 
       - name: Remove previous documentation
         run: rm -rf docs

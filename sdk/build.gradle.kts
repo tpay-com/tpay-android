@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.dokka.javadoc)
     signing
     id("kotlin-parcelize")
     alias(libs.plugins.version.check)
@@ -90,8 +91,8 @@ dokka {
 
 tasks.register<Jar>("generateDocumentation") {
     archiveClassifier.set("javadoc")
-    dependsOn(tasks.named("dokkaGenerateJavadoc"))
-    from(tasks.named("dokkaGenerateJavadoc").map { it.outputs })
+    dependsOn(tasks.named("dokkaGeneratePublicationJavadoc"))
+    from(tasks.named("dokkaGeneratePublicationJavadoc").map { it.outputs })
 }
 
 tasks.register<Jar>("sourcesJar") {
