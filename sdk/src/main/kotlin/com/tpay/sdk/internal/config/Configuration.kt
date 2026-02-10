@@ -11,10 +11,16 @@ import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.models.moduleError.ModuleError
 import com.tpay.sdk.api.providers.MerchantDetailsProvider
 import com.tpay.sdk.api.providers.SSLCertificatesProvider
+import com.tpay.sdk.di.injectFields
+import com.tpay.sdk.server.RequestPropertyProvider
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class Configuration {
+    @Inject
+    private lateinit var requestPropertyProvider: RequestPropertyProvider
+
     // Save values to state handle
     var merchant: Merchant? = null
     var paymentMethods: List<PaymentMethod> = PaymentMethod.allMethods
@@ -24,7 +30,17 @@ internal class Configuration {
     var preferredLanguage: Language = Language.PL
     var supportedLanguages: List<Language> = Language.values().toList()
     var compatibility: Compatibility = Compatibility.NATIVE
+
     var googlePayConfiguration: GooglePayConfiguration? = null
+
+    init {
+        injectFields()
+    }
+
+    fun setCompatibility(compatibility: Compatibility, sdkVersionName: String?) {
+        this.compatibility = compatibility
+        requestPropertyProvider.setSdkVersion(compatibility, sdkVersionName)
+    }
 
     fun checkPaymentConfiguration(): ConfigurationCheckResult {
         val isGooglePayInMethods = paymentMethods
@@ -37,6 +53,7 @@ internal class Configuration {
             isGooglePayInMethods && (googlePayConfiguration == null || googlePayConfiguration?.merchantId?.isBlank() == true) -> {
                 ConfigurationCheckResult.Invalid(ModuleError.ConfigurationError.GooglePayNotConfigured)
             }
+
             merchantDetailsProvider == null -> ConfigurationCheckResult.Invalid(ModuleError.ConfigurationError.MerchantDetailsProviderNotProvided)
             else -> ConfigurationCheckResult.Valid
         }

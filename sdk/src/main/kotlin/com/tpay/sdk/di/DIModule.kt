@@ -6,13 +6,15 @@ import com.tpay.sdk.server.ServerService
 import com.tpay.sdk.internal.Repository
 import com.tpay.sdk.internal.config.Configuration
 import com.tpay.sdk.internal.webViewModule.WebViewCoordinator
+import com.tpay.sdk.server.RequestPropertyProvider
 import javax.inject.Singleton
 
 internal class DIModule {
+
     @Provides
     @Singleton
-    fun repository(): Repository {
-        return Repository(serverService())
+    fun repository(service: ServerService): Repository {
+        return Repository(service)
     }
 
     @Provides
@@ -35,7 +37,14 @@ internal class DIModule {
 
     @Provides
     @Singleton
-    fun serverService(): ServerService {
-        return ServerService()
+    fun requestPropertyProvider(): RequestPropertyProvider {
+        return RequestPropertyProvider()
     }
+
+    @Provides
+    @Singleton
+    fun serverService(requestPropertyProvider: RequestPropertyProvider): ServerService {
+        return ServerService(requestPropertyProvider)
+    }
+
 }

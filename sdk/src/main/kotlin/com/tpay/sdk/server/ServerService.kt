@@ -2,6 +2,7 @@ package com.tpay.sdk.server
 
 import com.tpay.sdk.api.models.Environment
 import com.tpay.sdk.api.models.merchant.Merchant
+import com.tpay.sdk.di.injectFields
 import com.tpay.sdk.extensions.Completable
 import com.tpay.sdk.extensions.Threads
 import com.tpay.sdk.server.dto.request.CardTokenizationRequestDTO
@@ -13,8 +14,9 @@ import javax.inject.Singleton
 import kotlin.Exception
 
 @Singleton
-internal class ServerService {
-    private var networking: Networking = Networking(Environment.PRODUCTION.baseUrl)
+internal class ServerService(private val requestPropertyProvider: RequestPropertyProvider) {
+    private var networking: Networking =
+        Networking(Environment.PRODUCTION.baseUrl, requestPropertyProvider)
     private var clientId: String = ""
     private var clientSecret: String = ""
     private var accessToken: AccessToken? = null
@@ -22,10 +24,10 @@ internal class ServerService {
     fun setAuth(
         authorization: Merchant.Authorization,
         environment: Environment
-    ){
+    ) {
         clientId = authorization.clientId
         clientSecret = authorization.clientSecret
-        networking = Networking(environment.baseUrl)
+        networking = Networking(environment.baseUrl, requestPropertyProvider)
         accessToken = null
     }
 
@@ -38,7 +40,7 @@ internal class ServerService {
 
     fun tokenizeCard(
         cardTokenizationRequestDTO: CardTokenizationRequestDTO
-    ) : Completable<CardTokenizationResponseDTO> = Completable.create { completable ->
+    ): Completable<CardTokenizationResponseDTO> = Completable.create { completable ->
         authorize({ accessToken ->
             networking.post(
                 endpoint = "tokens",
@@ -59,29 +61,31 @@ internal class ServerService {
         }, completable::onError)
     }
 
-    fun getPaymentChannels(): Completable<GetChannelsResponseDTO> = Completable.create { completable ->
-        authorize({ accessToken ->
-            networking.get(
-                endpoint = "transactions/channels?imageSize=medium",
-                auth = Auth.BearerAuth(accessToken.token)
-            )
-                .observeOn(Threads.IO)
-                .observe({ response ->
-                    try {
-                        completable.onSuccess(GetChannelsResponseDTO(response))
-                    } catch (exception: Exception) {
-                        exception.printStackTrace()
-                        completable.onError(JsonParseException(exception.message))
-                    }
-                }, { e ->
-                    handleClientOrServerError(e)
-                    completable.onError(e)
-                })
-        }, completable::onError)
-    }
+    fun getPaymentChannels(): Completable<GetChannelsResponseDTO> =
+        Completable.create { completable ->
+            authorize({ accessToken ->
+                networking.get(
+                    endpoint = "transactions/channels?imageSize=medium",
+                    auth = Auth.BearerAuth(accessToken.token)
+                )
+                    .observeOn(Threads.IO)
+                    .observe({ response ->
+                        try {
+                            completable.onSuccess(GetChannelsResponseDTO(response))
+                        } catch (exception: Exception) {
+                            exception.printStackTrace()
+                            completable.onError(JsonParseException(exception.message))
+                        }
+                    }, { e ->
+                        handleClientOrServerError(e)
+                        completable.onError(e)
+                    })
+            }, completable::onError)
+        }
 
-    fun getPaymentMethods(): Completable<GetTransactionMethodsResponseDTO> = Completable.create { completable ->
-        authorize({ accessToken ->
+    fun getPaymentMethods(): Completable<GetTransactionMethodsResponseDTO> =
+        Completable.create { completable ->
+            authorize({ accessToken ->
                 networking.get(
                     endpoint = "transactions/bank-groups?onlyOnline=true",
                     auth = Auth.BearerAuth(accessToken.token)
@@ -97,12 +101,12 @@ internal class ServerService {
                         handleClientOrServerError(e)
                         completable.onError(e)
                     }
-                )
+                    )
             }, { e ->
                 completable.onError(e)
             }
-        )
-    }
+            )
+        }
 
     fun getImage(imageUrl: String): Completable<ByteArray> {
         return Completable.create { completable ->
@@ -143,15 +147,15 @@ internal class ServerService {
                 )
                     .observeOn(Threads.IO)
                     .observe({ response ->
-                    try {
-                        completable.onSuccess(CreateTransactionResponseDTO(response))
-                    } catch (exception: Exception) {
-                        completable.onError(JsonParseException(exception.message))
-                    }
-                }, { e ->
-                    handleClientOrServerError(e)
-                    completable.onError(e)
-                })
+                        try {
+                            completable.onSuccess(CreateTransactionResponseDTO(response))
+                        } catch (exception: Exception) {
+                            completable.onError(JsonParseException(exception.message))
+                        }
+                    }, { e ->
+                        handleClientOrServerError(e)
+                        completable.onError(e)
+                    })
             }, { e ->
                 completable.onError(e)
             })
@@ -201,7 +205,7 @@ internal class ServerService {
                         .observe({ response ->
                             try {
                                 completable.onSuccess(GetTransactionResponseDTO(response))
-                            } catch (exception: Exception){
+                            } catch (exception: Exception) {
                                 completable.onError(JsonParseException(exception.message))
                             }
                         }, { e ->

@@ -61,8 +61,8 @@ sealed class TpayModule {
          * Function responsible for configuring the compatibility mode.
          * [Compatibility.NATIVE] is set by default.
          */
-        fun configure(compatibility: Compatibility): Companion {
-            configuration.compatibility = compatibility
+        fun configure(compatibility: Compatibility, sdkVersionName: String? = null): Companion {
+            configuration.setCompatibility(compatibility, sdkVersionName)
             return this
         }
 

@@ -17,7 +17,7 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 2
-val versionPatch = 5
+val versionPatch = 6
 val versionName = "$versionMajor.$versionMinor.$versionPatch"
 val archiveName = "com.tpay.sdk-$versionName"
 
@@ -28,6 +28,7 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.min.sdk.get().toInt()
         setProperty("archivesBaseName", archiveName)
+        buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
 
         multiDexEnabled = true
 
@@ -36,6 +37,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
 

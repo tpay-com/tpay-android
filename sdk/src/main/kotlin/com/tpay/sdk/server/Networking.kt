@@ -1,7 +1,9 @@
 package com.tpay.sdk.server
 
+import android.os.Build
 import android.util.Base64
 import android.util.Log
+import com.tpay.sdk.BuildConfig
 import com.tpay.sdk.extensions.*
 import com.tpay.sdk.server.dto.ErrorResponseDTO
 import org.json.JSONException
@@ -14,7 +16,10 @@ import java.net.URL
 import java.nio.charset.Charset
 import java.util.concurrent.Executors
 
-internal class Networking(baseUrl: String) {
+internal class Networking(
+    baseUrl: String,
+    private val requestPropertyProvider: RequestPropertyProvider
+) {
     private var baseUrl = baseUrl.addAtEndIfNotThere("/")
         set(value) {
             field = value.addAtEndIfNotThere("/")
@@ -29,7 +34,13 @@ internal class Networking(baseUrl: String) {
 
     fun post(endpoint: String, auth: Auth? = null, body: String? = null): Completable<String> {
         return Completable.create { completable ->
-            makeRequest(method = "POST", endpoint = endpoint, auth = auth, body =  body, completable = completable)
+            makeRequest(
+                method = "POST",
+                endpoint = endpoint,
+                auth = auth,
+                body = body,
+                completable = completable
+            )
         }
     }
 
@@ -46,21 +57,33 @@ internal class Networking(baseUrl: String) {
                     when {
                         isServerError(code) -> {
                             val errorResponse = ErrorResponseDTO(readErrorMessage(httpConnection))
-                            completable.onError(HttpServerException(code, errorResponse.readErrorMessages()))
+                            completable.onError(
+                                HttpServerException(
+                                    code,
+                                    errorResponse.readErrorMessages()
+                                )
+                            )
                         }
+
                         isClientError(code) -> {
                             val errorResponse = ErrorResponseDTO(readErrorMessage(httpConnection))
-                            completable.onError(HttpClientException(code, errorResponse.readErrorMessages()))
+                            completable.onError(
+                                HttpClientException(
+                                    code,
+                                    errorResponse.readErrorMessages()
+                                )
+                            )
                         }
+
                         else -> {
                             completable.onSuccess(bytes)
                         }
                     }
                 }
                 httpConnection.disconnect()
-            } catch (exception: Exception){
+            } catch (exception: Exception) {
                 completable.onError(NoInternetException)
-            } catch (exception: JSONException){
+            } catch (exception: JSONException) {
                 completable.onError(JsonParseException(exception.message))
             }
         }
@@ -80,8 +103,7 @@ internal class Networking(baseUrl: String) {
                 httpConnection.connectTimeout = 60000
                 httpConnection.requestMethod = method
 
-                httpConnection.setRequestProperty("Content-Type", "application/json")
-                httpConnection.setRequestProperty("Accept", "application/json")
+                requestPropertyProvider.setRequestProperties(httpConnection)
 
                 auth?.let {
                     httpConnection.setRequestProperty(it.header, it.value)
@@ -100,12 +122,24 @@ internal class Networking(baseUrl: String) {
                     when {
                         isServerError(code) -> {
                             val errorResponse = ErrorResponseDTO(readErrorMessage(httpConnection))
-                            completable.onError(HttpServerException(code, errorResponse.readErrorMessages()))
+                            completable.onError(
+                                HttpServerException(
+                                    code,
+                                    errorResponse.readErrorMessages()
+                                )
+                            )
                         }
+
                         isClientError(code) -> {
                             val errorResponse = ErrorResponseDTO(readErrorMessage(httpConnection))
-                            completable.onError(HttpClientException(code, errorResponse.readErrorMessages()))
+                            completable.onError(
+                                HttpClientException(
+                                    code,
+                                    errorResponse.readErrorMessages()
+                                )
+                            )
                         }
+
                         else -> {
                             val responseMessage = readResponseMessage(httpConnection)
                             logResponse(
@@ -120,7 +154,7 @@ internal class Networking(baseUrl: String) {
                 httpConnection.disconnect()
             } catch (exception: Exception) {
                 completable.onError(NoInternetException)
-            } catch (exception: JSONException){
+            } catch (exception: JSONException) {
                 completable.onError(JsonParseException(exception.message))
             }
         }
