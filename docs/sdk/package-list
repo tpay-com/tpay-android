@@ -535,7 +535,7 @@ $dokka.location:com.tpay.sdk.api.screenless/TransactionState/valueOf/#kotlin.Str
 $dokka.location:com.tpay.sdk.api.screenless/TransactionState/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-transaction-state/values.html
 $dokka.location:com.tpay.sdk.api.tpayModule////PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/index.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion///PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/index.html
-$dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Compatibility/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
+$dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Compatibility#kotlin.String?/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Environment/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.GooglePayConfiguration/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Language#kotlin.collections.List[com.tpay.sdk.api.models.Language]/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
