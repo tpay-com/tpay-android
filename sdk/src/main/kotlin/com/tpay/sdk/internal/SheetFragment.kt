@@ -614,7 +614,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
 
     private fun getLanguageForLocale(locale: Locale): Language {
         val languageTag = locale.toLanguageTag().substring(0, 2)
-        return Language.values().first { it.languageTag == languageTag }
+        return Language.entries.first { it.languageTag == languageTag }
     }
 
     var isClickBlockerVisible: Boolean

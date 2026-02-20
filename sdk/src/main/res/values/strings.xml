@@ -25,7 +25,6 @@
     <string name="payer_data_email_hint">E-mail</string>
     <string name="image_content_description">Obraz</string>
     <string name="payment_method_name_apple_pay" translatable="false">Apple Pay</string>
-    <string name="payment_method_name_google_pay" translatable="false">Google Pay</string>
     <string name="payment_method_name_pay_pal" translatable="false">PayPal</string>
     <string name="fragment_payment_method_header">Wybierz formę płatności</string>
     <string name="add_card">Dodaj kartę</string>

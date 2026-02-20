@@ -54,12 +54,14 @@ internal class ButtonPaymentMethod @JvmOverloads constructor(
                 try {
                     getInteger(R.styleable.ButtonPaymentMethod_preset, -1).let {
                         when (it) {
-                            PaymentMethodPreset.APPLE_PAY.ordinal -> paymentMethodPreset =
-                                PaymentMethodPreset.APPLE_PAY
-                            PaymentMethodPreset.GOOGLE_PAY.ordinal -> paymentMethodPreset =
-                                PaymentMethodPreset.GOOGLE_PAY
-                            PaymentMethodPreset.PAYPAL.ordinal -> paymentMethodPreset =
-                                PaymentMethodPreset.PAYPAL
+                            // TODO: get rid of hardcoded presets
+                            // currently only Google Pay presets are dynamically loaded from remote source
+                            PaymentMethodPreset.APPLE_PAY.ordinal ->
+                                paymentMethodPreset = PaymentMethodPreset.APPLE_PAY
+
+                            PaymentMethodPreset.PAYPAL.ordinal ->
+                                paymentMethodPreset = PaymentMethodPreset.PAYPAL
+
                             else -> {
                                 icon = getDrawable(R.styleable.ButtonPaymentMethod_tpayButtonIcon)
                                 name = getString(R.styleable.ButtonPaymentMethod_buttonText) ?: ""
@@ -84,9 +86,9 @@ internal class ButtonPaymentMethod @JvmOverloads constructor(
         }
     }
 
+    // TODO: this should be removed and bellow presets should be dynamically loaded directly from remote source
     enum class PaymentMethodPreset(val icon: Int, val methodNameId: Int) {
         APPLE_PAY(R.drawable.ic_apple_pay_24, R.string.payment_method_name_apple_pay),
-        GOOGLE_PAY(R.drawable.ic_gpay_24, R.string.payment_method_name_google_pay),
         PAYPAL(R.drawable.ic_paypal_24, R.string.payment_method_name_pay_pal)
     }
 

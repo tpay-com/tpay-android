@@ -229,7 +229,7 @@ Right now, SDK allows you to use 2 languages:
 
 > [!warning]
 > If you do not choose to configure languages at all, by default, all available languages will be
-> supported and polish will be preferred one.
+> supported and polish will be preferred one. 
 
 ```kotlin
 TpayModule.configure(

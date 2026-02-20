@@ -2,6 +2,7 @@ package com.tpay.sdk.internal.paymentMethod
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import com.tpay.sdk.R
 import com.tpay.sdk.api.models.BlikAlias
 import com.tpay.sdk.api.models.DigitalWallet
@@ -33,6 +34,7 @@ import com.tpay.sdk.api.screenless.transfer.CreateTransferTransactionResult
 import com.tpay.sdk.api.screenless.transfer.TransferPayment
 import com.tpay.sdk.designSystem.textfields.CreditCardDate
 import com.tpay.sdk.designSystem.textfields.Validators
+import com.tpay.sdk.extensions.Completable
 import com.tpay.sdk.extensions.Observable
 import com.tpay.sdk.extensions.isValidBLIKCode
 import com.tpay.sdk.extensions.isValidCVVCode
@@ -145,6 +147,9 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     val availableWalletMethods
         get() = repository.availablePaymentMethods?.availableWallets ?: emptyList()
 
+    val googlePayWallet
+        get() = availableWalletMethods.firstOrNull { method -> method.wallet == DigitalWallet.GOOGLE_PAY }
+
     val availableTransferMethods: List<ChannelMethod>
         get() = repository.availablePaymentMethods?.availableTransfers ?: emptyList()
 
@@ -152,14 +157,15 @@ internal class PaymentMethodViewModel : BaseViewModel() {
         get() = repository.availablePaymentMethods?.availablePekaoInstallmentMethods ?: emptyList()
 
     val isGooglePayInPaymentMethods: Boolean
-        get() = availableWalletMethods
-            .firstOrNull { method -> method.wallet == DigitalWallet.GOOGLE_PAY } != null
+        get() = googlePayWallet != null
 
     val merchantName: String
-        get() = configuration.merchantDetailsProvider?.merchantDisplayName(languageSwitcher.currentLanguage.asApi()) ?: ""
+        get() = configuration.merchantDetailsProvider?.merchantDisplayName(languageSwitcher.currentLanguage.asApi())
+            ?: ""
 
     val merchantRODOUrl: String
-        get() = configuration.merchantDetailsProvider?.regulationsLink(languageSwitcher.currentLanguage.asApi()) ?: ""
+        get() = configuration.merchantDetailsProvider?.regulationsLink(languageSwitcher.currentLanguage.asApi())
+            ?: ""
 
     val merchantCity: String?
         get() = configuration.merchantDetailsProvider?.merchantCity(languageSwitcher.currentLanguage.asApi())
@@ -168,10 +174,12 @@ internal class PaymentMethodViewModel : BaseViewModel() {
         get() = repository.transaction.payerContext.automaticPaymentMethods?.blikAlias
 
     val automaticCreditCardPaymentMethods: List<TokenizedCard>
-        get() = repository.transaction.payerContext.automaticPaymentMethods?.tokenizedCards ?: emptyList()
+        get() = repository.transaction.payerContext.automaticPaymentMethods?.tokenizedCards
+            ?: emptyList()
 
     val isBLIKOneClickPaymentAvailable: Boolean
-        get() = automaticBlikPaymentMethod?.let { blikAlias -> blikAlias is BlikAlias.Registered } ?: false
+        get() = automaticBlikPaymentMethod?.let { blikAlias -> blikAlias is BlikAlias.Registered }
+            ?: false
 
     val canBlikAliasBeRegistered: Boolean
         get() = automaticBlikPaymentMethod != null
@@ -251,7 +259,8 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                                 expirationDate = cardDate,
                                 cvv = cardCVV
                             ),
-                            domain = configuration.sslCertificatesProvider?.apiConfiguration?.pinnedDomain ?: EXAMPLE_DOMAIN,
+                            domain = configuration.sslCertificatesProvider?.apiConfiguration?.pinnedDomain
+                                ?: EXAMPLE_DOMAIN,
                             saveCard = saveCardChecked
                         )
                         repository.transaction.run {
@@ -273,6 +282,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+
             PaymentMethodScreenState.CARD_ONE_CLICK -> {
                 selectedTokenizedCard?.let { tokenizedCard ->
                     oneClickCardError.value = false
@@ -298,6 +308,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+
             PaymentMethodScreenState.BLIK, PaymentMethodScreenState.BLIK_ONE_CLICK_CODE -> {
                 blikNumberError.value = when {
                     blikOtc.isBlank() -> FormError.Resource(R.string.field_required)
@@ -339,6 +350,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+
             PaymentMethodScreenState.BLIK_AMBIGUOUS -> {
                 fun handleBlikAmbiguousAliasError() {
                     screenClickable.value = true
@@ -379,6 +391,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     )
                 }
             }
+
             PaymentMethodScreenState.BLIK_ONE_CLICK -> {
                 automaticBlikPaymentMethod?.let { blikAlias ->
                     oneClickBLIKError.value = false
@@ -406,6 +419,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+
             PaymentMethodScreenState.WALLET -> {
                 walletError.value = walletMethod.value == WalletMethod.NONE
                 if (walletError.value == false) {
@@ -420,6 +434,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+
             PaymentMethodScreenState.TRANSFER -> {
                 transferError.value = selectedTransferId == null
                 if (transferError.value == false) {
@@ -443,6 +458,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+
             PaymentMethodScreenState.RATY_PEKAO -> {
                 selectedRatyPekaoVariantId?.run variant@{
                     ratyPekaoError.value = false
@@ -467,6 +483,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     buttonLoading.value = false
                 }
             }
+
             PaymentMethodScreenState.PAY_PO -> (payPoPayer ?: payer).run payer@{
                 payPoPayerNameError.value = Validators.validatePayerName(name)
                     ?.let(FormError::Resource) ?: FormError.None
@@ -540,23 +557,27 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                         }
                     }.build().execute(onResult = this::handleGooglePayResult)
                 }
+
                 is OpenGooglePayResult.Cancelled -> {
                     screenClickable.value = true
                     buttonLoading.value = false
                 }
+
                 else -> handleGooglePayDataError()
             }
         }
     }
 
     private fun handlePayPoResult(result: CreatePayPoTransactionResult) {
-        repository.selectedPaymentMethod = PaymentMethod.InstallmentPayments(listOf(InstallmentPayment.PAY_PO))
+        repository.selectedPaymentMethod =
+            PaymentMethod.InstallmentPayments(listOf(InstallmentPayment.PAY_PO))
 
         when (result) {
             is CreatePayPoTransactionResult.Created -> {
                 handleTransactionId(result.transactionId)
                 handlePaymentUrl(result.paymentUrl)
             }
+
             is CreatePayPoTransactionResult.Error -> {
                 result.transactionId?.let(::handleTransactionId)
                 moveToFailureScreen(addToBackStack = true)
@@ -568,13 +589,15 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     }
 
     private fun handleRatyPekaoResult(result: CreatePekaoInstallmentTransactionResult) {
-        repository.selectedPaymentMethod = PaymentMethod.InstallmentPayments(listOf(InstallmentPayment.RATY_PEKAO))
+        repository.selectedPaymentMethod =
+            PaymentMethod.InstallmentPayments(listOf(InstallmentPayment.RATY_PEKAO))
 
         when (result) {
             is CreatePekaoInstallmentTransactionResult.Created -> {
                 handleTransactionId(result.transactionId)
                 handlePaymentUrl(result.paymentUrl)
             }
+
             is CreatePekaoInstallmentTransactionResult.Error -> {
                 result.transactionId?.let(this::handleTransactionId)
                 moveToFailureScreen(addToBackStack = true)
@@ -587,17 +610,19 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     private fun handleBLIKResult(
         isCodePayment: Boolean,
         result: CreateBLIKTransactionResult
-    ){
+    ) {
         repository.selectedPaymentMethod = PaymentMethod.Blik
         when (result) {
             is CreateBLIKTransactionResult.CreatedAndPaid -> {
                 handleTransactionId(result.transactionId)
                 moveToSuccessScreen()
             }
+
             is CreateBLIKTransactionResult.Created -> {
                 handleTransactionId(result.transactionId)
                 moveToProcessingPaymentScreen(addToBackStack = true)
             }
+
             is CreateBLIKTransactionResult.ConfiguredPaymentFailed -> {
                 if (isCodePayment) {
                     errorMessageId.value = R.string.blik_code_not_found_or_expired
@@ -606,10 +631,12 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     moveToFailureScreen(addToBackStack = true)
                 }
             }
+
             is CreateBLIKTransactionResult.Error -> {
                 result.transactionId?.let(this::handleTransactionId)
                 moveToFailureScreen(addToBackStack = true)
             }
+
             is CreateBLIKTransactionResult.AmbiguousBlikAlias -> {
                 ambiguousBlikTransactionId = result.transactionId
                 ambiguousBlikAliases = result.aliases
@@ -617,7 +644,8 @@ internal class PaymentMethodViewModel : BaseViewModel() {
             }
         }
 
-        val isErrorMessageDisplayed = isCodePayment && result is CreateBLIKTransactionResult.ConfiguredPaymentFailed
+        val isErrorMessageDisplayed =
+            isCodePayment && result is CreateBLIKTransactionResult.ConfiguredPaymentFailed
 
         screenClickable.value = !isErrorMessageDisplayed
         buttonLoading.value = false
@@ -630,6 +658,7 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                 handleTransactionId(result.transactionId)
                 handlePaymentUrl(result.paymentUrl)
             }
+
             is CreateTransferTransactionResult.Error -> {
                 result.transactionId?.let(this::handleTransactionId)
                 moveToFailureScreen(addToBackStack = true)
@@ -647,16 +676,19 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     }
 
     private fun handleGooglePayResult(result: CreateGooglePayTransactionResult) {
-        repository.selectedPaymentMethod = PaymentMethod.DigitalWallets(listOf(DigitalWallet.GOOGLE_PAY))
+        repository.selectedPaymentMethod =
+            PaymentMethod.DigitalWallets(listOf(DigitalWallet.GOOGLE_PAY))
         when (result) {
             is CreateGooglePayTransactionResult.CreatedAndPaid -> {
                 handleTransactionId(result.transactionId)
                 moveToSuccessScreen()
             }
+
             is CreateGooglePayTransactionResult.Created -> {
                 handleTransactionId(result.transactionId)
                 handlePaymentUrl(result.paymentUrl)
             }
+
             is CreateGooglePayTransactionResult.Error -> {
                 result.transactionId?.let(this::handleTransactionId)
                 moveToFailureScreen(addToBackStack = true)
@@ -674,10 +706,12 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                 handleTransactionId(result.transactionId)
                 moveToSuccessScreen()
             }
+
             is CreateCreditCardTransactionResult.Created -> {
                 handleTransactionId(result.transactionId)
                 handlePaymentUrl(result.paymentUrl)
             }
+
             is CreateCreditCardTransactionResult.Error -> {
                 result.transactionId?.let(this::handleTransactionId)
                 moveToFailureScreen(addToBackStack = true)
@@ -713,6 +747,9 @@ internal class PaymentMethodViewModel : BaseViewModel() {
     internal fun onRatyPekaoItemClick(id: Int) {
         selectedRatyPekaoVariantId = id
     }
+
+    fun getPaymentLogo(imageUrl: String): Completable<BitmapDrawable> =
+        repository.getImageDrawable(imageUrl)
 
     companion object {
         private const val EXAMPLE_DOMAIN = "example.com"

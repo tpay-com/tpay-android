@@ -2,10 +2,10 @@ package com.tpay.sdk.internal.paymentMethod
 
 import android.content.Context
 import com.tpay.sdk.R
-import com.tpay.sdk.api.models.DigitalWallet
 import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
 import com.tpay.sdk.extensions.isVisible
 import com.tpay.sdk.extensions.onClick
+import com.tpay.sdk.extensions.runOnMainThread
 
 internal class WalletPaymentComposition(
     private val binding: FragmentPaymentMethodBinding,
@@ -17,7 +17,7 @@ internal class WalletPaymentComposition(
         viewModel.screenState = PaymentMethodScreenState.WALLET
 
         isLayoutVisible = true
-        setWalletPaymentMethodActions()
+        setupGooglePayWallet()
         observeErrors()
         observeWalletMethods()
         selectWalletIfOnlyOneAvailable()
@@ -49,24 +49,22 @@ internal class WalletPaymentComposition(
                 paymentBoxWallet.isSelected = value
                 setPayButtonText(payButtonText)
             }
-            if(value) deselectWalletMethods()
+            if (value) deselectWalletMethods()
         }
 
     private fun selectWalletIfOnlyOneAvailable() = viewModel.run {
         if (availableWalletMethods.size != 1) return@run
 
         binding.walletPaymentMethod.run {
-            when (availableWalletMethods.first().wallet) {
-                DigitalWallet.GOOGLE_PAY -> {
-                    googlePay.isSelected = true
-                    walletMethod.value = WalletMethod.GOOGLE_PAY
-                }
-                // TODO: Add more wallets in the future
+            googlePayWallet?.let {
+                googlePay.isSelected = true
+                walletMethod.value = WalletMethod.GOOGLE_PAY
             }
+            // TODO: Add more wallets in the future
         }
     }
 
-    private fun observeWalletMethods(){
+    private fun observeWalletMethods() {
         viewModel.walletMethod.observe { method ->
             binding.walletPaymentMethod.run {
                 googlePay.isSelected = method == WalletMethod.GOOGLE_PAY
@@ -80,11 +78,23 @@ internal class WalletPaymentComposition(
         }
     }
 
-    private fun setWalletPaymentMethodActions() {
+    private fun setupGooglePayWallet() {
         binding.walletPaymentMethod.run {
             googlePay.onClick {
                 viewModel.walletMethod.value = WalletMethod.GOOGLE_PAY
             }
+            googlePay.name = viewModel.googlePayWallet?.method?.name.orEmpty()
+        }
+
+        viewModel.googlePayWallet?.let {
+            viewModel.getPaymentLogo(it.method.imageUrl).observe(
+                onSuccess = { drawable ->
+                    binding.walletPaymentMethod.run {
+                        googlePay.icon = drawable
+                    }
+                },
+                onError = {}
+            )
         }
     }
 

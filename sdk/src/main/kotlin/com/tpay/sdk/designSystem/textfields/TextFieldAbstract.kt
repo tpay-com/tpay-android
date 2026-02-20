@@ -3,14 +3,11 @@
 package com.tpay.sdk.designSystem.textfields
 
 import android.content.Context
-import android.os.Parcel
-import android.os.Parcelable
 import android.text.Editable
 import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout

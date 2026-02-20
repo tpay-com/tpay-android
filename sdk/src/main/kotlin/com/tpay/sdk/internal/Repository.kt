@@ -9,6 +9,7 @@ import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.models.transaction.Transaction
 import com.tpay.sdk.api.screenless.Redirects
 import com.tpay.sdk.api.screenless.channelMethods.AvailablePaymentMethods
+import com.tpay.sdk.api.screenless.channelMethods.ChannelMethod
 import com.tpay.sdk.cache.Cache
 import com.tpay.sdk.cache.CachedNetworkImage
 import com.tpay.sdk.di.injectFields
@@ -62,12 +63,18 @@ internal class Repository(private val serverService: ServerService) {
     private fun preloadImages(
         availablePaymentMethods: AvailablePaymentMethods
     ) = availablePaymentMethods.run {
-        for (method in (availableTransfers + availablePekaoInstallmentMethods)) {
-            if (preloadedImages[method.imageUrl] != null) continue
-            getImageDrawable(method.imageUrl).observe(
-                onSuccess = { image -> preloadedImages[method.imageUrl] = image },
-                onError = {}
-            )
+        val methods = mutableListOf<ChannelMethod>().apply {
+            addAll(availableTransfers)
+            addAll(availablePekaoInstallmentMethods)
+            addAll(availableWallets.map { it.method })
+        }
+        methods.forEach { method ->
+            if (preloadedImages[method.imageUrl] == null) {
+                getImageDrawable(method.imageUrl).observe(
+                    onSuccess = { image -> preloadedImages[method.imageUrl] = image },
+                    onError = {}
+                )
+            }
         }
     }
 
@@ -80,7 +87,8 @@ internal class Repository(private val serverService: ServerService) {
 
     internal fun tokenizeCard(
         cardTokenizationRequestDTO: CardTokenizationRequestDTO
-    ): Completable<CardTokenizationResponseDTO> = serverService.tokenizeCard(cardTokenizationRequestDTO)
+    ): Completable<CardTokenizationResponseDTO> =
+        serverService.tokenizeCard(cardTokenizationRequestDTO)
 
     internal fun getImageDrawable(imageUrl: String): Completable<BitmapDrawable> {
         return Completable.create { completable ->

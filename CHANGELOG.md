@@ -1,3 +1,16 @@
+## 1.2.7
+
+### Fixed
+
+- Google Pay brand assets update
+- Fixed application crash when setting only one supported language
+
+## 1.2.6
+
+### Enhancements
+
+- Minor functionality upgrades
+
 ## 1.2.5
 
 ### Enhancements

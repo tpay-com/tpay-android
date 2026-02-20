@@ -40,21 +40,21 @@ internal class SheetViewModel(private val savedStateHandle: SavedStateHandle) : 
             savedStateHandle[GOOGLE_PAY_CONFIGURATION_KEY] = googlePayConfiguration
             savedStateHandle[PUBLIC_KEY_HASH_KEY] =
                 sslCertificatesProvider?.apiConfiguration?.publicKeyHash
-            savedStateHandle[MERCHANT_NAMES_KEY] = Language.values()
+            savedStateHandle[MERCHANT_NAMES_KEY] = supportedLanguages
                 .map { language ->
                     LocalizedString(
                         language,
                         merchantDetailsProvider?.merchantDisplayName(language) ?: ""
                     )
                 }
-            savedStateHandle[MERCHANT_CITIES_KEY] = Language.values()
+            savedStateHandle[MERCHANT_CITIES_KEY] = supportedLanguages
                 .map { language ->
                     LocalizedString(
                         language,
                         merchantDetailsProvider?.merchantCity(language) ?: ""
                     )
                 }
-            savedStateHandle[REGULATION_URLS_KEY] = Language.values()
+            savedStateHandle[REGULATION_URLS_KEY] = supportedLanguages
                 .map { language ->
                     LocalizedString(
                         language,

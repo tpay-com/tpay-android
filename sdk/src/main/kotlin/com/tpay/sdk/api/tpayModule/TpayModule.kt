@@ -78,16 +78,21 @@ sealed class TpayModule {
          * Function responsible for configuring languages available in Tpay UI module
          * @param [preferredLanguage] language that will be displayed
          * @param [supportedLanguages] languages that user will be able to use
+         *
+         * @throws IllegalArgumentException if supported language list is empty
          */
         fun configure(
             preferredLanguage: Language,
-            supportedLanguages: List<Language> = Language.values().toList()
+            supportedLanguages: List<Language> = Language.entries
         ): Companion {
+            if(supportedLanguages.isEmpty()){
+                throw IllegalArgumentException("List of supported languages cannot be empty")
+            }
+
             configuration.preferredLanguage = preferredLanguage
 
             supportedLanguages
                 .distinct()
-                .ifEmpty { Language.values().toList() }
                 .let { languages ->
                     configuration.supportedLanguages = if (languages.contains(preferredLanguage)) {
                         languages

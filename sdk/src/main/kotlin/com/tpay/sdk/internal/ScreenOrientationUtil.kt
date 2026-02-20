@@ -3,7 +3,6 @@ package com.tpay.sdk.internal
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import com.tpay.sdk.extensions.runDelayedOnMainThread
 
 object ScreenOrientationUtil {
     fun lock(activity: Activity) {

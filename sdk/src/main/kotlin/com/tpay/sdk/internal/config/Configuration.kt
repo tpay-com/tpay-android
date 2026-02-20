@@ -28,7 +28,7 @@ internal class Configuration {
     var sslCertificatesProvider: SSLCertificatesProvider? = null
     var merchantDetailsProvider: MerchantDetailsProvider? = null
     var preferredLanguage: Language = Language.PL
-    var supportedLanguages: List<Language> = Language.values().toList()
+    var supportedLanguages: List<Language> = Language.entries
     var compatibility: Compatibility = Compatibility.NATIVE
 
     var googlePayConfiguration: GooglePayConfiguration? = null

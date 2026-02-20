@@ -7,6 +7,5 @@ internal class PSECommand(
 }
 
 internal enum class CardType(val bytes: ByteArray){
-    CONTACT("1PAY.SYS.DDF01".toByteArray()),
     CONTACTLESS("2PAY.SYS.DDF01".toByteArray())
 }

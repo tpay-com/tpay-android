@@ -44,7 +44,7 @@ internal class CreditCardAdapter : RecyclerView.Adapter<CreditCardAdapter.Credit
                 payCardBrand = when(tokenizedCard.brand){
                     CreditCardBrand.MASTERCARD -> ButtonPayCard.PayCardBrand.MASTERCARD
                     CreditCardBrand.VISA -> ButtonPayCard.PayCardBrand.VISA
-                    else -> ButtonPayCard.PayCardBrand.NONE
+                    CreditCardBrand.UNKNOWN -> ButtonPayCard.PayCardBrand.NONE
                 }
                 dottedCardNumber = "${context.getString(R.string.pay_card_tail_dots)} ${tokenizedCard.cardTail}"
 
