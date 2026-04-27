@@ -211,49 +211,17 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 }
 
                 paymentMethodBoxes.forEach { it.second.isVisible = true }
+                if(viewModel.screenState == PaymentMethodScreenState.NONE) {
+                    viewModel.screenState = paymentMethodBoxes.first().first
+                }
                 try {
                     paymentMethodBoxes.first().second.updateMargins(start = PAYMENT_BOX_MARGIN_START)
                     paymentMethodBoxes.last().second.updateMargins(end = PAYMENT_BOX_MARGIN_END)
 
-                    when (paymentMethodBoxes.first().first) {
-                        PaymentMethodScreenState.CARD -> {
-                            if(viewModel.automaticCreditCardPaymentMethods.isEmpty()){
-                                showCardPaymentComposition()
-                            } else {
-                                showOneClickCardPaymentComposition()
-                            }
-                        }
-                        PaymentMethodScreenState.BLIK_ONE_CLICK -> {
-                            showBLIKOneClickPaymentComposition()
-                        }
-                        PaymentMethodScreenState.BLIK -> {
-                            showBLIKCodePaymentComposition()
-                        }
-                        PaymentMethodScreenState.BLIK_AMBIGUOUS -> {
-                            showBLIKAmbiguousPaymentComposition()
-                        }
-                        PaymentMethodScreenState.PAY_PO -> {
-                            showPayPoPaymentComposition()
-                        }
-                        PaymentMethodScreenState.RATY_PEKAO -> {
-                            showRatyPekaoComposition()
-                        }
-                        PaymentMethodScreenState.TRANSFER -> {
-                            changeComposition(
-                                TransferPaymentComposition(
-                                    binding,
-                                    viewModel,
-                                    sheetFragment,
-                                    payButtonPriceText,
-                                    requireContext())
-                            )
-                        }
-                        PaymentMethodScreenState.WALLET -> {
-                            showWalletPaymentComposition()
-                        }
-                        else -> { }
-                    }
-                } catch (exception: NoSuchElementException) { exception.printStackTrace() }
+                    showComposition(viewModel.screenState)
+                } catch (exception: NoSuchElementException) {
+                    exception.printStackTrace()
+                }
             }
         }
     }
@@ -374,6 +342,18 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         changeComposition(WalletPaymentComposition(binding, viewModel, payButtonPriceText, requireContext()))
     }
 
+    private fun showTransferPaymentComposition() {
+        changeComposition(
+            TransferPaymentComposition(
+                binding = binding,
+                viewModel = viewModel,
+                sheetFragment = sheetFragment,
+                payButtonText = payButtonPriceText,
+                context = requireContext()
+            )
+        )
+    }
+
     private fun showRatyPekaoComposition() {
         changeComposition(
             RatyPekaoComposition(
@@ -432,29 +412,40 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 showWalletPaymentComposition()
             }
             paymentBoxTransfer.onClick {
-                changeComposition(
-                    TransferPaymentComposition(
-                        binding,
-                        viewModel,
-                        sheetFragment,
-                        payButtonPriceText,
-                        requireContext()
-                    )
-                )
+                showTransferPaymentComposition()
             }
             paymentBoxRatyPekao.onClick {
-                changeComposition(
-                    RatyPekaoComposition(
-                        binding,
-                        viewModel,
-                        sheetFragment,
-                        payButtonContinueText,
-                        requireContext()
-                    )
-                )
+                showRatyPekaoComposition()
             }
+
             paymentBoxPayPo.onClick(::showPayPoPaymentComposition)
         }
+    }
+
+    private fun showComposition(state: PaymentMethodScreenState) = when (state) {
+        PaymentMethodScreenState.CARD -> {
+            if (viewModel.automaticCreditCardPaymentMethods.isEmpty()) {
+                showCardPaymentComposition()
+            } else {
+                showOneClickCardPaymentComposition()
+            }
+        }
+
+        PaymentMethodScreenState.BLIK_ONE_CLICK -> showBLIKOneClickPaymentComposition()
+
+        PaymentMethodScreenState.BLIK -> showBLIKCodePaymentComposition()
+
+        PaymentMethodScreenState.BLIK_AMBIGUOUS -> showBLIKAmbiguousPaymentComposition()
+
+        PaymentMethodScreenState.PAY_PO -> showPayPoPaymentComposition()
+
+        PaymentMethodScreenState.RATY_PEKAO -> showRatyPekaoComposition()
+
+        PaymentMethodScreenState.TRANSFER -> showTransferPaymentComposition()
+
+        PaymentMethodScreenState.WALLET -> showWalletPaymentComposition()
+
+        else -> Unit
     }
 
     private fun changeCompositionIfDifferent(composition: Composition) {

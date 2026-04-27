@@ -17,7 +17,7 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 2
-val versionPatch = 7
+val versionPatch = 8
 val versionName = "$versionMajor.$versionMinor.$versionPatch"
 val archiveName = "com.tpay.sdk-$versionName"
 

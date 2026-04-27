@@ -24,16 +24,11 @@ internal class CardPaymentComposition(
     override fun onCreate() {
         viewModel.screenState = PaymentMethodScreenState.CARD
 
-        resetTextFields()
-        resetCheckbox()
-
         isLayoutVisible = true
         isNfcIconVisible = context.isNFCAvailable()
         isCardSelectionButtonVisible = viewModel.automaticCreditCardPaymentMethods.isNotEmpty()
 
         setupTextFields()
-        observeTextChanges()
-        observeTextFieldErrors()
         setOnClickListeners()
         observeNfcChanges()
     }
@@ -48,7 +43,6 @@ internal class CardPaymentComposition(
             shouldReadPayCardData.value = false
         }
         resetCheckbox()
-        resetTextFields()
         onHideKeyboard.invoke()
         isLayoutVisible = false
     }
@@ -160,11 +154,17 @@ internal class CardPaymentComposition(
         binding.cardPaymentMethod.saveCardCheckbox.isChecked = false
     }
 
-    private fun resetTextFields() {
+    private fun restoreTextFields() {
         binding.cardPaymentMethod.run {
-            creditCardNumberTextField.reset()
-            creditCardDateTextField.reset()
-            creditCardCVVTextField.reset()
+            if (viewModel.cardNumber.isNotEmpty()) {
+                creditCardNumberTextField.notFormattedText = viewModel.cardNumber
+            }
+            if (viewModel.cardDate.isNotEmpty()) {
+                creditCardDateTextField.formattedText = viewModel.cardDate
+            }
+            if (viewModel.cardCVV.isNotEmpty()) {
+                creditCardCVVTextField.formattedText = viewModel.cardCVV
+            }
         }
     }
 
@@ -174,6 +174,10 @@ internal class CardPaymentComposition(
             creditCardDateTextField.setImeOptions(EditorInfo.IME_ACTION_NEXT)
             creditCardCVVTextField.setImeOptions(EditorInfo.IME_ACTION_DONE)
         }
+
+        observeTextChanges()
+        observeTextFieldErrors()
+        restoreTextFields()
     }
 
     private fun observeNfcChanges() {

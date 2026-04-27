@@ -43,7 +43,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="8dp"
                         app:buttonText="@string/electronic_wallets"
-                        app:paymentBoxState="checked"
                         app:paymentBoxType="wallet" />
 
                     <com.tpay.sdk.designSystem.cards.CardPaymentBox

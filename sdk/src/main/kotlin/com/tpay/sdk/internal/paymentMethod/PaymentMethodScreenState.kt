@@ -10,5 +10,6 @@ internal enum class PaymentMethodScreenState {
     WALLET,
     TRANSFER,
     RATY_PEKAO,
-    PAY_PO
+    PAY_PO,
+    NONE
 }

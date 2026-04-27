@@ -25,7 +25,7 @@ class GooglePayRequest(
     }
 
     companion object {
-        private val ALLOWED_AUTH_METHODS = JSONArray(listOf("PAN_ONLY"))
+        private val ALLOWED_AUTH_METHODS = JSONArray(listOf("PAN_ONLY", "CRYPTOGRAM_3DS"))
         private val ALLOWED_CARD_NETWORKS = JSONArray(listOf("MASTERCARD", "VISA"))
         private const val GATEWAY = "tpaycom"
         private const val API_VERSION = 2

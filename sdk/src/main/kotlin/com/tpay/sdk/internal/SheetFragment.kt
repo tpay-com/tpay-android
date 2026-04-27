@@ -267,7 +267,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
                 headerLbl.setOutAnimation(context, R.anim.alpha_out)
 
                 closeBtn.onClick {
-                    closeSheet()
+                    onCloseButtonClick()
                 }
                 userCard.onClick {
                     activity?.onBackPressed()
@@ -372,6 +372,12 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
             .start()
     }
 
+    fun onCloseButtonClick() {
+        if (navigation.getCurrentFragment() is WebViewFragment) {
+            navigation.onBackPressed()
+        } else closeSheet()
+    }
+
     fun closeSheet() {
         requireActivity().run {
             hideKeyboard()
@@ -431,7 +437,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
             binding.closeBtn.isVisible = value
         }
 
-    private var isHeaderTextVisible: Boolean
+    var isHeaderTextVisible: Boolean
         get() = binding.headerLbl.isVisible
         set(value) {
             binding.headerLbl.isVisible = value

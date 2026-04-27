@@ -9,6 +9,7 @@ import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.tpay.sdk.R
 import com.tpay.sdk.databinding.FragmentWebViewBinding
@@ -25,7 +26,12 @@ internal class WebViewFragment : BaseFragment(R.layout.fragment_web_view) {
         super.onViewCreated(view, savedInstanceState)
 
         sheetFragment.run {
-            isSheetHeaderVisible = false
+            isSheetHeaderVisible = true
+            isHeaderTextVisible = false
+            binding.closeBtn.apply {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_chevron_right_24)
+                rotation = 180f
+            }
             hideUserCard(withAnim = false)
             hideLanguageBtn(withAnim = false)
             runDelayedOnMainThread({
@@ -102,10 +108,18 @@ internal class WebViewFragment : BaseFragment(R.layout.fragment_web_view) {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sheetFragment.run {
+            binding.closeBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_close)
+            setSheetStandardHeight()
+        }
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onDestroy()
-        sheetFragment.setSheetStandardHeight()
     }
 
     companion object {

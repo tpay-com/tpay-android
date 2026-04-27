@@ -47,7 +47,7 @@ import com.tpay.sdk.internal.processingPayment.ProcessingPaymentFragment
 import com.tpay.sdk.internal.webView.WebUrl
 
 internal class PaymentMethodViewModel : BaseViewModel() {
-    internal var screenState = PaymentMethodScreenState.CARD
+    internal var screenState = PaymentMethodScreenState.NONE
     internal val cardNumberError = Observable<FormError>(FormError.None)
     internal val cardDateError = Observable<FormError>(FormError.None)
     internal val cardCVVError = Observable<FormError>(FormError.None)
@@ -532,6 +532,8 @@ internal class PaymentMethodViewModel : BaseViewModel() {
                     }
                 }.build().execute { result -> handlePayPoResult(result) }
             }
+
+            PaymentMethodScreenState.NONE -> Unit
         }
     }
 

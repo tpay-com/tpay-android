@@ -1,3 +1,9 @@
+## 1.2.8
+
+### Enhancements
+
+- Minor functionality upgrades
+
 ## 1.2.7
 
 ### Fixed

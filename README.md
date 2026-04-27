@@ -6,6 +6,19 @@
 [![Java](https://img.shields.io/badge/Java-11-informational.svg?logo=java)](https://shields.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Table of Contents
+
+- [About](#about)
+- [Install](#install)
+- [Configuration](#configuration)
+- [Handling payments](#handling-payments)
+- [Official SDK screens](#official-sdk-screens)
+- [Tokenization](#tokenization)
+- [Web view](#web-view)
+- [Common](#common)
+- [Screenless Payments](#screenless-payments)
+- [License](#license)
+
 ## About
 
 This SDK allows your app to make payments with Tpay.
@@ -200,19 +213,6 @@ TpayModule.configure(
     },
 )
 ```
-
-#### Google Pay configuration
-
-In order to be able to use Google Pay method you have to provide your `merchant_id` to the SDK.
-
-> [!tip]
-> Your login name to the merchant panel is your merchant id.
-
-```kotlin
-TpayModule.configure(GooglePayConfiguration("merchant_id"))
-```
-
-<br>
 
 > [!important]
 > Beneath you will find all configurations that are **OPTIONAL**.
@@ -426,7 +426,7 @@ Using `Payment.Sheet` screen you can set up automatic BLIK or card payments.
 Thanks to that, user will not have to enter BLIK/card data all over again each time making the
 payment.
 
-##### Automatic Card Payments
+#### Automatic Card Payments
 
 If a user using a card as a payment method will opt-in saving card, on successful payment, on the link
 specified as `notificationUrl` Tpay backend will send information about saved card token, tail and
@@ -453,7 +453,7 @@ automaticPaymentMethods = AutomaticPaymentMethods(
 )
 ```
 
-##### Automatic BLIK Payments
+#### Automatic BLIK Payments
 
 If a user using BLIK as a payment method will opt-in saving BLIK alias, next time the same user will
 want to pay with BLIK, you can simply use a previously saved alias to make the payment even faster.
@@ -468,6 +468,83 @@ automaticPaymentMethods = AutomaticPaymentMethods(
     ),
 )
 ```
+
+#### Google Pay on-site configuration
+
+Google Pay on-site is an integration of Google Pay payments that allows customers to pay directly from your mobile application.
+
+Google Pay on-site can be integrated in the following scenarios:
+
+- Android application (native) - Google Pay is launched directly in a native Android mobile application, where the integration is implemented using the Google Pay API for Android.
+- Android application with WebView - Google Pay is launched in a mobile application via the WebView component, where the user is redirected to the Tpay transaction panel handling the Google Pay payment.
+
+> [!Warning]
+> - The Google Pay on-site method is currently available only for the Pekao acquiring agent. Check whether your card payments are processed through this acquiring agent.
+> - Google Pay supports only **Visa** and **Mastercard**.
+
+> [!important]
+> Before using Google Pay, make sure the following prerequisites are met:
+> - Card payments are enabled in your merchant account.
+> - Google Pay payment channel is activated in your merchant panel.
+
+#### Android application (native)
+
+##### Development phase
+
+In order to be able to use Google Pay method you have to: 
+
+- add `DigitalWallet.GOOGLE_PAY` to a supported payment list 
+- provide your `merchant_id` to the SDK as follows
+
+```kotlin
+TpayModule.configure(GooglePayConfiguration("merchant_id"))
+```
+
+`merchant_id` is unique identifier assigned to you during Tpay account registration.
+
+##### Production readiness
+
+To correctly launch Google Pay in an Android application, the application should:
+
+- be signed with the application certificate (SHA-256),
+- be submitted and configured in the Google Pay & Wallet Console,
+- have a correctly configured package name consistent with the application data registered in Google.
+
+Application requirements and environment configuration are described in Google's documentation:
+
+- [App prerequisites (minSdk, distribution via Google Play)](https://developers.google.com/pay/api/android/guides/setup)
+- [Application integration approval and publishing process](https://developers.google.com/pay/api/android/guides/test-and-deploy/publish-your-integration)
+
+Google provides a checklist of functional and branding requirements that must be met before publishing the integration:
+
+[Integration checklist](https://developers.google.com/pay/api/android/guides/test-and-deploy/integration-checklist)
+
+#### Integration in a mobile application with Webview
+
+For Google Pay integration in a mobile application using WebView, the application should redirect the user to the Tpay transaction panel, where the Google Pay payment is launched.
+
+In this model:
+
+- Google Pay integration is handled in the Tpay transaction panel,
+- you do not implement Google Pay directly in your application or on your checkout page.
+
+Application-side requirements:
+
+For the Google Pay payment to be correctly launched in WebView, the application should:
+
+- use up-to-date versions of Android System WebView / Chrome,
+- have Payment Request API support enabled in the WebView environment,
+- meet Google's requirements for handling payments in WebView,
+- complete the application integration publishing process in the Google Pay & Wallet Console (for the production environment). 
+
+Detailed implementation steps are described in Google's documentation:
+
+- [Web payments in Android WebView](https://developer.chrome.com/docs/android/payments-in-webviews)
+- [Google Pay – Using Android WebView](https://developers.google.com/pay/api/android/guides/recipes/using-android-webview)
+- [Application integration publishing (Production)](https://developers.google.com/pay/api/android/guides/test-and-deploy/publish-your-integration)
+
+> [!Warning]
+> - If the WebView environment does not meet Google Pay requirements, the payment button may not be displayed or the payment may not be correctly launched.
 
 ## Tokenization
 
@@ -956,16 +1033,11 @@ BLIKPayment.Builder()
 
 #### BLIK Alias Payment
 
-If you have for example a returning users and you want to make their payments with BLIK even
-smoother,
+If you have returning users and you want to make their BLIK payments even smoother,
 you can register BLIK Alias for them, so they will only be prompted to accept payment in their
-banking app,
-without need of entering BLIK code each time they want to make the payment.
+banking app, without need of entering BLIK code each time they want to make the payment.
 
 In order to do that, you have to use `setBLIKCodeAndRegisterAlias` method instead of `setBLIKCode`.
-
-> [!warning]
-> To properly register alias in sandbox, use `amount = 0.15`.
 
 ```kotlin
 BLIKPayment.Builder()
@@ -978,10 +1050,12 @@ BLIKPayment.Builder()
     )
 // rest of the BLIKPayment configuration
 ```
+> [!warning]
+> To properly register alias in sandbox, use `amount = 0.15`.
 
-If the payment were successful, you can assume an alias was created and can be used for the future
-payments.
-Next time you want to pay with only an alias, just use `setBLIKAlias` method.
+> [!important]
+Provided alias cannot be assumed as registered until receiving webhook notification about its status. Notification should be received by dedicated backend server, for implementation details check official [documentation](https://docs-api.tpay.com/en/webhooks/) . Additionally your backend server should implement other BLIK related [notifications](https://docs-api.tpay.com/en/webhooks/#blik-one-clickblik-recurring-payments-after-expiration-update-or-delete-alias) to ensure BLIK alias is valid and usable.
+Once alias is registered for a user, in order to pay with only an alias, just use `setBLIKAlias` method.
 
 ```kotlin
 BLIKPayment.Builder()
@@ -993,6 +1067,9 @@ BLIKPayment.Builder()
     )
 // rest of the BLIKPayment configuration
 ```
+
+> [!warning]
+> Before testing BLIK alias functionality check sandbox environment limitations listed in [documentation](https://docs-api.tpay.com/en/first-steps/environments/#blik-payments)
 
 #### BLIK Ambiguous Alias Payment
 
@@ -1243,7 +1320,7 @@ GooglePayPayment.Builder()
 
 > [!warning]
 > If GooglePayPayment returns `Created` result, you have to handle `paymentUrl`
-> sent with it and redirect user to it in order to complete the payment.
+> sent with it and redirect user to it in order to complete the payment. 
 
 > [!warning]
 > Take under consideration, that choosing this option,
@@ -1275,6 +1352,8 @@ val googlePayUtil = GooglePayUtil(
 googlePayUtil.openGooglePay()
 ```
 
+`merchant_id` is unique identifier assigned to you during Tpay account registration.
+
 To successfully handle result of the payment, implement `handleActivityResult` method in your
 activity's `onActivityResult`.
 
@@ -1300,6 +1379,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 > [!warning]
 > If `OpenGooglePayResult` returns `Success`, you **HAVE TO** use it's content to make an actual
 > payment by using `GooglePayPayment.Builder`.
+
+> [!warning]
+> In order to launch Google Pay on production follow [these guidelines](#production-readiness)
 
 ## License
 

@@ -28,8 +28,6 @@ internal class CardInformationComposition(
             addCard.creditCardNumberTextField.isNfcIconVisible = context.isNFCAvailable()
         }
 
-        observeTextFieldChanges()
-        observeViewModelFields()
         setOnClicks()
         setupTextFields()
         setSpannedTexts()
@@ -113,6 +111,34 @@ internal class CardInformationComposition(
                     this@CardInformationComposition.context.getString(R.string.credit_card_cvv_hint)
             }
         }
+
+        observeTextFieldChanges()
+        observeTextFieldErrors()
+        restoreTextFields()
+    }
+
+    private fun restoreTextFields() {
+        binding.addCard.run {
+            if (viewModel.nameSurname.isNotEmpty()) {
+                addCardNameSurnameTextField.formattedText = viewModel.nameSurname
+            }
+
+            if (viewModel.email.isNotEmpty()) {
+                addCardEmailTextField.formattedText = viewModel.email
+            }
+
+            if (viewModel.creditCardNumber.isNotEmpty()) {
+                creditCardNumberTextField.notFormattedText = viewModel.creditCardNumber
+            }
+
+            if (viewModel.expirationDate.isNotEmpty()) {
+                creditCardDateTextField.formattedText = viewModel.expirationDate
+            }
+
+            if (viewModel.cvv.isNotEmpty()) {
+                creditCardCVVTextField.formattedText = viewModel.cvv
+            }
+        }
     }
 
     private fun observeTextFieldChanges() {
@@ -137,23 +163,28 @@ internal class CardInformationComposition(
         }
     }
 
-    private fun observeViewModelFields() {
+    private fun observeTextFieldErrors() {
         binding.addCard.run {
             viewModel.run {
                 nameSurnameError.observe { formError ->
-                    addCardNameSurnameTextField.errorMessage = this@CardInformationComposition.getError(formError)
+                    addCardNameSurnameTextField.errorMessage =
+                        this@CardInformationComposition.getError(formError)
                 }
                 emailError.observe { formError ->
-                    addCardEmailTextField.errorMessage = this@CardInformationComposition.getError(formError)
+                    addCardEmailTextField.errorMessage =
+                        this@CardInformationComposition.getError(formError)
                 }
                 creditCardNumberError.observe { formError ->
-                    creditCardNumberTextField.errorMessage = this@CardInformationComposition.getError(formError)
+                    creditCardNumberTextField.errorMessage =
+                        this@CardInformationComposition.getError(formError)
                 }
                 expirationDateError.observe { formError ->
-                    creditCardDateTextField.errorMessage = this@CardInformationComposition.getError(formError)
+                    creditCardDateTextField.errorMessage =
+                        this@CardInformationComposition.getError(formError)
                 }
                 cvvError.observe { formError ->
-                    creditCardCVVTextField.errorMessage = this@CardInformationComposition.getError(formError)
+                    creditCardCVVTextField.errorMessage =
+                        this@CardInformationComposition.getError(formError)
                 }
             }
         }
