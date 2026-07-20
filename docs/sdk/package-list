@@ -85,10 +85,6 @@ $dokka.location:com.tpay.sdk.api.models.transaction/Quantity.Specified///Pointin
 $dokka.location:com.tpay.sdk.api.models.transaction/Quantity.Specified/Specified/#kotlin.Int/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-quantity/-specified/-specified.html
 $dokka.location:com.tpay.sdk.api.models.transaction/Quantity.Specified/value/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-quantity/-specified/value.html
 $dokka.location:com.tpay.sdk.api.models.transaction/Quantity///PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-quantity/index.html
-$dokka.location:com.tpay.sdk.api.models.transaction/Recursive///PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-recursive/index.html
-$dokka.location:com.tpay.sdk.api.models.transaction/Recursive/expirationDate/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-recursive/expiration-date.html
-$dokka.location:com.tpay.sdk.api.models.transaction/Recursive/frequency/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-recursive/frequency.html
-$dokka.location:com.tpay.sdk.api.models.transaction/Recursive/quantity/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-recursive/quantity.html
 $dokka.location:com.tpay.sdk.api.models.transaction/SingleTransaction///PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-single-transaction/index.html
 $dokka.location:com.tpay.sdk.api.models.transaction/SingleTransaction/SingleTransaction/#kotlin.Double#kotlin.String#kotlin.String?#com.tpay.sdk.api.models.PayerContext#com.tpay.sdk.api.screenless.Notifications?/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-single-transaction/-single-transaction.html
 $dokka.location:com.tpay.sdk.api.models.transaction/SingleTransaction/amount/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models.transaction/-single-transaction/amount.html
@@ -164,6 +160,10 @@ $dokka.location:com.tpay.sdk.api.models/Language/values/#/PointingToDeclaration/
 $dokka.location:com.tpay.sdk.api.models/ObservablePayment///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-observable-payment/index.html
 $dokka.location:com.tpay.sdk.api.models/ObservablePayment/addObserver/#com.tpay.sdk.api.payment.PaymentDelegate/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-observable-payment/add-observer.html
 $dokka.location:com.tpay.sdk.api.models/ObservablePayment/removeObserver/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-observable-payment/remove-observer.html
+$dokka.location:com.tpay.sdk.api.models/Option.SingleTransactionOnly///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-option/-single-transaction-only/index.html
+$dokka.location:com.tpay.sdk.api.models/Option.SingleTransactionOnly/SingleTransactionOnly/#kotlin.Boolean/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-option/-single-transaction-only/-single-transaction-only.html
+$dokka.location:com.tpay.sdk.api.models/Option.SingleTransactionOnly/value/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-option/-single-transaction-only/value.html
+$dokka.location:com.tpay.sdk.api.models/Option///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-option/index.html
 $dokka.location:com.tpay.sdk.api.models/PayerContext///PointingToDeclaration/sdk/com.tpay.sdk.api.models/-payer-context/index.html
 $dokka.location:com.tpay.sdk.api.models/PayerContext/PayerContext/#com.tpay.sdk.api.models.payer.Payer#com.tpay.sdk.api.models.AutomaticPaymentMethods?/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-payer-context/-payer-context.html
 $dokka.location:com.tpay.sdk.api.models/PayerContext/automaticPaymentMethods/#/PointingToDeclaration/sdk/com.tpay.sdk.api.models/-payer-context/automatic-payment-methods.html
@@ -250,6 +250,7 @@ $dokka.location:com.tpay.sdk.api.screenless.blik/BLIKPayment.Builder/setCallback
 $dokka.location:com.tpay.sdk.api.screenless.blik/BLIKPayment.Builder/setPayer/#com.tpay.sdk.api.models.payer.Payer/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.blik/-b-l-i-k-payment/-builder/set-payer.html
 $dokka.location:com.tpay.sdk.api.screenless.blik/BLIKPayment.Builder/setPaymentDetails/#com.tpay.sdk.api.screenless.PaymentDetails/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.blik/-b-l-i-k-payment/-builder/set-payment-details.html
 $dokka.location:com.tpay.sdk.api.screenless.blik/BLIKPayment///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.blik/-b-l-i-k-payment/index.html
+$dokka.location:com.tpay.sdk.api.screenless.blik/BLIKPayment/continueTransaction/#kotlin.String#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.blik.CreateBLIKTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.blik/-b-l-i-k-payment/continue-transaction.html
 $dokka.location:com.tpay.sdk.api.screenless.blik/BLIKPayment/execute/#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.blik.CreateBLIKTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.blik/-b-l-i-k-payment/execute.html
 $dokka.location:com.tpay.sdk.api.screenless.blik/CreateBLIKTransactionResult.AmbiguousBlikAlias///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.blik/-create-b-l-i-k-transaction-result/-ambiguous-blik-alias/index.html
 $dokka.location:com.tpay.sdk.api.screenless.blik/CreateBLIKTransactionResult.AmbiguousBlikAlias/AmbiguousBlikAlias/#kotlin.String#kotlin.collections.List[com.tpay.sdk.api.screenless.blik.AmbiguousAlias]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.blik/-create-b-l-i-k-transaction-result/-ambiguous-blik-alias/-ambiguous-blik-alias.html
@@ -299,6 +300,7 @@ $dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment.Builder/setPa
 $dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment.Builder/setPaymentDetails/#com.tpay.sdk.api.screenless.PaymentDetails/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.card/-credit-card-payment/-builder/set-payment-details.html
 $dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment.Builder/setRecursive/#com.tpay.sdk.api.screenless.card.Recursive/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.card/-credit-card-payment/-builder/set-recursive.html
 $dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.card/-credit-card-payment/index.html
+$dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment/continueTransaction/#kotlin.String#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.card.CreateCreditCardTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.card/-credit-card-payment/continue-transaction.html
 $dokka.location:com.tpay.sdk.api.screenless.card/CreditCardPayment/execute/#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.card.CreateCreditCardTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.card/-credit-card-payment/execute.html
 $dokka.location:com.tpay.sdk.api.screenless.card/Recursive///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.card/-recursive/index.html
 $dokka.location:com.tpay.sdk.api.screenless.card/Recursive/Recursive/#com.tpay.sdk.api.models.transaction.Frequency#com.tpay.sdk.api.models.transaction.Quantity#java.util.Date/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.card/-recursive/-recursive.html
@@ -406,6 +408,7 @@ $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment.Builder/s
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment.Builder/setPayer/#com.tpay.sdk.api.models.payer.Payer/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-payment/-builder/set-payer.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment.Builder/setPaymentDetails/#com.tpay.sdk.api.screenless.PaymentDetails/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-payment/-builder/set-payment-details.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-payment/index.html
+$dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment/continueTransaction/#kotlin.String#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.googlePay.CreateGooglePayTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-payment/continue-transaction.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayPayment/execute/#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.googlePay.CreateGooglePayTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-payment/execute.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayRequest.Companion///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-request/-companion/index.html
 $dokka.location:com.tpay.sdk.api.screenless.googlePay/GooglePayRequest///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.googlePay/-google-pay-request/index.html
@@ -444,6 +447,7 @@ $dokka.location:com.tpay.sdk.api.screenless.payPo/PayPoPayment.Builder/setCallba
 $dokka.location:com.tpay.sdk.api.screenless.payPo/PayPoPayment.Builder/setPayer/#com.tpay.sdk.api.models.payer.Payer/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.payPo/-pay-po-payment/-builder/set-payer.html
 $dokka.location:com.tpay.sdk.api.screenless.payPo/PayPoPayment.Builder/setPaymentDetails/#com.tpay.sdk.api.screenless.PaymentDetails/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.payPo/-pay-po-payment/-builder/set-payment-details.html
 $dokka.location:com.tpay.sdk.api.screenless.payPo/PayPoPayment///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.payPo/-pay-po-payment/index.html
+$dokka.location:com.tpay.sdk.api.screenless.payPo/PayPoPayment/continueTransaction/#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.String#kotlin.Function1[com.tpay.sdk.api.screenless.payPo.CreatePayPoTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.payPo/-pay-po-payment/continue-transaction.html
 $dokka.location:com.tpay.sdk.api.screenless.payPo/PayPoPayment/execute/#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.payPo.CreatePayPoTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.payPo/-pay-po-payment/execute.html
 $dokka.location:com.tpay.sdk.api.screenless.pekaoInstallment////PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.pekaoInstallment/index.html
 $dokka.location:com.tpay.sdk.api.screenless.pekaoInstallment/CreatePekaoInstallmentTransactionResult.Created///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.pekaoInstallment/-create-pekao-installment-transaction-result/-created/index.html
@@ -482,6 +486,7 @@ $dokka.location:com.tpay.sdk.api.screenless.transfer/TransferPayment.Builder/set
 $dokka.location:com.tpay.sdk.api.screenless.transfer/TransferPayment.Builder/setPayer/#com.tpay.sdk.api.models.payer.Payer/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.transfer/-transfer-payment/-builder/set-payer.html
 $dokka.location:com.tpay.sdk.api.screenless.transfer/TransferPayment.Builder/setPaymentDetails/#com.tpay.sdk.api.screenless.PaymentDetails/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.transfer/-transfer-payment/-builder/set-payment-details.html
 $dokka.location:com.tpay.sdk.api.screenless.transfer/TransferPayment///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.transfer/-transfer-payment/index.html
+$dokka.location:com.tpay.sdk.api.screenless.transfer/TransferPayment/continueTransaction/#kotlin.String#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.transfer.CreateTransferTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.transfer/-transfer-payment/continue-transaction.html
 $dokka.location:com.tpay.sdk.api.screenless.transfer/TransferPayment/execute/#com.tpay.sdk.api.screenless.LongPollingConfig?#kotlin.Function1[com.tpay.sdk.api.screenless.transfer.CreateTransferTransactionResult,kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless.transfer/-transfer-payment/execute.html
 $dokka.location:com.tpay.sdk.api.screenless////PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/index.html
 $dokka.location:com.tpay.sdk.api.screenless/LongPolling///PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-long-polling/index.html
@@ -535,10 +540,11 @@ $dokka.location:com.tpay.sdk.api.screenless/TransactionState/valueOf/#kotlin.Str
 $dokka.location:com.tpay.sdk.api.screenless/TransactionState/values/#/PointingToDeclaration/sdk/com.tpay.sdk.api.screenless/-transaction-state/values.html
 $dokka.location:com.tpay.sdk.api.tpayModule////PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/index.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion///PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/index.html
-$dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Compatibility/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
+$dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Compatibility#kotlin.String?/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Environment/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.GooglePayConfiguration/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Language#kotlin.collections.List[com.tpay.sdk.api.models.Language]/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
+$dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.Option/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.models.merchant.Merchant/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.providers.MerchantDetailsProvider/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
 $dokka.location:com.tpay.sdk.api.tpayModule/TpayModule.Companion/configure/#com.tpay.sdk.api.providers.SSLCertificatesProvider/PointingToDeclaration/sdk/com.tpay.sdk.api.tpayModule/-tpay-module/-companion/configure.html
@@ -586,8 +592,6 @@ $dokka.location:com.tpay.sdk.api/PayCardEncryptor/encrypt/#kotlin.String#kotlin.
 $dokka.location:com.tpay.sdk.extensions////PointingToDeclaration/sdk/com.tpay.sdk.extensions/index.html
 $dokka.location:com.tpay.sdk.extensions//actuallyOptString/org.json.JSONObject#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.extensions/actually-opt-string.html
 $dokka.location:com.tpay.sdk.extensions//getOrThrow/androidx.lifecycle.SavedStateHandle#kotlin.String/PointingToDeclaration/sdk/com.tpay.sdk.extensions/get-or-throw.html
-$dokka.location:com.tpay.sdk.extensions//readParcelableOrThrow/android.os.Parcel#/PointingToDeclaration/sdk/com.tpay.sdk.extensions/read-parcelable-or-throw.html
-$dokka.location:com.tpay.sdk.extensions//readStringOrThrow/android.os.Parcel#/PointingToDeclaration/sdk/com.tpay.sdk.extensions/read-string-or-throw.html
 $dokka.location:com.tpay.sdk.extensions//runDelayedOnMainThread/#kotlin.Function0[kotlin.Unit]#kotlin.Long/PointingToDeclaration/sdk/com.tpay.sdk.extensions/run-delayed-on-main-thread.html
 $dokka.location:com.tpay.sdk.extensions//runOnMainThread/#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/sdk/com.tpay.sdk.extensions/run-on-main-thread.html
 $dokka.location:com.tpay.sdk.internal////PointingToDeclaration/sdk/com.tpay.sdk.internal/index.html
