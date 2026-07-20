@@ -5,6 +5,8 @@ import com.tpay.sdk.api.PayCardEncryptor
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.*
 import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
+import com.tpay.sdk.server.dto.request.PayCardRequest
+import com.tpay.sdk.server.dto.response.CreateTransactionResponseDTO
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,18 +22,45 @@ class CreditCardPayment private constructor(
     ) {
         makeTransaction(request)
             .observe({ response ->
-                val result = TransactionResponseValidator.validateCreditCard(response)
-
-                longPollingConfig?.run {
-                    if (result is CreateCreditCardTransactionResult.Created) {
-                        longPolling.start(result.transactionId, this)
-                    }
-                }
-
-                onResult(result)
+                handleTransactionResponse(longPollingConfig, response, onResult)
             }, { e ->
                 onResult(CreateCreditCardTransactionResult.Error(errorMessage = e.message))
             })
+    }
+
+    fun continueTransaction(
+        transactionId: String,
+        longPollingConfig: LongPollingConfig? = null,
+        onResult: (CreateCreditCardTransactionResult) -> Unit
+    ) {
+        request.pay?.let {payRequest ->
+            val channelId = payRequest.channelId
+            val cardPayment = payRequest.cardPaymentData
+            if(channelId != null && cardPayment != null) {
+                continueTransaction(transactionId, PayCardRequest(cardPayment, channelId))
+                    .observe({ response ->
+                        handleTransactionResponse(longPollingConfig, response, onResult)
+                    }, { e ->
+                        onResult(CreateCreditCardTransactionResult.Error(errorMessage = e.message))
+                    })
+            }
+        }
+    }
+
+    private fun handleTransactionResponse(
+        longPollingConfig: LongPollingConfig?,
+        response: CreateTransactionResponseDTO,
+        onResult: (CreateCreditCardTransactionResult) -> Unit
+    ) {
+        val result = TransactionResponseValidator.validateCreditCard(response)
+
+        longPollingConfig?.run {
+            if (result is CreateCreditCardTransactionResult.Created) {
+                longPolling.start(result.transactionId, this)
+            }
+        }
+
+        onResult(result)
     }
 
     /**

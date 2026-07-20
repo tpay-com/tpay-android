@@ -55,6 +55,8 @@ sealed class Payment {
 
         private fun saveArgs() {
             repository.transaction = transaction
+            repository.transactionId = null
+            repository.selectedPaymentMethod = null
         }
 
         override fun present(): SheetOpenResult {

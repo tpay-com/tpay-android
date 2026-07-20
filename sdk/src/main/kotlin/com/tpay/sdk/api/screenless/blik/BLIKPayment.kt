@@ -1,16 +1,19 @@
 @file:Suppress("unused")
+
 package com.tpay.sdk.api.screenless.blik
 
 import com.tpay.sdk.api.models.BlikAlias
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.*
 import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
+import com.tpay.sdk.server.dto.request.PayBlikRequest
+import com.tpay.sdk.server.dto.response.CreateTransactionResponseDTO
 
 /**
  * Class responsible for creating BLIK payment
  */
 class BLIKPayment private constructor(
-    private val request: CreateTransactionWithChannelsDTO
+    private val request: CreateTransactionWithChannelsDTO,
 ) : Payment<CreateBLIKTransactionResult>() {
     override fun execute(
         longPollingConfig: LongPollingConfig?,
@@ -18,22 +21,45 @@ class BLIKPayment private constructor(
     ) {
         makeTransaction(request)
             .observe({ response ->
-                val result = TransactionResponseValidator.validateBLIK(response)
-
-                longPollingConfig?.run {
-                    if (result is CreateBLIKTransactionResult.Created) {
-                        longPolling.start(
-                            transactionId = result.transactionId,
-                            longPollingConfig = this,
-                            isBlikPayment = true
-                        )
-                    }
-                }
-
-                onResult(result)
+                handleTransactionResponse(longPollingConfig, response, onResult)
             }, { e ->
                 onResult(CreateBLIKTransactionResult.Error(e.message))
             })
+    }
+
+    fun continueTransaction(
+        transactionId: String,
+        longPollingConfig: LongPollingConfig? = null,
+        onResult: (CreateBLIKTransactionResult) -> Unit
+    ) {
+        request.pay?.blikPaymentData?.let {
+            continueTransaction(transactionId, PayBlikRequest(it))
+                .observe({ response ->
+                    handleTransactionResponse(longPollingConfig, response, onResult)
+                }, { e ->
+                    onResult(CreateBLIKTransactionResult.Error(e.message))
+                })
+        }
+    }
+
+    private fun handleTransactionResponse(
+        longPollingConfig: LongPollingConfig?,
+        response: CreateTransactionResponseDTO,
+        onResult: (CreateBLIKTransactionResult) -> Unit
+    ) {
+        val result = TransactionResponseValidator.validateBLIK(response)
+
+        longPollingConfig?.run {
+            if (result is CreateBLIKTransactionResult.Created) {
+                longPolling.start(
+                    transactionId = result.transactionId,
+                    longPollingConfig = this,
+                    isBlikPayment = true
+                )
+            }
+        }
+
+        onResult(result)
     }
 
     /**

@@ -4,6 +4,8 @@ package com.tpay.sdk.api.screenless.transfer
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.*
 import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
+import com.tpay.sdk.server.dto.request.PayTransactionRequestDTO
+import com.tpay.sdk.server.dto.response.CreateTransactionResponseDTO
 
 /**
  * Class responsible for creating transfer payment.
@@ -17,18 +19,43 @@ class TransferPayment private constructor(
     ) {
         makeTransaction(request)
             .observe({ response ->
-                val result = TransactionResponseValidator.validateTransfer(response)
-
-                longPollingConfig?.run {
-                    if (result is CreateTransferTransactionResult.Created) {
-                        longPolling.start(result.transactionId, this)
-                    }
-                }
-
-                onResult(result)
+                handleTransactionResponse(longPollingConfig, response, onResult)
             }, { e ->
                 onResult(CreateTransferTransactionResult.Error(e.message))
             })
+    }
+
+    fun continueTransaction(
+        transactionId: String,
+        longPollingConfig: LongPollingConfig? = null,
+        onResult: (CreateTransferTransactionResult) -> Unit
+    ) {
+        request.pay?.channelId?.let { selectedChannel ->
+            continueTransaction(transactionId, PayTransactionRequestDTO().apply {
+                channelId = selectedChannel
+            })
+                .observe({ response ->
+                    handleTransactionResponse(longPollingConfig, response, onResult)
+                }, { e ->
+                    onResult(CreateTransferTransactionResult.Error(e.message))
+                })
+        }
+    }
+
+    private fun handleTransactionResponse(
+        longPollingConfig: LongPollingConfig?,
+        response: CreateTransactionResponseDTO,
+        onResult: (CreateTransferTransactionResult) -> Unit
+    ) {
+        val result = TransactionResponseValidator.validateTransfer(response)
+
+        longPollingConfig?.run {
+            if (result is CreateTransferTransactionResult.Created) {
+                longPolling.start(result.transactionId, this)
+            }
+        }
+
+        onResult(result)
     }
 
     /**

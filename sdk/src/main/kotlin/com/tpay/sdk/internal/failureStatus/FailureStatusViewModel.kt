@@ -12,6 +12,7 @@ internal class FailureStatusViewModel : BaseViewModel() {
                 addCardCoordinator.addCardFailure.invoke()
                 repository.tokenizationId = null
             }
+
             else -> {
                 paymentCoordinators.get(sheet.sheetType)?.paymentCancelled?.invoke(repository.transactionId)
                 repository.transactionId = null
@@ -28,7 +29,10 @@ internal class FailureStatusViewModel : BaseViewModel() {
         } else {
             navigation.onBackPressed()
         }
-        repository.transactionId = null
-        repository.selectedPaymentMethod = null
+
+        if (!configuration.isSingleTransactionOnly()) {
+            repository.transactionId = null
+            repository.selectedPaymentMethod = null
+        }
     }
 }

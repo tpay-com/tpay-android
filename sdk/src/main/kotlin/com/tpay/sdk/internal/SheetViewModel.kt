@@ -6,6 +6,7 @@ import com.tpay.sdk.api.models.CertificatePinningConfiguration
 import com.tpay.sdk.api.models.DigitalWallet
 import com.tpay.sdk.api.models.InstallmentPayment
 import com.tpay.sdk.api.models.Language
+import com.tpay.sdk.api.models.Option
 import com.tpay.sdk.api.models.PaymentMethod
 import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.models.transaction.Transaction
@@ -73,6 +74,9 @@ internal class SheetViewModel(private val savedStateHandle: SavedStateHandle) : 
             savedStateHandle[INSTALLMENT_PAYMENTS_SELECTED_KEY] = paymentMethods
                 .filterIsInstance<PaymentMethod.InstallmentPayments>().firstOrNull()?.methods
                 ?: emptyList()
+            savedStateHandle[OPTION_SINGlE_TRANSACTION_KEY] = options
+                .filterIsInstance<Option.SingleTransactionOnly>()
+                .firstOrNull()?.value ?: false
         }
     }
 
@@ -111,6 +115,9 @@ internal class SheetViewModel(private val savedStateHandle: SavedStateHandle) : 
                                 localized.language == language
                             }?.value ?: ""
                         }
+                    }
+                    options = mutableSetOf<Option>().apply {
+                        add(Option.SingleTransactionOnly(getOrThrow(OPTION_SINGlE_TRANSACTION_KEY)))
                     }
                     paymentMethods = mutableListOf<PaymentMethod>().apply {
                         if (getOrThrow(CREDIT_CARD_SELECTED_KEY)) {
@@ -238,5 +245,6 @@ internal class SheetViewModel(private val savedStateHandle: SavedStateHandle) : 
         private const val TRANSFER_SELECTED_KEY = "TRANSFER_SELECTED"
         private const val DIGITAL_WALLETS_SELECTED_KEY = "DIGITAL_WALLETS_SELECTED"
         private const val INSTALLMENT_PAYMENTS_SELECTED_KEY = "INSTALLMENT_PAYMENTS_SELECTED"
+        private const val OPTION_SINGlE_TRANSACTION_KEY = "OPTION_SINGlE_TRANSACTION_KEY"
     }
 }

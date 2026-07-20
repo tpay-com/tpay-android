@@ -83,4 +83,5 @@
     <string name="city">Miasto</string>
     <string name="poland">Polska</string>
     <string name="value_is_invalid">Wartość jest niepoprawna</string>
+    <string name="payment_method_change_not_allowed">Zmiana formy płatności niemożliwa</string>
 </resources>

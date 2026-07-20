@@ -6,6 +6,7 @@ import com.tpay.sdk.api.models.DigitalWallet
 import com.tpay.sdk.api.models.Environment
 import com.tpay.sdk.api.models.GooglePayConfiguration
 import com.tpay.sdk.api.models.Language
+import com.tpay.sdk.api.models.Option
 import com.tpay.sdk.api.models.PaymentMethod
 import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.models.moduleError.ModuleError
@@ -32,10 +33,17 @@ internal class Configuration {
     var compatibility: Compatibility = Compatibility.NATIVE
 
     var googlePayConfiguration: GooglePayConfiguration? = null
+    var options: Set<Option> = setOf(
+        Option.SingleTransactionOnly(false)
+    )
 
     init {
         injectFields()
     }
+
+    fun isSingleTransactionOnly() = options
+        .filterIsInstance<Option.SingleTransactionOnly>()
+        .firstOrNull()?.value ?: false
 
     fun setCompatibility(compatibility: Compatibility, sdkVersionName: String?) {
         this.compatibility = compatibility

@@ -72,4 +72,5 @@
     <string name="city">City</string>
     <string name="poland">Poland</string>
     <string name="value_is_invalid">Value is incorrect</string>
+    <string name="payment_method_change_not_allowed">Payment method change not allowed</string>
 </resources>

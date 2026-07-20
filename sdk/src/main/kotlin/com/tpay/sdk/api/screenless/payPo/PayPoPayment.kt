@@ -9,6 +9,8 @@ import com.tpay.sdk.api.screenless.PaymentDetails
 import com.tpay.sdk.api.screenless.Redirects
 import com.tpay.sdk.api.screenless.TransactionResponseValidator
 import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
+import com.tpay.sdk.server.dto.request.PayTransactionRequestDTO
+import com.tpay.sdk.server.dto.response.CreateTransactionResponseDTO
 
 /**
  * Class responsible for creating PayPo payment
@@ -22,18 +24,44 @@ class PayPoPayment private constructor(
     ) {
         makeTransaction(request)
             .observe({ response ->
-                val result = TransactionResponseValidator.validatePayPo(response)
-
-                longPollingConfig?.run {
-                    if (result is CreatePayPoTransactionResult.Created) {
-                        longPolling.start(result.transactionId, this)
-                    }
-                }
-
-                onResult(result)
+                handleTransactionResponse(longPollingConfig, response, onResult)
             }, { e ->
                 onResult(CreatePayPoTransactionResult.Error(e.message))
             })
+    }
+
+
+    fun continueTransaction(
+        longPollingConfig: LongPollingConfig? = null,
+        transactionId: String,
+        onResult: (CreatePayPoTransactionResult) -> Unit
+    ) {
+        request.pay?.channelId?.let { channelId ->
+            continueTransaction(transactionId, PayTransactionRequestDTO().apply {
+                this.channelId = channelId
+            })
+                .observe({ response ->
+                    handleTransactionResponse(longPollingConfig, response, onResult)
+                }, { e ->
+                    onResult(CreatePayPoTransactionResult.Error(e.message))
+                })
+        }
+    }
+
+    private fun handleTransactionResponse(
+        longPollingConfig: LongPollingConfig?,
+        response: CreateTransactionResponseDTO,
+        onResult: (CreatePayPoTransactionResult) -> Unit
+    ) {
+        val result = TransactionResponseValidator.validatePayPo(response)
+
+        longPollingConfig?.run {
+            if (result is CreatePayPoTransactionResult.Created) {
+                longPolling.start(result.transactionId, this)
+            }
+        }
+
+        onResult(result)
     }
 
     class Builder : PaymentBuilder<PayPoPayment>() {

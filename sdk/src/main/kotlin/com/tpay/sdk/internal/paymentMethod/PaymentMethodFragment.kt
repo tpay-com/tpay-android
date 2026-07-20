@@ -20,6 +20,7 @@ import com.tpay.sdk.R
 import com.tpay.sdk.api.models.Environment
 import com.tpay.sdk.api.screenless.googlePay.GooglePayEnvironment
 import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
+import com.tpay.sdk.designSystem.cards.CardPaymentBox
 import com.tpay.sdk.designSystem.textfields.TextFieldAbstract
 import com.tpay.sdk.designSystem.textfields.Validators
 import com.tpay.sdk.extensions.*
@@ -61,6 +62,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                             viewModel.isNfcEnabled.value = false
                             viewModel.shouldReadPayCardData.value = false
                         }
+
                         NfcAdapter.STATE_ON -> {
                             viewModel.isNfcEnabled.value = true
                             viewModel.shouldReadPayCardData.value = true
@@ -125,7 +127,8 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                             showCardPaymentComposition()
                             binding.cardPaymentMethod.run {
                                 creditCardNumberTextField.notFormattedText = cardNumber
-                                val calendar = Calendar.getInstance().also { it.time = expirationDate }
+                                val calendar =
+                                    Calendar.getInstance().also { it.time = expirationDate }
                                 creditCardDateTextField.notFormattedText =
                                     "${calendar.month.formatMonth()}${calendar.year.formatYearLast2Digits()}"
                                 binding.cardNFCScan.tryAgainButton.performClick()
@@ -174,7 +177,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         }
     }
 
-    private fun checkIfOCRIconShouldBeVisible(){
+    private fun checkIfOCRIconShouldBeVisible() {
         val request = PaymentCardRecognitionIntentRequest.getDefaultInstance()
         paymentsClient
             .getPaymentCardRecognitionIntent(request)
@@ -194,7 +197,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                     paymentMethodBoxes.add(PaymentMethodScreenState.CARD to paymentBoxCard)
                 }
                 if (blikAvailable) {
-                    if (isBLIKOneClickPaymentAvailable){
+                    if (isBLIKOneClickPaymentAvailable) {
                         paymentMethodBoxes.add(PaymentMethodScreenState.BLIK_ONE_CLICK to paymentBoxBLIK)
                     } else {
                         paymentMethodBoxes.add(PaymentMethodScreenState.BLIK to paymentBoxBLIK)
@@ -211,14 +214,33 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 }
 
                 paymentMethodBoxes.forEach { it.second.isVisible = true }
-                if(viewModel.screenState == PaymentMethodScreenState.NONE) {
-                    viewModel.screenState = paymentMethodBoxes.first().first
+                if (viewModel.screenState == PaymentMethodScreenState.NONE) {
+                    val lockedState = viewModel.selectedPaymentMethodScreenState
+                    viewModel.screenState = if (
+                        viewModel.isPaymentMethodPickerLocked &&
+                        paymentMethodBoxes.any { it.first == lockedState }
+                    ) {
+                        lockedState!!
+                    } else {
+                        paymentMethodBoxes.first().first
+                    }
                 }
                 try {
                     paymentMethodBoxes.first().second.updateMargins(start = PAYMENT_BOX_MARGIN_START)
                     paymentMethodBoxes.last().second.updateMargins(end = PAYMENT_BOX_MARGIN_END)
 
                     showComposition(viewModel.screenState)
+
+                    if (viewModel.isPaymentMethodPickerLocked) {
+                        paymentMethodBoxes
+                            .firstOrNull { it.first == viewModel.screenState }
+                            ?.second
+                            ?.let { selectedBox ->
+                                methodPicker.post {
+                                    methodPicker.smoothScrollTo(selectedBox.left, 0)
+                                }
+                            }
+                    }
                 } catch (exception: NoSuchElementException) {
                     exception.printStackTrace()
                 }
@@ -248,7 +270,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         }
     }
 
-    private fun observeViewModelFields(){
+    private fun observeViewModelFields() {
         binding.run {
             viewModel.run {
                 screenClickable.observe { clickable ->
@@ -257,7 +279,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 buttonLoading.observe { isLoading ->
                     sheetFragment.handleDraggingAndSettling()
                     payButton.isLoading = isLoading
-                    if(!isLoading && viewModel.screenState == PaymentMethodScreenState.CARD && viewModel.payCardFieldsValid){
+                    if (!isLoading && viewModel.screenState == PaymentMethodScreenState.CARD && viewModel.payCardFieldsValid) {
                         root.isVisible = false
                     }
                 }
@@ -280,7 +302,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         }
     }
 
-    private fun showCardPaymentComposition(onHideKeyboard: () -> Unit = { hideKeyboard() }){
+    private fun showCardPaymentComposition(onHideKeyboard: () -> Unit = { hideKeyboard() }) {
         changeComposition(
             CardPaymentComposition(
                 binding,
@@ -293,7 +315,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         )
     }
 
-    private fun showOneClickCardPaymentComposition(){
+    private fun showOneClickCardPaymentComposition() {
         changeComposition(
             OneClickCardPaymentComposition(
                 binding,
@@ -310,7 +332,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         showBackButton: Boolean = false,
         onBackButtonClick: () -> Unit = { },
         onHideKeyboard: () -> Unit = { hideKeyboard() }
-    ){
+    ) {
         changeComposition(
             BLIKCodePaymentComposition(
                 binding,
@@ -324,22 +346,44 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
         )
     }
 
-    private fun showBLIKOneClickPaymentComposition(){
+    private fun showBLIKOneClickPaymentComposition() {
         changeComposition(
             BLIKOneClickPaymentComposition(binding, viewModel, payButtonPriceText, requireContext())
         )
     }
 
-    private fun showBLIKAmbiguousPaymentComposition(){
-        changeCompositionIfDifferent(BLIKAmbiguousComposition(binding, viewModel, payButtonPriceText, requireContext()))
+    private fun showBLIKAmbiguousPaymentComposition() {
+        changeCompositionIfDifferent(
+            BLIKAmbiguousComposition(
+                binding,
+                viewModel,
+                payButtonPriceText,
+                requireContext()
+            )
+        )
     }
 
     private fun showPayPoPaymentComposition() {
-        changeComposition(PayPoComposition(binding, viewModel, payButtonPayPoText, ::hideKeyboard, requireContext()))
+        changeComposition(
+            PayPoComposition(
+                binding,
+                viewModel,
+                payButtonPayPoText,
+                ::hideKeyboard,
+                requireContext()
+            )
+        )
     }
 
     private fun showWalletPaymentComposition() {
-        changeComposition(WalletPaymentComposition(binding, viewModel, payButtonPriceText, requireContext()))
+        changeComposition(
+            WalletPaymentComposition(
+                binding,
+                viewModel,
+                payButtonPriceText,
+                requireContext()
+            )
+        )
     }
 
     private fun showTransferPaymentComposition() {
@@ -389,36 +433,51 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
     private fun setPaymentMethodPickerBehaviour() {
         binding.run {
             paymentBoxCard.onClick {
-                if (viewModel.automaticCreditCardPaymentMethods.isEmpty()){
-                    showCardPaymentComposition()
-                } else {
-                    showOneClickCardPaymentComposition()
+                onMethodPicked(paymentBoxCard) {
+                    if (viewModel.automaticCreditCardPaymentMethods.isEmpty()) {
+                        showCardPaymentComposition()
+                    } else {
+                        showOneClickCardPaymentComposition()
+                    }
                 }
             }
             paymentBoxBLIK.onClick {
-                viewModel.run {
-                    if (isBLIKOneClickPaymentAvailable){
-                        if (isBlikAliasConflict) {
-                            showBLIKAmbiguousPaymentComposition()
+                onMethodPicked(paymentBoxBLIK) {
+                    viewModel.run {
+                        if (isBLIKOneClickPaymentAvailable) {
+                            if (isBlikAliasConflict) {
+                                showBLIKAmbiguousPaymentComposition()
+                            } else {
+                                showBLIKOneClickPaymentComposition()
+                            }
                         } else {
-                            showBLIKOneClickPaymentComposition()
+                            showBLIKCodePaymentComposition()
                         }
-                    } else {
-                        showBLIKCodePaymentComposition()
                     }
                 }
             }
             paymentBoxWallet.onClick {
-                showWalletPaymentComposition()
+                onMethodPicked(paymentBoxWallet) { showWalletPaymentComposition() }
             }
             paymentBoxTransfer.onClick {
-                showTransferPaymentComposition()
+                onMethodPicked(paymentBoxTransfer) { showTransferPaymentComposition() }
             }
             paymentBoxRatyPekao.onClick {
-                showRatyPekaoComposition()
+                onMethodPicked(paymentBoxPayPo) { showRatyPekaoComposition() }
             }
 
-            paymentBoxPayPo.onClick(::showPayPoPaymentComposition)
+            paymentBoxPayPo.onClick {
+                onMethodPicked(paymentBoxPayPo) { showPayPoPaymentComposition() }
+            }
+        }
+    }
+
+    private fun onMethodPicked(cardPaymentBox: CardPaymentBox, pickAction: () -> Unit) {
+        if (!viewModel.isPaymentMethodPickerLocked) {
+            pickAction()
+        } else {
+            binding.root.post { cardPaymentBox.state = CardPaymentBox.PaymentBoxState.ENABLED }
+            viewModel.errorMessageId.value = R.string.payment_method_change_not_allowed
         }
     }
 

@@ -4,6 +4,7 @@ import com.tpay.sdk.api.models.Compatibility
 import com.tpay.sdk.api.models.Environment
 import com.tpay.sdk.api.models.GooglePayConfiguration
 import com.tpay.sdk.api.models.Language
+import com.tpay.sdk.api.models.Option
 import com.tpay.sdk.api.models.PaymentMethod
 import com.tpay.sdk.api.models.merchant.Merchant
 import com.tpay.sdk.api.providers.MerchantDetailsProvider
@@ -71,6 +72,18 @@ sealed class TpayModule {
          */
         fun configure(googlePayConfiguration: GooglePayConfiguration): Companion {
             configuration.googlePayConfiguration = googlePayConfiguration
+            return this
+        }
+
+        /**
+         * Function responsible for configuring a single option.
+         * Any existing option of the same type is replaced; other options are preserved.
+         */
+        fun configure(option: Option): Companion {
+            val options: MutableSet<Option> = configuration.options.toMutableSet()
+            options.removeAll { it::class == option::class }
+            options.add(option)
+            configuration.options = options
             return this
         }
 

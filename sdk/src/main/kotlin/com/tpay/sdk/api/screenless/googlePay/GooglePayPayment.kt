@@ -4,6 +4,8 @@ import android.util.Base64
 import com.tpay.sdk.api.models.payer.Payer
 import com.tpay.sdk.api.screenless.*
 import com.tpay.sdk.server.dto.request.CreateTransactionWithChannelsDTO
+import com.tpay.sdk.server.dto.request.PayGooglePayRequest
+import com.tpay.sdk.server.dto.response.CreateTransactionResponseDTO
 
 /**
  * Class responsible for creating Google Pay payment
@@ -17,18 +19,46 @@ class GooglePayPayment private constructor(
     ) {
         makeTransaction(request)
             .observe({ response ->
-                val result = TransactionResponseValidator.validateGooglePay(response)
-
-                longPollingConfig?.run {
-                    if (result is CreateGooglePayTransactionResult.Created) {
-                        longPolling.start(result.transactionId, this)
-                    }
-                }
-
-                onResult(result)
+                handleTransactionResponse(longPollingConfig, response, onResult)
             }, { e ->
                 onResult(CreateGooglePayTransactionResult.Error(e.message))
             })
+    }
+
+    fun continueTransaction(
+        transactionId: String,
+        longPollingConfig: LongPollingConfig? = null,
+        onResult: (CreateGooglePayTransactionResult) -> Unit
+    ) {
+        request.pay?.let { payRequest ->
+            val channelId = payRequest.channelId
+            val token = payRequest.googlePayPaymentData
+            if (channelId != null && token != null) {
+                continueTransaction(
+                    transactionId, PayGooglePayRequest(token, channelId)
+                ).observe({ response ->
+                    handleTransactionResponse(longPollingConfig, response, onResult)
+                }, { e ->
+                    onResult(CreateGooglePayTransactionResult.Error(e.message))
+                })
+            }
+        }
+    }
+
+    private fun handleTransactionResponse(
+        longPollingConfig: LongPollingConfig?,
+        response: CreateTransactionResponseDTO,
+        onResult: (CreateGooglePayTransactionResult) -> Unit
+    ) {
+        val result = TransactionResponseValidator.validateGooglePay(response)
+
+        longPollingConfig?.run {
+            if (result is CreateGooglePayTransactionResult.Created) {
+                longPolling.start(result.transactionId, this)
+            }
+        }
+
+        onResult(result)
     }
 
     /**

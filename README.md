@@ -11,6 +11,7 @@
 - [About](#about)
 - [Install](#install)
 - [Configuration](#configuration)
+- [Options](#options)
 - [Handling payments](#handling-payments)
 - [Official SDK screens](#official-sdk-screens)
 - [Tokenization](#tokenization)
@@ -291,6 +292,23 @@ TpayModule.configure(Compatibility.FLUTTER)
 
 // For React Native module
 TpayModule.configure(Compatibility.REACT_NATIVE)
+```
+
+## Options
+
+> [!note]
+> Calling `configure` with an `Option` only replaces the existing option of the same type; all other
+> previously configured options (and other configuration made via the other `configure` overloads)
+> are preserved.
+
+Currently available options:
+
+| Option                              | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Option.SingleTransactionOnly(Boolean)` | By default SDK on each payment creates new transaction, this allows user to change payment channel if previous payment did not succeed. This behaviour can be changed by altering `Option.SingleTransactionOnly`, when set to `true`, only a single transaction can be created per checkout session but switching channels will be impossible. Once a transaction has already been created, the SDK will continue that same transaction (and lock the payment method picker) instead of creating a new one. |
+
+```kotlin
+TpayModule.configure(Option.SingleTransactionOnly(true))
 ```
 
 ## Handling payments

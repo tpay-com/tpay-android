@@ -1,9 +1,7 @@
 package com.tpay.sdk.server
 
-import android.os.Build
 import android.util.Base64
 import android.util.Log
-import com.tpay.sdk.BuildConfig
 import com.tpay.sdk.extensions.*
 import com.tpay.sdk.server.dto.ErrorResponseDTO
 import org.json.JSONException
@@ -121,7 +119,13 @@ internal class Networking(
                 httpConnection.responseCode.let { code ->
                     when {
                         isServerError(code) -> {
-                            val errorResponse = ErrorResponseDTO(readErrorMessage(httpConnection))
+                            val response = readErrorMessage(httpConnection)
+                            logResponse(
+                                httpConnection,
+                                response,
+                                responseTime = (System.currentTimeMillis() - timestamp)
+                            )
+                            val errorResponse = ErrorResponseDTO(response)
                             completable.onError(
                                 HttpServerException(
                                     code,
@@ -131,7 +135,13 @@ internal class Networking(
                         }
 
                         isClientError(code) -> {
-                            val errorResponse = ErrorResponseDTO(readErrorMessage(httpConnection))
+                            val response = readErrorMessage(httpConnection)
+                            logResponse(
+                                httpConnection,
+                                response,
+                                responseTime = (System.currentTimeMillis() - timestamp)
+                            )
+                            val errorResponse = ErrorResponseDTO(response)
                             completable.onError(
                                 HttpClientException(
                                     code,

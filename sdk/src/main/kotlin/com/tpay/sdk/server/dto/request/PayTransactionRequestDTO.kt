@@ -11,6 +11,12 @@ import org.json.JSONObject
 
 @Keep
 internal open class PayTransactionRequestDTO : JSONObject() {
+    var channelId: Int? = null
+        set(value) {
+            put("channelId", value)
+            field = value
+        }
+
     var groupId: Int? = null
         set(value) {
             put("groupId", value)

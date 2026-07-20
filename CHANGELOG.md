@@ -1,3 +1,9 @@
+## 1.2.9
+
+### Enhancements
+
+- Add option for repaying existing transactions 
+
 ## 1.2.8
 
 ### Enhancements
