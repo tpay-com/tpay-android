@@ -463,7 +463,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 onMethodPicked(paymentBoxTransfer) { showTransferPaymentComposition() }
             }
             paymentBoxRatyPekao.onClick {
-                onMethodPicked(paymentBoxPayPo) { showRatyPekaoComposition() }
+                onMethodPicked(paymentBoxRatyPekao) { showRatyPekaoComposition() }
             }
 
             paymentBoxPayPo.onClick {

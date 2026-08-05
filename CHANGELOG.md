@@ -1,3 +1,9 @@
+## 1.2.10
+
+### Enhancements
+
+- Minor functionality upgrades
+
 ## 1.2.9
 
 ### Enhancements
