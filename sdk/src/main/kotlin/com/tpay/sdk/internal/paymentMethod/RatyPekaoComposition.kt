@@ -7,6 +7,7 @@ import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
 import com.tpay.sdk.designSystem.cards.ChannelMethodCard
 import com.tpay.sdk.extensions.isVisible
 import com.tpay.sdk.internal.SheetFragment
+import com.tpay.sdk.extensions.logStackTrace
 
 internal class RatyPekaoComposition(
     private val binding: FragmentPaymentMethodBinding,
@@ -37,7 +38,7 @@ internal class RatyPekaoComposition(
         try {
             sheetFragment.isShadowBelowHeaderVisible = false
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            exception.logStackTrace()
         }
     }
 

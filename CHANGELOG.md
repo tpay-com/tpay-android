@@ -1,3 +1,9 @@
+## 1.2.11
+
+### Enhancements
+
+- Security improvements
+
 ## 1.2.10
 
 ### Enhancements

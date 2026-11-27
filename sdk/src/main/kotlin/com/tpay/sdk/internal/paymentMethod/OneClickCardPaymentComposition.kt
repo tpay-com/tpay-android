@@ -7,6 +7,7 @@ import com.tpay.sdk.databinding.FragmentPaymentMethodBinding
 import com.tpay.sdk.extensions.isVisible
 import com.tpay.sdk.extensions.onClick
 import com.tpay.sdk.internal.SheetFragment
+import com.tpay.sdk.extensions.logStackTrace
 
 
 internal class OneClickCardPaymentComposition(
@@ -32,7 +33,7 @@ internal class OneClickCardPaymentComposition(
         viewModel.selectedTokenizedCard = null
         try {
             sheetFragment.isShadowBelowHeaderVisible = false
-        } catch (exception: Exception){ exception.printStackTrace() }
+        } catch (exception: Exception){ exception.logStackTrace() }
     }
 
     private fun setupRecyclerView(){

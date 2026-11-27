@@ -242,7 +242,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                             }
                     }
                 } catch (exception: NoSuchElementException) {
-                    exception.printStackTrace()
+                    exception.logStackTrace()
                 }
             }
         }
@@ -297,7 +297,7 @@ internal class PaymentMethodFragment : BaseFragment(R.layout.fragment_payment_me
                 isGooglePayButtonVisible = isAvailable && viewModel.isGooglePayInPaymentMethods
                 binding.paymentBoxWallet.isVisible = isGooglePayButtonVisible
             } catch (e: Exception) {
-                e.printStackTrace()
+                e.logStackTrace()
             }
         }
     }

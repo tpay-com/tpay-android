@@ -60,7 +60,7 @@ internal fun prepareBoldSpannedURLText(
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                                 context.startActivity(intent)
                             } catch (exception: Exception) {
-                                exception.printStackTrace()
+                                exception.logStackTrace()
                             }
                         }
                     },

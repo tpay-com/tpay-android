@@ -9,6 +9,7 @@ import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.Wallet
 import org.json.JSONObject
+import com.tpay.sdk.extensions.logStackTrace
 
 /**
  * Class providing utils for Google Pay
@@ -94,7 +95,7 @@ class GooglePayUtil(
                 cardTail = cardTail
             )
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            exception.logStackTrace()
             OpenGooglePayResult.UnknownError
         }
     }

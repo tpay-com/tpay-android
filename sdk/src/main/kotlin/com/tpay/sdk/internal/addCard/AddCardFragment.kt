@@ -174,7 +174,7 @@ internal class AddCardFragment : BaseFragment(R.layout.fragment_add_card) {
                 try {
                     binding.addCard.creditCardNumberTextField.isScanIconVisible = false
                 } catch (exception: Exception) {
-                    exception.printStackTrace()
+                    exception.logStackTrace()
                 }
             }
     }

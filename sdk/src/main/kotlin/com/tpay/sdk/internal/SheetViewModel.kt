@@ -16,6 +16,7 @@ import com.tpay.sdk.extensions.containsMethodOfType
 import com.tpay.sdk.extensions.getOrThrow
 import com.tpay.sdk.internal.base.BaseViewModel
 import com.tpay.sdk.internal.model.LocalizedString
+import com.tpay.sdk.extensions.logStackTrace
 
 internal class SheetViewModel(private val savedStateHandle: SavedStateHandle) : BaseViewModel() {
     var languageSelectedByUser = com.tpay.sdk.internal.Language.POLISH
@@ -144,7 +145,7 @@ internal class SheetViewModel(private val savedStateHandle: SavedStateHandle) : 
 
             }
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            exception.logStackTrace()
         }
     }
 

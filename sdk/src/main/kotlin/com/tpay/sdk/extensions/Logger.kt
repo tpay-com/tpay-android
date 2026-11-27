@@ -4,6 +4,7 @@ package com.tpay.sdk.extensions
 
 import android.os.Build
 import android.util.Log
+import com.tpay.sdk.BuildConfig
 import com.tpay.sdk.extensions.Logger.formatKeys
 import com.tpay.sdk.extensions.Logger.getClassName
 import com.tpay.sdk.extensions.Logger.getLineNumber
@@ -143,4 +144,9 @@ internal object Logger {
 
 internal infix fun String.cause(that: Throwable): Pair<String, Throwable?> = this to that
 
-internal var isloggingEnabled = true
+// Logs only in debug builds of the SDK (e.g. the demo app). The published release artifact logs nothing.
+internal var isloggingEnabled = BuildConfig.DEBUG
+
+internal fun Throwable.logStackTrace() {
+    if (isloggingEnabled) printStackTrace()
+}

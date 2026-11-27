@@ -103,7 +103,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
             showSheet()
             setUpOnBackgroundClick()
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            exception.logStackTrace()
         }
     }
 
@@ -319,7 +319,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
                 }
             }
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            exception.logStackTrace()
         }
     }
 
@@ -342,7 +342,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
                 }
             }
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            exception.logStackTrace()
         }
     }
 
@@ -526,7 +526,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
                     try {
                         binding.languageBtn.isVisible = false
                     } catch (exception: Exception) {
-                        exception.printStackTrace()
+                        exception.logStackTrace()
                     }
                 }
                 .start()
@@ -571,7 +571,7 @@ internal class SheetFragment : Fragment(R.layout.fragment_sheet) {
                     try {
                         binding.userCard.isVisible = false
                     } catch (exception: Exception) {
-                        exception.printStackTrace()
+                        exception.logStackTrace()
                     }
                 }
                 .start()

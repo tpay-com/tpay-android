@@ -12,6 +12,7 @@ import com.tpay.sdk.server.dto.request.PayTransactionRequestDTO
 import com.tpay.sdk.server.dto.response.*
 import javax.inject.Singleton
 import kotlin.Exception
+import com.tpay.sdk.extensions.logStackTrace
 
 @Singleton
 internal class ServerService(private val requestPropertyProvider: RequestPropertyProvider) {
@@ -73,7 +74,7 @@ internal class ServerService(private val requestPropertyProvider: RequestPropert
                         try {
                             completable.onSuccess(GetChannelsResponseDTO(response))
                         } catch (exception: Exception) {
-                            exception.printStackTrace()
+                            exception.logStackTrace()
                             completable.onError(JsonParseException(exception.message))
                         }
                     }, { e ->
